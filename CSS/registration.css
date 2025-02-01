@@ -41,6 +41,7 @@ a:hover{
 }
 
 .loginBox {
+    height: 700px;
     position: relative;
     width: 750px;
     backdrop-filter: blur(25px);
@@ -136,6 +137,38 @@ a:hover{
     outline: none;
     
 }
+
+.inputField-gym {
+    width: 90%;
+    height: 55px;
+    font-size: 16px;
+    background: transparent;
+    color: var(--secondary-color);
+    padding-inline: 20px 20px;
+    border: 2px solid var(--primary-color);
+    border-radius: 30px;
+    outline: none;
+    
+}
+.gym-box{
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+}
+
+.inputField-cred {
+    width: 90%;
+    height: 55px;
+    font-size: 16px;
+    background: transparent;
+    color: var(--secondary-color);
+    padding-inline: 20px 20px;
+    border: 2px solid var(--primary-color);
+    border-radius: 30px;
+    outline: none;
+    
+}
 #user{
     margin-bottom: 10px;
 }
@@ -158,6 +191,32 @@ a:hover{
     position: absolute;
     top: 20px;
     left: 485px;
+    transition: 0.2s;
+}
+
+.label-gym {
+    position: absolute;
+    top: 280px;
+    left: 90px;
+    transition: 0.2s;
+}
+
+.label-user {
+    position: absolute;
+    top: 345px;
+    left: 90px;
+    transition: 0.2s;
+}
+.label-pass {
+    position: absolute;
+    top: 410px;
+    left: 90px;
+    transition: 0.2s;
+}
+.label-repass {
+    position: absolute;
+    top: 475px;
+    left: 90px;
     transition: 0.2s;
 }
 
@@ -198,7 +257,25 @@ a:hover{
     padding: 0 10px;
 }
 
+.inputField-gym:focus ~ .label-gym,
+.inputField-gym:valid ~ .label-gym{
+    position: absolute;
+    top: 250px;
+    left: 100px;
+    font-size: 14px;
+    background-color: var(--primary-color);
+    border-radius: 30px;
+    color: var(--black-color);
+    padding: 0 10px;
+}
 
+
+.input-a{
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+}
 .icon{
     position: absolute;
     top: 18px;
