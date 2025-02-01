@@ -7,45 +7,74 @@ body{
     height: 100vh;
     font-family: Arial, sans-serif;
 }
-/*SideBar*/
-.container-sidebar{
-    background-color: pink;
+/* SideBar */
+.container-sidebar {
+    background-color: #ffffff;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 20px;
-    width: 50px;
+    width: 50px; /* Sidebar width */
     height: 100vh;
     position: fixed;
-    
+    left: 0;
+    top: 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+    border-radius: 15px;
 }
-.container-sidebar h1{
+
+/* Center the items properly in the sidebar */
+.container-sidebar h1 {
     font-size: 0.75rem;
     display: block;
     align-items: center;
+    text-align: center;
 }
+
+/* Circle Container */
+.circle-container {
+    width: 45px;
+    height: 45px;
+    background-color: #f3f3fa;
+    border-radius: 50%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin-bottom: 10px; /* Add space between icon and text */
+}
+
+/* Center the content in each section */
+.dashboard, .record, .news {
+    display: flex;
+    flex-direction: column; /* Stack icon and text vertically */
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px; /* Space between sections */
+}
+
+.dashboard h1, .record h1, .news h1 {
+    margin-top: 10px; /* Space between icon and text */
+    font-size: 12px; /* Adjust font size if needed */
+    text-align: center;
+}
+
+/* Optional: Adjust icon size */
+.icon {
+    font-size: 20px;
+}
+
 .admin-profile-letter{
     margin-bottom: 1rem;
     width: 55px;
     height: 55px;
-    background-color: #333; 
+    background-color: #f3f3fa;  
     border-radius: 50%; 
     display: inline-block;
 }
-.dashboard-container, .record-container, .news-container{
-    width: 55px;
-    height: 55px;
-    background-color: #333; 
-    border-radius: 50%; 
-    display: inline-block;
-    margin: 1rem 0 0 0;
-}
-
-
-
 /*mainpage*/
 .container-mainpage{
-    background-color: saddlebrown;
+    background-color: #f5f6fa;
     flex-grow: 1;
     padding: 20px;
 }
@@ -53,18 +82,123 @@ body{
 
 
 /*navbar*/
-
-.container-navbar{
-    background-color: aqua;
+.container-navbar {
     display: flex;
-    height: 50px;
-    width: 100%;
+    justify-content: flex-end;
     align-items: center;
-    justify-content: space-between;
-    
-
+    background-color: #ffffff;
+    padding: 10px 20px;
+    height: 60px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 15px 0 0 15px ;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 100px; /* Adjust based on sidebar width */
+    z-index: 1000;
 }
-.container-navbar, .profile-container{
+
+.notification-container{
+    width: 45px; 
+    height: 45px; 
+    background-color: #f3f3fa; 
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.icon{
+
+    font-size: 20px;
+    color: #9c99a5;
+}
+.profile-container{
+    display: flex;
+    align-items: center;
+    background-color: #f3f3fa;
+    padding: 8px 10px;
+    border-radius: 20px; 
+    cursor: pointer;
     position: relative;
+}
+
+.profile-picture {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; 
+    margin-right: 10px;
+    overflow: hidden; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
     
+}
+.profile-picture img{
+    width: 100%;  
+    height: 100%; 
+    object-fit: cover; 
+    border-radius: 50%; 
+}
+.profile-name {
+    color: black;
+}
+
+.profile-name h1 {
+    margin: 0;
+    font-size: 13px;
+}
+
+.profile-name h2 {
+    margin: 2px 0 0 0;
+    font-size: 10px;
+    color: black;
+}
+
+.drop-down-icon {
+    color: black;
+    margin-left: 10px;
+    cursor: pointer;
+    position: relative; 
+}
+
+.drop-down {
+    display: block; 
+    visibility: hidden; 
+    opacity: 0; 
+    position: absolute;
+    top: 60px;
+    right: 0;
+    background-color: #444;
+    list-style-type: none;
+    padding: 10px;
+    margin: 2px 0 0 0;
+    border-radius: 10px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: visibility 0.2s ease, opacity 0.2s ease;
+}
+
+.drop-down ul {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+}
+
+.drop-down ul li {
+    padding: 5px 10px;
+    color: white;
+    cursor: pointer;
+}
+
+.drop-down ul li:hover {
+    background-color: #555;
+}
+
+
+.drop-down-icon:hover + .drop-down,
+.drop-down:hover {
+    visibility: visible;
+    opacity: 1;
 }
