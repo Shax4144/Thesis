@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,21 +9,26 @@
     <link rel="stylesheet" href="../CSS/admin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
+
 <body>
     <!--NavBar-->
     <div class="container-navbar">
-        <div class="notification-container">
-            <div class="notification-icon"></div>
+        <div class="notification-container circle-container">
+            <div class="notification-icon">
+                <i class="far fa-bell icon"></i>
+            </div>
         </div>
-    
+
         <div class="profile-container">
-            <div class="profile-picture"></div>
+            <div class="profile-picture">
+                <img src="../Pictures/Icons/image.png" alt="cardo">
+            </div>
             <div class="profile-name">
                 <h1 id="name">Francis Erick Datu</h1>
-                <h2 id="status">Student</h2>
+                <h2 id="status">Admin</h2>
             </div>
             <div class="drop-down-icon">
-                <i class="fas fa-chevron-down"></i> 
+                <i class="fas fa-chevron-down"></i>
             </div>
             <div class="drop-down" id="drop-down">
                 <ul>
@@ -38,29 +44,45 @@
 
     <!--SideBar-->
     <div class="container-sidebar">
-        
+
         <div class="admin-profile-letter">
             <h1 id="letter"></h1>
         </div>
 
-        <div class="circle-container">
-            <div class="dashboard-icon icon"></div>
-            
+        <div class="dashboard">
+            <div class="circle-container">
+                <div class="dashboard-icon icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+
+            </div>
+            <h1>Dashboard</h1>
         </div>
-        <h1>Dashboard</h1>
-        <div class="circle-container">
-            <div class="record-icon icon"></div>
-            
+
+        <div class="record">
+            <div class="circle-container">
+                <div class="record-icon icon">
+                    <i class="far fa-file"></i>
+                </div>
+
+            </div>
+            <h1>Record</h1>
+
         </div>
-        <h1>Record</h1>
-        <div class="circle-container">
-            <div class="news-icon icon"></div>
-            
+
+        <div class="news">
+            <div class="circle-container">
+                <div class="news-icon icon">
+                    <i class="far fa-newspaper"></i>
+                </div>
+
+            </div>
+            <h1>News</h1>
         </div>
-        <h1>News</h1>
+        
     </div>
 
-    
+
     <!--MainPage-->
     <div class="container-mainpage">
         <div class="dashboard-content">
@@ -75,4 +97,5 @@
     </div>
     <script src="../JS/admin.js"></script>
 </body>
+
 </html>
