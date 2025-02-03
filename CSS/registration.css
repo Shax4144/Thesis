@@ -381,12 +381,24 @@ a:hover{
 
 .fa-eye{
     position: absolute;
-    top: 20px;
-    right: 55px;
+    top: 382px;
+    right: 80px;
     font-size: 17px;
     color: var(--primary-color);
 }
 .fa-eye.active{
+    color: var(--secondary-color);
+}
+
+.repass{
+    position: absolute;
+    top: 449px;
+    right: 80px;
+    font-size: 17px;
+    color: var(--primary-color);
+}
+
+.repass.active{
     color: var(--secondary-color);
 }
 
