@@ -5,7 +5,7 @@ body{
     display: flex;
     flex-direction: column;
     height: 100vh;
-    font-family: Arial, sans-serif;
+   
 }
 /* SideBar */
 .container-sidebar {
@@ -13,17 +13,65 @@ body{
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px;
-    width: 50px; /* Sidebar width */
+    padding: 20px 0; 
+    width: 90px; 
     height: 100vh;
     position: fixed;
     left: 0;
     top: 0;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     border-radius: 15px;
 }
+.container-nav-circle {
+    width: 100%; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0; 
+    position: relative; 
+    
+}
 
-/* Center the items properly in the sidebar */
+
+.container-nav-circle:hover {
+    cursor: pointer; 
+}
+
+.container-nav-circle:hover::after {
+    width: 60%; 
+    left: 20%; 
+}
+
+
+
+.circle-container {
+    width: 45px;
+    height: 45px;
+    background-color: #f3f3fa;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.container-nav-circle:hover .circle-container{
+    background-color: #efdcdc;
+}
+
+h1 {
+    margin-top: 8px;
+    font-size: 12px;
+    text-align: center;
+    transition: color 0.3s ease-in-out;
+}
+
+.container-nav-circle:hover h1 {
+    color: #f36c6c;
+    transition: color 0.3s ease-in-out;
+}
+
 .container-sidebar h1 {
     font-size: 0.75rem;
     display: block;
@@ -31,38 +79,19 @@ body{
     text-align: center;
 }
 
-/* Circle Container */
-.circle-container {
-    width: 45px;
-    height: 45px;
-    background-color: #f3f3fa;
-    border-radius: 50%;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    margin-bottom: 10px; /* Add space between icon and text */
-}
 
-/* Center the content in each section */
-.dashboard, .record, .news {
-    display: flex;
-    flex-direction: column; /* Stack icon and text vertically */
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 20px; /* Space between sections */
-}
 
-.dashboard h1, .record h1, .news h1 {
-    margin-top: 10px; /* Space between icon and text */
-    font-size: 12px; /* Adjust font size if needed */
+.container-nav-circle h1{
+    margin-top: 10px; 
+    font-size: 12px;
     text-align: center;
 }
 
-/* Optional: Adjust icon size */
-.icon {
-    font-size: 20px;
+.container-nav-circle:hover .icon{
+    color: #f36c6c;
 }
+
+
 
 .admin-profile-letter{
     margin-bottom: 1rem;
@@ -72,14 +101,6 @@ body{
     border-radius: 50%; 
     display: inline-block;
 }
-/*mainpage*/
-.container-mainpage{
-    background-color: #f5f6fa;
-    flex-grow: 1;
-    padding: 20px;
-}
-
-
 
 /*navbar*/
 .container-navbar {
@@ -94,7 +115,7 @@ body{
     position: fixed;
     top: 0;
     right: 0;
-    left: 100px; /* Adjust based on sidebar width */
+    left: 100px; 
     z-index: 1000;
 }
 
@@ -108,12 +129,23 @@ body{
     align-items: center;
     margin-right: 20px;
     cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+    
+}
+.notification-container:hover {
+    background-color: #efdcdc; 
+}
+
+.notification-container:hover .icon {
+    color: #f36c6c; 
+    transition: color 0.3s ease-in-out;
 }
 
 .icon{
 
     font-size: 20px;
     color: #9c99a5;
+    transition: color 0.3s ease-in-out;
 }
 .profile-container{
     display: flex;
@@ -163,7 +195,10 @@ body{
     cursor: pointer;
     position: relative; 
 }
-
+.drop-down-icon:hover {
+    color: #f36c6c; 
+    transition: color 0.1s ease-in-out;
+}
 .drop-down {
     display: block; 
     visibility: hidden; 
@@ -201,4 +236,89 @@ body{
 .drop-down:hover {
     visibility: visible;
     opacity: 1;
+}
+
+
+
+/*mainpage*/
+
+.container-mainpage {
+    background-color: #f5f6fa;
+    flex-grow: 1;
+    padding: 20px;
+    margin-left: 90px; 
+    margin-top: 60px;
+}
+.dashboard-content{
+    margin-left: 90px;
+}
+
+.dashboard-content, 
+.record-content,
+.news-content, 
+.profile-content, 
+.history-content {
+    display: none; 
+}
+
+.dashboard-content.active,
+.record-content.active,
+.news-content.active, 
+.profile-content.active, 
+.history-content.active {
+    display: block;
+}
+
+
+.dashboard.active .circle-container,
+.record.active .circle-container,
+.news.active .circle-container, 
+.profile.active .circle-container, 
+.history.active .circle-container {
+    background-color: #efdcdc;
+}
+
+.dashboard.active h1,
+.record.active h1,
+.news.active h1, 
+.profile.active h1, 
+.history.active h1 {
+    color: #f36c6c; 
+}
+
+.dashboard.active .icon,
+.record.active .icon,
+.news.active .icon, 
+.profile.active .icon, 
+.history.active .icon {
+    color: #f36c6c; 
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(700px, 1fr)); /* Ensures each box is around 700px */
+    gap: 20px; /* Gap between boxes */
+    justify-content: center; /* Center grid items horizontally */
+    align-items: center; /* Center grid items vertically */
+}
+
+/* Ensure all boxes are equal in size */
+.dash-box {
+    width: 700px; /* Set fixed width */
+    height: 200px; /* Set fixed height for uniform size */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f4f4f4; /* Background color */
+    padding: 20px;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover transition */
+    
+}
+
+.dash-box:hover {
+    transform: translateY(-5px); /* Move the box up slightly */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a stronger shadow */
 }
