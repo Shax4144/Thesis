@@ -1,71 +1,51 @@
-
 document.addEventListener("DOMContentLoaded", function () {
- 
-    const dashboard = document.querySelector(".dashboard");
-    const profile = document.querySelector(".profile");
-    const history = document.querySelector(".history");
-    const record = document.querySelector(".record");
-    const news = document.querySelector(".news");
-   
-
-    const dashboardContent = document.getElementById("dashboard-content");
-    const profileContent = document.getElementById("profile-content");
-    const historyContent = document.getElementById("history-content");
-    const recordContent = document.getElementById("record-content");
-    const newsContent = document.getElementById("news-content");
-   
-
-   
-    function hideAllContent() {
-        dashboardContent.classList.remove("active");
-        profileContent.classList.remove("active");
-        historyContent.classList.remove("active");
-        recordContent.classList.remove("active");
-        newsContent.classList.remove("active");
+    // Get all sidebar navigation elements
+    const navItems = document.querySelectorAll(".container-nav-circle");
     
+    // Get all main page content sections
+    const contentSections = {
+        dashboard: document.getElementById("dashboard-content"),
+        profile: document.getElementById("profile-content"),
+        history: document.getElementById("history-content"),
+        record: document.getElementById("record-content"),
+        news: document.getElementById("news-content")
+    };
 
-        dashboard.classList.remove("active");
-        profile.classList.remove("active");
-        history.classList.remove("active");
-        record.classList.remove("active");
-        news.classList.remove("active");
-     
+    // Function to hide all content sections
+    function hideAllSections() {
+        Object.values(contentSections).forEach(section => {
+            section.style.display = "none";
+        });
     }
 
+    // Function to remove active class from all buttons
+    function removeActiveClass() {
+        navItems.forEach(item => {
+            item.classList.remove("active");
+        });
+    }
 
-    hideAllContent();
-    dashboardContent.classList.add("active");
-    dashboard.classList.add("active");
+    // Set default view (Dashboard)
+    hideAllSections();
+    contentSections.dashboard.style.display = "block";
+    document.querySelector(".dashboard").classList.add("active"); // Set Dashboard as active by default
 
-   
-    dashboard.addEventListener("click", function () {
-        hideAllContent();
-        dashboardContent.classList.add("active");
-        dashboard.classList.add("active");
-    });
-    
-    profile.addEventListener("click", function () {
-        hideAllContent();
-        profileContent.classList.add("active");
-        profile.classList.add("active");
-    });
+    // Attach click events to sidebar menu items
+    navItems.forEach(item => {
+        item.addEventListener("click", function () {
+            hideAllSections(); // Hide all sections first
+            removeActiveClass(); // Remove active class from all buttons
 
-    history.addEventListener("click", function () {
-        hideAllContent();
-        historyContent.classList.add("active");
-        history.classList.add("active");
-    });
-    record.addEventListener("click", function () {
-        hideAllContent();
-        recordContent.classList.add("active");
-        record.classList.add("active");
-    });
+            // Get section name from the class of the clicked item
+            let sectionClass = this.classList[0]; // e.g., "dashboard", "profile", etc.
 
-    news.addEventListener("click", function () {
-        hideAllContent();
-        newsContent.classList.add("active");
-        news.classList.add("active");
-    });
+            // Display the corresponding section
+            if (contentSections[sectionClass]) {
+                contentSections[sectionClass].style.display = "block";
+            }
 
-    
+            // Add active class to the clicked button
+            this.classList.add("active");
+        });
+    });
 });
