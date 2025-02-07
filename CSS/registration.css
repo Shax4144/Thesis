@@ -517,6 +517,21 @@ a:hover{
         overflow-y: scroll;
         height: 70vh;
     }
+    .registerBox::-webkit-scrollbar-track{
+        background: transparent;
+        border-radius: 50vw;
+        margin-block: 1.5em;
+    }
+    .registerBox::-webkit-scrollbar{
+        width: 3px;
+        padding-right: 10px;
+        margin-top: 10px;
+        
+    }
+    .registerBox::-webkit-scrollbar-thumb{
+        background-color: var(--secondary-color);
+        border-radius: 100vw;
+    }
 
     .inputBox{
         flex-direction: column;
