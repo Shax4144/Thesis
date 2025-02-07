@@ -41,7 +41,7 @@ a:hover{
 }
 
 .registerBox {
-    height: 600px;
+    height: 65vh;
     position: relative;
     width: 750px;
     backdrop-filter: blur(25px);
@@ -405,6 +405,7 @@ a:hover{
     border-radius: 30px;
     cursor: pointer;
     transition: 0.3s;
+    margin-top: 10px;
 }
 
 .input-submit:hover{
@@ -413,6 +414,7 @@ a:hover{
 
 .loginzone{
     text-align: center;
+    margin-top: 10px;
 }
 
 .loginzone a{
@@ -497,6 +499,14 @@ a:hover{
         top: 365px;
         left: 85px;
     }
+    .fa-eye{
+        top: 390px;
+        right: 60px;
+    }
+    .repass{
+        top: 455px;
+        right: 60px;
+    }
     .label-repass{
         top: 455px;
     }
@@ -504,6 +514,9 @@ a:hover{
     .inputFields:valid ~ .label-repass{
         top: 430px;
         left: 85px;
+    }
+    .inputFields{
+        padding-inline: 20px 40px;
     }
 }
 
@@ -515,7 +528,7 @@ a:hover{
     .registerBox{
         padding: 4em 1.5em 1.5em 1.5em;
         overflow-y: scroll;
-        height: 70vh;
+        height: 65vh;
     }
     .registerBox::-webkit-scrollbar-track{
         background: transparent;
