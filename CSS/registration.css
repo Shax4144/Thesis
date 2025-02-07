@@ -168,7 +168,7 @@ a:hover{
     align-items: center;
 }
 
-.inputField-gym {
+.inputFields {
     width: 90%;
     height: 55px;
     font-size: 16px;
@@ -299,8 +299,8 @@ a:hover{
     padding: 0 10px;
 }
 
-.inputField-gym:focus ~ .label-gym,
-.inputField-gym:valid ~ .label-gym{
+.inputFields:focus ~ .label-gym,
+.inputFields:valid ~ .label-gym{
     position: absolute;
     top: 225px;
     left: 90px;
@@ -323,8 +323,8 @@ a:hover{
     padding: 0 10px;
 }
 
-.inputField-gym:focus ~ .label-user,
-.inputField-gym:valid ~ .label-user{
+.inputFields:focus ~ .label-user,
+.inputFields:valid ~ .label-user{
     position: absolute;
     top: 292px;
     left: 90px;
@@ -335,8 +335,8 @@ a:hover{
     padding: 0 10px;
 }
 
-.inputField-gym:focus ~ .label-pass,
-.inputField-gym:valid ~ .label-pass{
+.inputFields:focus ~ .label-pass,
+.inputFields:valid ~ .label-pass{
     position: absolute;
     top: 358px;
     left: 90px;
@@ -347,8 +347,8 @@ a:hover{
     padding: 0 10px;
 }
 
-.inputField-gym:focus ~ .label-repass,
-.inputField-gym:valid ~ .label-repass{
+.inputFields:focus ~ .label-repass,
+.inputFields:valid ~ .label-repass{
     position: absolute;
     top: 422px;
     left: 90px;
