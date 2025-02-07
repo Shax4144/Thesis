@@ -115,73 +115,138 @@
 <div class="container-mainpage">
     <div class="dashboard-content" id="dashboard-content">
         <h2>Dashboard</h2>
-        <div class="dashboard-grid">
-      
-
-        <div class="profile dash-box">
-            <div class="dash-box-container">
-                <div class="profile-icon icon">
-                    <i class="fas fa-user"></i>
+        <div class="content-boxes">
+            <div class="students-box box">
+                <div class="box-content">
+                    <h2>Student</h2>
+                    <h3 id="number-students">0</h3>
                 </div>
-
             </div>
-            <h1>Profile</h1>
-        </div>
-
-        <div class="history dash-box">
-            <div class="dash-box-container">
-                <div class="history-icon icon">
-                    <i class="fas fa-history"></i>
+            <div class="coaches-box box">
+                <div class="box-content">
+                    <h2>Coaches</h2>
+                    <h3 id="number-coaches">0</h3>
                 </div>
-
             </div>
-            <h1>History</h1>
-        </div>
-
-
-        <div class="record dash-box">
-            <div class="dash-box-container">
-                <div class="record-icon icon">
-                    <i class="far fa-file"></i>
+            <div class="incoming-events-box box">
+                <div class="box-content">
+                    <h2>Events</h2>
+                    <h3 id="number-incoming-events">0</h3>
                 </div>
-
             </div>
-            <h1>Record</h1>
-
-        </div>
-
-
-
-       
-
-        <div class="news dash-box">
-            <div class="dash-box-container">
-                <div class="news-icon icon">
-                    <i class="far fa-newspaper"></i>
+            <div class="news-box box">
+                <div class="box-content">
+                    <h2>News</h2>
+                    <h3 id="number-news">0</h3>
                 </div>
-
             </div>
-            <h1>News</h1> 
         </div>
-        
     </div>
 
 
 
     <div class="profile-content" id="profile-content">
-        <h2>Profile Content</h2>
-        <div class="profile-image-mainpage">
-            <img src="../Pictures/Icons/image.png" alt="Carding">
+        <h2>Profile</h2>
+        <div class="profile-header">
+            <div class="profile-image-mainpage">
+                <img src="../Pictures/Icons/image.png" alt="Profile Picture">
+            </div>
+            <div class="profile-header-info">
+                <h1 id="name">Francis Erick E. Datu</h1>
+                <p id="belt">1st Dan Blackbelt</p>
+                <p id="gym">Shigatsu Warriors</p>
+                <p id="id-number">No. 123</p>
+            </div>
+        </div>
+        <div class="profile-details">
+            <h2>Personal Information</h2>
+            <div class="detail-item">
+                <span class="detail-label">Birthday:</span>
+                <span class="detail-value" id="birthday">July 23, 2003</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Age:</span>
+                <span class="detail-value" id="age">19</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Height:</span>
+                <span class="detail-value" id="height">164cm</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Weight:</span>
+                <span class="detail-value" id="weight">70kg</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Interests:</span>
+                <span class="detail-value" id="interests">Martial Arts, Reading, Gaming</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Achievements:</span>
+                <span class="detail-value" id="achievements">National Champion 2023, Regional Gold Medalist</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Contact:</span>
+                <span class="detail-value" id="contact">francis@example.com</span>
+            </div>
+        </div>
+        <button class="mainpage-profile-button">Edit Profile</button>
+    </div>
+
+
+    <div class="history-content" id="history-content">
+        <h2>History</h2>
+        <h3>Recent Tournament</h3>
+        <div class="win-box">
+            <span></span>
+        </div>
+        <div class="tournament-played-box">
+            <span></span>
+        </div>
+        <div class="history-box">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tournament</th>
+                        <th>Place</th>
+                        <th>Type</th>
+                        <th>Date</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td id="tournament-values"></td>
+                        <td id="place-values"></td>
+                        <td id="type-values"></td>
+                        <td id="date-values"></td>
+                        <td id="result-values"></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
-    <div class="history-content" id="history-content">
-        <h2>History Content</h2>
-    </div>
+
+
     <div class="record-content" id="record-content">
         <h2>Record Content</h2>
+        <div class="record-box">
+
+        </div>
     </div>
     <div class="news-content" id="news-content">
         <h2>News Content</h2>
+        <div class="news-box-content">
+            <div class="news-item">
+                <img src="../Pictures/Icons/PTU.jpg" alt="PTU Victory">
+                <h3>PTU Wins International Tournament</h3>
+                <p>February 6, 2025 - In a thrilling display of skill and teamwork, PTU has emerged victorious in the recent international tournament. The team's performance was highlighted by their strategic gameplay and exceptional coordination, leading to a well-deserved win. This victory marks a significant milestone for PTU, showcasing their prowess on the global stage.</p>
+            </div>
+            <div class="news-item">
+                <img src="../Pictures/Icons/image.png" alt="PTU Victory">
+                <h3>PTU Wins International Tournament</h3>
+                <p>February 6, 2025 - In a thrilling display of skill and teamwork, PTU has emerged victorious in the recent international tournament. The team's performance was highlighted by their strategic gameplay and exceptional coordination, leading to a well-deserved win. This victory marks a significant milestone for PTU, showcasing their prowess on the global stage.</p>
+            </div>
+        </div>
     </div>
 </div>
 
