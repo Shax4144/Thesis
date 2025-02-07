@@ -40,8 +40,8 @@ a:hover{
     background-color: rgba(0, 0,  0, 0.2);
 }
 
-.loginBox {
-    height: 700px;
+.registerBox {
+    height: 600px;
     position: relative;
     width: 750px;
     backdrop-filter: blur(25px);
@@ -136,25 +136,12 @@ a:hover{
     
 }
 
-.inputField-date {
-    width: 200px;
-    height: 55px;
-    font-size: 16px;
-    background: transparent;
-    color: var(--secondary-color);
-    padding-inline: 20px 20px;
-    border: 2px solid var(--primary-color);
-    border-radius: 30px;
-    outline: none;
-    
-}
-
 .optionField{
     width: 200px;
     height: 55px;
     font-size: 16px;
     background: transparent;
-    color: var(--secondary-color);
+    color: var(--primary-color);
     padding-inline: 20px 20px;
     border: 2px solid var(--primary-color);
     border-radius: 30px;
@@ -372,7 +359,7 @@ a:hover{
     font-size: 20px;
 }
 
-.regpass{
+.repass{
     position: absolute;
     top: 300px;
     right: 55px;
@@ -431,12 +418,234 @@ a:hover{
 .loginzone a{
     font-weight: 500;
 }
+@media only screen and (max-width: 750px){
+    .wrapper{
+        padding: 100px;
+        margin: auto;
+    }
+    .registerBox{
+        padding: 5em 1em 1em 1em;
+        height: 65vh;
+    }
+    
+    #mname.inputField{
+        margin-left: 5px;
+        margin-right: 5px;
+    }
 
-@media only screen and (max-width: 564px){
+    .label{
+        left: 25px;
+    }
+
+    .label-mid{
+        left: 230px;
+    }
+    .inputField:focus ~ .label,
+    .inputField:valid ~ .label{
+        top: 3px;
+        left: 25px;
+    }
+    .inputField:focus ~ .label-mid,
+    .inputField:valid ~ .label-mid{
+        top: 3px;
+        left: 230px;
+    }
+    .label-last{
+        left: 435px;
+    }
+    .inputField:focus ~ .label-last,
+    .inputField:valid ~ .label-last{
+        top: 3px;
+        left: 440px;
+    }
+    .label-age{
+        left: 230px;
+    }
+
+    .inputField:focus ~ .label-age,
+    .inputField:valid ~ .label-age{
+        top: -7px;
+        left: 240px;
+    }
+    .label-bday{
+        left: 440px;
+    }
+    .label-gym, .label-user, .label-pass, .label-repass{
+        left: 65px;
+    }
+    .label-gym{
+        top: 260px;
+    }
+    .inputFields:focus ~ .label-gym,
+    .inputFields:valid ~ .label-gym{
+        top: 235px;
+        left: 85px;
+    }
+    .label-user{
+        top: 325px;
+    }
+    .inputFields:focus ~ .label-user,
+    .inputFields:valid ~ .label-user{
+        top: 298px;
+        left: 85px;
+    }
+    .label-pass{
+        top: 390px;
+    }
+    .inputFields:focus ~ .label-pass,
+    .inputFields:valid ~ .label-pass{
+        top: 365px;
+        left: 85px;
+    }
+    .label-repass{
+        top: 455px;
+    }
+    .inputFields:focus ~ .label-repass,
+    .inputFields:valid ~ .label-repass{
+        top: 430px;
+        left: 85px;
+    }
+}
+
+@media only screen and (max-width: 641px){
     .wrapper{
         padding: 20px;
     }
-    .loginBox{
-        padding: 7.5em 1.5em 4em 1.5em;
+
+    .registerBox{
+        padding: 4em 1.5em 1.5em 1.5em;
+        overflow-y: scroll;
+        height: 70vh;
+    }
+
+    .inputBox{
+        flex-direction: column;
+        padding: 15px 0px 0px;
+        margin-bottom: 0px;
+    }
+    .inputBox1{
+        flex-direction: column;
+        margin: 1px;
+    }
+    .inputField, .inputField-date{
+        width: 90%;
+        margin-bottom: 10px;
+    }
+    .inputFields{
+        padding-inline: 20px 30px;
+    }
+
+    .label{
+        position: absolute;
+        left: 45px;
+        top: 35px;
+    }
+
+    .label-mid{
+        position: absolute;
+        left: 45px;
+        top: 100px;
+    }
+
+    .label-last{
+        position: absolute;
+        left: 45px;
+        top: 165px;
+    }
+
+    .inputField:focus ~ .label,
+    .inputField:valid ~ .label{
+    left: 50px;
+    top: 7px;
+    }
+
+    .inputField:focus ~ .label-mid,
+    .inputField:valid ~ .label-mid{
+    left: 50px;
+    top: 73px;
+    }
+
+    .inputField:focus ~ .label-last,
+    .inputField:valid ~ .label-last{
+    left: 50px;
+    top: 139px;
+    }
+    .optionField{
+        display: flex;
+        width: 90%;
+        margin-bottom: 10px;
+    }
+    .label-belt{
+        position: absolute;
+        top: -5px;
+        left: 50px;
+    }
+    .label-age{
+        position: absolute;
+        top: 86px;
+        left: 45px;
+    }
+    .inputField:focus ~ .label-age,
+    .inputField:valid ~ .label-age{
+    left: 50px;
+    top: 58px;
+    }
+    .label-bday{
+        position: absolute;
+        top: 125px;
+        left: 50px;
+    }
+    .label-gym{
+        position: absolute;
+        top: 495px;
+        left: 62px;
+    }
+    .inputFields:focus ~ .label-gym,
+    .inputFields:valid ~ .label-gym{
+        top: 469px;
+        left: 68px;  
+    }
+    .label-user{
+        top: 560px;
+        left: 62px;
+    }
+    .inputFields:focus ~ .label-user,
+    .inputFields:valid ~ .label-user{
+        top: 534px;
+        left: 68px;  
+    }
+    .label-pass{
+        top: 625px;
+        left: 62px;
+    }
+    .inputFields:focus ~ .label-pass,
+    .inputFields:valid ~ .label-pass{
+        top: 599px;
+        left: 68px;  
+    }
+    .label-repass{
+        top: 690px;
+        left: 62px;
+    }
+    .inputFields:focus ~ .label-repass,
+    .inputFields:valid ~ .label-repass{
+        top: 665px;
+        left: 68px;  
+    }
+    .fa-eye{
+        position: absolute;
+        top: 625px;
+        right: 53px;
+    }
+    .repass{
+        position: absolute;
+        top: 690px;
+        right: 53px;
+    }
+    .input-submit{
+        margin-top: 10px;
+    }
+    .loginzone{
+        margin: 10px;
     }
 }
