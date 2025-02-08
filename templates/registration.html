@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/assets/css/registration.css">
+    <title>Pooms-E</title>
+
+    <!-- Boxicons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <!-- Font awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" 
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" 
+    
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div class="wrapper">
+        <div class="registerBox">
+            <div class="loginHeader">
+                <span>
+                    Sign up
+                </span>
+            </div>
+            <div class="inputBox">
+                <div class="details">
+                    <input type="text" id="fname" class="inputField" required>
+                    <label for="fname" class="label">First Name</label>
+                </div> 
+                <div class="details">
+                    <input type="text" id="mname" class="inputField" required>
+                <label for="mname" class="label-mid">Middle Name</label>
+                </div>
+                <div class="details">
+                    <input type="text" id="lname" class="inputField" required>
+                <label for="lname" class="label-last">Last Name</label>
+                </div>
+            </div>
+
+            <div class="inputBox1">
+                <div class="details">
+                    <select name="Belt" class="optionField">
+                        <option value="white">White Belt</option>
+                        <option value="yellow">Yellow Belt</option>
+                        <option value="green">Green Belt</option>
+                        <option value="blue">Blue Belt</option>
+                        <option value="red">Red Belt</option>
+                        <option value="black">Black Belt</option>
+                    </select>
+                    <label for="user" class="label-belt">Belt</label>
+                </div> 
+                <div class="details">
+                    <input type="text" id="age" class="inputField" required>
+                <label for="age" class="label-age">Age</label>
+                </div>
+                <div class="details">
+                    <input type="date" id="bday" class="inputField-date" required>
+                <label for="bday" class="label-bday">Birth date</label>
+                </div>    
+            </div>
+
+            <div class="details">
+                <input type="text" id="gym" class="inputFields" required>
+                <label for="gym" class="label-gym">Gym</label>
+            </div> 
+            <div class="details">
+                <input type="text" id="username" class="inputFields" required>
+                <label for="username" class="label-user">Username</label>
+            </div>
+            <div class="details">
+                <input type="password" id="pass" class="inputFields" required>
+                <label for="pass" class="label-pass">Password</label>
+                <i class="fa-regular fa-eye" id="eye"></i>
+            </div>
+            <div class="details">
+                <input type="password" id="repass" class="inputFields" required>
+                <label for="repass" class="label-repass">Confirm Password</label>
+                <i class="fa-regular fa-eye repass" id="eye2"></i>
+            </div>
+           
+            <input type="submit" class="input-submit" value="Register">
+            
+            <div class="loginzone">
+                <span>Already have an account? <a href="{{ url_for('login') }}">Login</a></span>
+            </div>
+        </div>
+    </div>
+
+    <script src="../static/assets/js/registration.js"></script>
+</body>
+</html>
