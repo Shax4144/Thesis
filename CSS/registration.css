@@ -141,7 +141,7 @@ a:hover{
     height: 55px;
     font-size: 16px;
     background: transparent;
-    color: var(--primary-color);
+    color: white;
     padding-inline: 20px 20px;
     border: 2px solid var(--primary-color);
     border-radius: 30px;
