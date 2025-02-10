@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="../CSS/student.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="container-sidebar">
+        <div class="admin-profile-letter">
+            <h1 id="letter"></h1>
+        </div>
+
+        <div class="container-nav-circle active" id="mainPageBtn">
+            <div class="circle-container"><i class="icon fas fa-user"></i></div>
+            <h1>Dashboard</h1>
+        </div>
+
+        <div class="container-nav-circle" id="newsEventsBtn">
+            <div class="circle-container"><i class="icon fas fa-newspaper"></i></div>
+            <h1>News & Events</h1>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <div class="container-navbar">
+        <div class="notification-container">
+            <div class="notification-icon">
+                <i class="far fa-bell icon"></i>
+            </div>
+        </div>
+
+        <div class="profile-container">
+            <div class="profile-picture">
+                <img src="../Pictures/Icons/image.png" alt="Profile">
+            </div>
+            <div class="profile-name">
+                <h1 id="name">Cyrus Clifford Aguas</h1>
+                <h2 id="status">The Best Student</h2>
+            </div>
+            <div class="drop-down-icon">
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="drop-down" id="profileMenu">
+                <ul>
+                    <li id="viewProfile"><i class="fas fa-user"></i> View Profile</li>
+                    <li id="editProfile"><i class="fas fa-pencil-alt"></i> Edit Profile</li>
+                    <li id="logout"><i class="fas fa-sign-out-alt"></i> Log Out</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Page -->
+    <div class="container-mainpage" id="mainPage">
+        <div class="student-container">
+            <h2>Welcome, <span id="studentName">Cyrus Clifford Aguas</span></h2>
+            <p>Belt Level: <span id="studentBelt">Legendary Belt</span></p>
+        </div>
+    </div>
+
+    <!-- News & Events Page 
+     ulol-->
+    <div class="container-news-events" id="newsEvents" style="display: none;">
+        <h2>News & Events</h2>
+        <div class="news-item">
+            <h3>Upcoming Tournament</h3>
+            <p>Join the National Championship on March 25, 2025.</p>
+        </div>
+        <div class="news-item">
+            <h3>Training Camp</h3>
+            <p>Special training camp available for all belts next month!</p>
+        </div>
+    </div>
+
+    <script src="../JS/student.js"></script>
+</body>
+
+</html>
