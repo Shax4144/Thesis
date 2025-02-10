@@ -1,11 +1,24 @@
 var pass = document.getElementById('pass');
 var eye = document.getElementById('eye');
+var eye2 = document.getElementById('eye2'); // Check if eye2 exists
 
-eye.addEventListener('click', togglePass);
-eye2.addEventListener('click', togglePass1);
+// Add event listener only if #eye exists
+if (eye) {
+    eye.addEventListener('click', togglePass);
+}
 
-function togglePass(){
+// Add event listener only if #eye2 exists
+if (eye2) {
+    var confirmPass = document.getElementById('confirm_pass');
+    eye2.addEventListener('click', togglePass1);
+}
+
+function togglePass() {
     eye.classList.toggle('active');
+    pass.type = (pass.type === 'password') ? 'text' : 'password';
+}
 
-    (pass.type == 'password') ? pass.type = 'text' : pass.type = 'password';
+function togglePass1() {
+    eye2.classList.toggle('active');
+    confirmPass.type = (confirmPass.type === 'password') ? 'text' : 'password';
 }
