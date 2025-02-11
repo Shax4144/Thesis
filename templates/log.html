@@ -3,27 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    
+    <title>PTU</title>
+    <link rel="stylesheet" href="../static/assets/css/log.css"
+    <!-- Boxicons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <!-- Font awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" 
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" 
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-    <div class="container">
-        <h2>Login</h2>
-        {{session['logged_in']}}
-        <form id="login_form">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" class="field" required>
+    <div class="wrapper">
+        <div class="container">
+            <div class="header">
+                <span>
+                    Login
+                </span>
+            </div>    
+            {{session['logged_in']}}
+            <form id="login_form">
+                <div class="inputBox">
+                    <input type="text" id="username" name="username" class="field" required>
+                    <label for="username" class="user">Username</label>
+                    <i class="bx bx-user icon"></i>
+                </div>
 
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" class="field" required>
+                <div class="inputBox">
+                    <input type="password" id="pass" name="password" class="field" required>
+                    <label for="password" class="pass">Password</label>
+                    <i class="fa-solid fa-unlock-keyhole icon1"></i>
+                    <i class="fa-regular fa-eye" id="eye"></i>
+                </div>
 
-            <p class="error error--hidden"></p>
+                <p class="error error--hidden"></p>
 
-            <input type="submit" value="Login" class="btn">
-        </form>
-    </div>
+                <div class="inputBox">
+                    <input type="submit" value="Login" class="btn">
+                </div>
+
+                <div class="registerZone">
+                    <span> 
+                        Don&apos;t have an account yet? 
+                        <a href="../templates/reg.html"> 
+                            Register now
+                        </a>
+                    </span>
+                </div>    
+            </form>
+        </div>
+    </div>    
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="/static/assets/js/scripts.js"></script>
+    <script src="../static/assets/js/login.js"></script>
+    <script src="../static/assets/js/scripts.js"></script>
+    
 </body>
 </html>

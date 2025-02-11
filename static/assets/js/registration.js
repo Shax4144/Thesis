@@ -15,6 +15,23 @@ $(document).ready(function () {
         repass.attr("type", repass.attr("type") === "password" ? "text" : "password");
     });
 
+    // Enforce age range (1-99)
+    $("input[name='age']").on("input", function () {
+        let min = 1;
+        let max = 99;
+        let value = parseInt($(this).val());
+
+        if(isNaN(value)){
+            $(this).val("");
+            return;
+        }
+        if (value < min) {
+            $(this).val(min);
+        } else if (value > max) {
+            $(this).val(max);
+        }
+    });
+
     // Handle signup form submission with AJAX
     $("#signup_form").submit(function (event) {
         event.preventDefault(); // Prevent default form submission
