@@ -37,3 +37,14 @@ class User:
     def signout():
         session.clear()  # Clears session
         return redirect('/')  # Redirects to login page
+    
+    @staticmethod
+    def login():
+        user = db.users.find_one({
+            "username": request.form.get('username')
+        })
+
+        if user:
+            return User.start_session(user)
+        
+        return jsonify({ "error": "Invalid login credentials"}), 401

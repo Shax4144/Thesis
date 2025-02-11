@@ -10,3 +10,7 @@ def signup():
 @user_bp.route('/signout')
 def signout():
     return User.signout()  # Call static method
+
+@user_bp.route('/user/login', methods=['POST'])
+def login():
+    return User.login()  # Call static method
