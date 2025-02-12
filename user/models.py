@@ -22,6 +22,7 @@ class User:
             "age": request.form.get('age'),
             "belt": request.form.get('belt'),
             "gym": request.form.get('gym'),
+            "role": request.form.get('role'),
             "username": request.form.get('username'),
             "password": generate_password_hash(request.form.get('password')),  # Hash password
         }
@@ -37,7 +38,7 @@ class User:
     @staticmethod
     def signout():
         session.clear()  # Clears session
-        return redirect('/')  # Redirects to login page
+        return redirect('/login')  # Redirects to login page
     
     @staticmethod
     def login():
