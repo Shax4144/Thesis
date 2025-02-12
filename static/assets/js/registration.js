@@ -14,7 +14,10 @@ $(document).ready(function () {
         eye2.toggleClass('active');
         repass.attr("type", repass.attr("type") === "password" ? "text" : "password");
     });
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5a647bdc61e6d8571d2a6b09f053f44accd92aa1
     // Enforce age range (1-99)
     $("input[name='age']").on("input", function () {
         let min = 1;
