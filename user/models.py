@@ -1,6 +1,6 @@
 from flask import jsonify, request, session, redirect
 import uuid
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 from database import db  
 
 class User:
@@ -28,10 +28,11 @@ class User:
 
         if db.users.find_one({ "username": user['username'] }):
             return jsonify({"error": "Username is already taken"}), 400
+        
         if db.users.insert_one(user):
-            return User.start_session(user)
+            return jsonify({"message": "Signup successful"}), 200  # No session started here
 
-        return jsonify({ "error": "Signup failed"}), 400
+        return jsonify({"error": "Signup failed"}), 400
     
     @staticmethod
     def signout():
@@ -44,7 +45,7 @@ class User:
             "username": request.form.get('username')
         })
 
-        if user:
-            return User.start_session(user)
-        
-        return jsonify({ "error": "Invalid login credentials"}), 401
+        if user and check_password_hash(user["password"], request.form.get('password')):  # Check password
+            return User.start_session(user)  # Start session here
+
+        return jsonify({"error": "Invalid login credentials"}), 401

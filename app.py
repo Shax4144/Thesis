@@ -12,7 +12,7 @@ def login_required(f):
     def wrap(*args, **kwargs):
         if 'logged_in' in session:
             return f(*args, **kwargs)
-        else:
+        else: 
             return redirect('/')  
     return wrap
 
@@ -29,7 +29,7 @@ def log():
 def reg():
     return render_template('reg.html')
 
-@app.route('/homepage')
+@app.route('/admin')
 @login_required 
 def admin():
     return render_template('admin.html')
