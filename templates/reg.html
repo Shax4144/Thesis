@@ -4,50 +4,100 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Signup Form</title>
-
+    <link rel="stylesheet" href="../static/assets/css/reg.css">
+     
+    <!-- Boxicons & Font Awesome -->
+     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 <body>
-    <div class="form-container">
-        <h2>Signup Form</h2>
-        <form name="signup_form">
+    <div class= "wrapper">
+        <div class="form-container">
+            <div class="signup_header">
+                <span>Signup<span>
+            </div>    
+            <form name="signup_form" class="inputBox">
+                
+                <div class="row1">
+                    <div class="details1">
+                        <input type="text" name="firstname" class="field" required>
+                        <label for="firstname" class="fname">First Name</label>
+                    </div >
 
-            <label for="firstname">First Name</label>
-            <input type="text" name="firstname" class="field" required>
-        
-            <label for="middlename">Middle Name</label>
-            <input type="text" name="middlename" class="field" required>
-        
-            <label for="lastname">Last Name</label>
-            <input type="text" name="lastname" class="field" required>
-        
-            <label for="birthdate">Birthdate</label>
-            <input type="date" name="birthdate" class="field" required>
-        
-            <label for="age">Age</label>
-            <input type="number" name="age" class="field" required>
-        
-            <label for="belt">Belt</label>
-            <input type="text" name="belt" class="field" required>
-        
-            <label for="gym">Gym</label>
-            <input type="text" name="gym" class="field" required>
-        
-            <label for="username">Username</label>
-            <input type="text" name="username" class="field" required>
-        
-            <label for="password">Password</label>
-            <input type="password" name="password" class="field" required>
-        
-            <label for="confirm_password">Confirm Password</label>
-            <input type="password" name="confirm_password" class="field" required>
-        
-            <p class="error--hidden"></p>
-        
-            <input type="submit" value="Sign Up" class="btn">
-        
-        </form>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="/static/assets/js/scripts.js"></script>
-    </div>
+                    <div class="details1">    
+                        <input type="text" name="middlename" class="field" required>
+                        <label for="middlename" class="mname">Middle Name</label>
+                    </div>
+
+                    <div class="details1">  
+                        <input type="text" name="lastname" class="field" required>
+                        <label for="lastname" class="lname">Last Name</label>
+                    </div>
+                </div>
+
+                <div class ="row2">
+                    <div class="details">
+                        <input type="date" name="birthdate" class="field1" required>
+                        <label for="birthdate" class="bday">Birth date</label>
+                    </div>
+                    <div class="details">
+                        <input type="number" id="ageInput" min="1" max="99" name="age" class="field1" required>
+                        <label for="age" class="age1">Age</label>
+                    </div>
+
+                    <div class="details">
+                        <label for="belt" class="belt1">Belt</label>
+                        <select id='belt' class="optionField">
+                            <option value = "select"> Select Belt</option>
+                            <option value = "white"> White</option>
+                            <option value = "yellow"> Yellow</option>
+                            <option value = "orange"> Orange</option>
+                            <option value = "green"> Green</option>
+                            <option value = "purple"> Purple</option>
+                            <option value = "blue"> Blue</option>
+                            <option value = "brown"> Brown</option>
+                            <option value = "red"> Red</option>
+                            <option value = "black"> Black</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col1">
+                    <div class="details">
+                        <input type="text" name="gym" class="field" required>
+                        <label for="gym" class="gym1">Gym</label>
+                    </div>
+                    
+                    <div class="details">
+                        <input type="text" name="username" class="field" required>
+                        <label for="username" class="user">Username</label>
+                    </div>
+
+                    <div class="details">
+                        <input type="password" id="pass" name="password" class="field" required>
+                        <label for="password" class="pass">Password</label>
+                        <i class="fa-regular fa-eye" id="eye"></i>
+                    </div>
+
+                    <div class="details">
+                        <input type="password" id="cPass" name="confirm_password" class="field" required>
+                        <label for="confirm_password" class="repass">Confirm Password</label>
+                        <i class="fa-regular fa-eye icon" id="eye2"></i>
+                    </div>
+                </div>    
+                <p class="error--hidden"></p>
+            
+                <input type="submit" class="input-submit" value="Register" class="btn">
+                
+                <div class="loginzone">
+                    <span>Already have an account? <a href="../templates/log.html"> Log in</a></span>
+                </div>
+            </form>
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script src="../static/assets/js/registration.js"></script>
+            <script src="../static/assets/js/scripts.js"></script>
+            
+        </div>
+    </div>    
 </body>
 </html>
