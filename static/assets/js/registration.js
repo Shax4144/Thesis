@@ -15,7 +15,6 @@ $(document).ready(function () {
         repass.attr("type", repass.attr("type") === "password" ? "text" : "password");
     });
 
-
     // Enforce age range (1-99)
     $("input[name='age']").on("input", function () {
         let min = 1;
