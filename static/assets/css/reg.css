@@ -187,6 +187,24 @@ input[type="number"]::-webkit-outer-spin-button {
     padding: 0 8px;
     font-size: 14px;
 }
+.row3{
+    display: grid;
+    grid-template-columns: 65% 30%;
+    gap: 15px;
+}
+#role.optionField{
+    width: 100%;
+}
+.role{
+    position: absolute;
+    top: 212px;
+    left: 525px;
+    background-color: var(--secondary-color);
+    border-radius: 30px;
+    color: var(--black-color);
+    padding: 0 8px;
+    font-size: 14px;
+}
 .col1{
     display: flex;
     flex-direction: column;
@@ -439,6 +457,9 @@ input[type="number"]::-webkit-outer-spin-button {
         left: 395px;
         font-size: 12px;
     }
+    .role{
+        left: 395px;
+    }
 }
 
 @media only screen and (max-width: 580px){
@@ -473,6 +494,18 @@ input[type="number"]::-webkit-outer-spin-button {
     .row1, .row2{
         flex-direction: column;
         padding: 0;
+    }
+    .row3{
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+    }
+    .details3{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-items: center;
+        align-items: center;
     }
     .fname{
         left: 70px;
@@ -530,6 +563,13 @@ input[type="number"]::-webkit-outer-spin-button {
         top: 457px;
         left: 70px;
     }
+    #role.optionField{
+        width: 90%;
+    }
+    .role{
+        top: 492px;
+        left: 75px;
+    }
     .field:focus ~ .gym1,
     .field:valid ~ .gym1{
         left: 75px;
@@ -537,37 +577,37 @@ input[type="number"]::-webkit-outer-spin-button {
     }
     .user{
         left: 70px;
-        top: 517px;
+        top: 575px;
     }
     .field:focus ~ .user,
     .field:valid ~ .user{
         left: 75px;
-        top: 493px;
+        top: 552px;
     }
     .pass{
-        top: 577px;
+        top: 636px;
         left: 70px;
     }
     .field:focus ~ .pass,
     .field:valid ~ .pass{
         left: 75px;
-        top: 552px;
+        top: 613px;
     }
     .repass{
-        top: 635px;
+        top: 695px;
         left: 70px;
     }
     .field:focus ~ .repass,
     .field:valid ~ .repass{
         left: 75px;
-        top: 612px;
+        top: 673px;
     }
     .fa-eye{
-        top: 575px;
+        top: 636px;
         right: 70px;
     }
     .icon{
-        top: 635px;
+        top: 695px;
         right: 70px;
     }
 }
