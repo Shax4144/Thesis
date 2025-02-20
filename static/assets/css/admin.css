@@ -242,15 +242,18 @@ h1 {
 
 /*mainpage*/
 
-.container-mainpage {
-    background-color: #f5f6fa;
-    flex-grow: 1;
-    padding: 20px;
-    margin-left: 90px; 
-    margin-top: 60px;
-}
-
-/* Active Sidebar Button */
+    .container-mainpage {
+        background-color: #f5f6fa;
+        flex-grow: 1;
+        padding: 20px;
+        margin-left: 90px; 
+    
+    }
+    .contents-container-mainpage {
+        margin-top: 40px;
+       
+    }
+    /* Active Sidebar Button */
 .container-nav-circle.active .circle-container {
     background-color: #f36c6c; /* Change background */
 }
@@ -410,11 +413,11 @@ h1 {
     color: #666;
 }
 
-.win-box, .tournament-played-box {
+.win-box{
     margin-bottom: 20px;
 }
 
-.win-box span, .tournament-played-box span {
+.win-box span {
     display: block;
     height: 50px; /* Placeholder size */
     width: 100%;
@@ -479,58 +482,127 @@ h1 {
     color: #aaa;
     text-align: center;
 }
- 
-
 .news-content {
-    font-family: Arial, sans-serif;
-    max-width: 100%;
-    margin-right: 50px;
-    
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 80px;
 }
 
+
 .news-content h2 {
-    text-align: left;
-    margin-bottom: 20px;
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 15px;
     color: #333;
 }
 
 .news-box-content {
+    display: flex;
+    justify-content: center;
+}
+
+.wrapper {
     width: 100%;
-    border: 1px solid #ddd;
-    border-radius: 10px;
+}
+
+.form-container {
     padding: 20px;
-    background-color: #ffffff;
-    max-height: 750px; /* Adjust this value based on how much content you want visible without scrolling */
-    overflow-y: auto; /* Makes the container scrollable vertically */
+    background: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
 }
 
-.news-item {
+.signup_header span {
+    display: block;
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    color: #007bff;
     margin-bottom: 20px;
+}
+
+.inputBox {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    margin: 20px;
+}
+
+.details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.field {
     padding: 10px;
-    border-bottom: 1px solid #eee;
-}
-
-.news-item:last-child {
-    border-bottom: none;
-    margin-bottom: 0;
-}
-
-.news-item img {
-    width: 100%; /* Makes the image responsive */
-    height: auto;
+    border: 1px solid #ccc;
     border-radius: 5px;
-    margin-bottom: 10px;
+    font-size: 16px;
 }
 
-.news-item h3 {
-    margin: 10px 0;
-    color: #333;
-    font-size: 18px;
+.field:focus {
+    border-color: #007bff;
+    outline: none;
 }
 
-.news-item p {
-    margin: 0;
-    color: #666;
+select.field {
+    cursor: pointer;
+}
+
+.field:disabled {
+    background: #e9ecef;
+    cursor: not-allowed;
+}
+
+.error-message {
+    color: red;
     font-size: 14px;
-    line-height: 1.5;
+    display: none;
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 12px;
+    background: #007bff;
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-submit:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.btn-submit:hover:not(:disabled) {
+    background: #0056b3;
+}
+
+.loginzone {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.loginzone a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.loginzone a:hover {
+    text-decoration: underline;
 }
