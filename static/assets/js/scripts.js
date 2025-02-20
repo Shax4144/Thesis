@@ -10,7 +10,7 @@ $("#login_form").submit(function (e) {
             password: $("#password").val()
         },
         success: function (response) {
-            window.location.href = "/admin"; // Redirect on successful login
+            window.location.href = "/api/admin"; // Redirect on successful login
         },
         error: function (xhr) {
             $(".error").removeClass("error--hidden").text(xhr.responseJSON.error);

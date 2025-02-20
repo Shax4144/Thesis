@@ -110,15 +110,16 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-
 document.addEventListener("DOMContentLoaded", function () {
     const tableBody = document.querySelector("#players-table tbody");
     const printButton = document.getElementById("print-button");
+    const refreshButton = document.querySelector(".btn-refresh"); // Select refresh button
+    const playersTable = document.querySelector(".history-box"); // Select table container
 
     // Fetch registered players from Flask API
     async function fetchPlayers() {
         try {
-            const response = await fetch('/api/players'); // Change to your actual endpoint
+            const response = await fetch('/api/players'); // Ensure this matches your Flask route
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
@@ -136,20 +137,29 @@ document.addEventListener("DOMContentLoaded", function () {
                     <td>${player.belt}</td>
                     <td>${player.gym}</td>
                     <td>${player.weight}</td>
-                    
                 `;
                 tableBody.appendChild(row);
             });
 
         } catch (error) {
             console.error("Error fetching players:", error);
-            tableBody.innerHTML = `<tr><td colspan="8">Failed to load data</td></tr>`;
+            tableBody.innerHTML = `<tr><td colspan="7">Failed to load data</td></tr>`; // Adjusted colspan
         }
     }
 
-    // Print functionality
+    // Print only the table
     printButton.addEventListener("click", function () {
-        window.print();
+        const originalContent = document.body.innerHTML; // Store full page content
+        const tableContent = playersTable.innerHTML; // Get only the table content
+
+        document.body.innerHTML = `<div>${tableContent}</div>`; // Replace body with table only
+        window.print(); // Open print dialog
+        document.body.innerHTML = originalContent; // Restore original content
+    });
+
+    // Refresh players list
+    refreshButton.addEventListener("click", function () {
+        fetchPlayers();
     });
 
     // Fetch players when the page loads
