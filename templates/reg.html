@@ -16,94 +16,35 @@
             <div class="signup_header">
                 <span>Signup<span>
             </div>    
-            <form name="signup_form" class="inputBox">
+            <form action="https://api.web3forms.com/submit" method="POST" name="signup_form" class="inputBox">
                 
                 <div class="row1">
-                    <div class="details1">
-                        <input type="text" name="firstname" class="field" required>
-                        <label for="firstname" class="fname">First Name</label>
-                    </div >
+                    <input type="hidden" name="access_key" value="aba81b4b-e345-424b-a32d-4a7e0a08367b">
 
-                    <div class="details1">    
-                        <input type="text" name="middlename" class="field" required>
-                        <label for="middlename" class="mname">Middle Name</label>
-                    </div>
+                    <input type="text" name="name" class="nameField" required>
+                    <label for="name" class="label-name">Enter your Name</label>
 
-                    <div class="details1">  
-                        <input type="text" name="lastname" class="field" required>
-                        <label for="lastname" class="lname">Last Name</label>
-                    </div>
+                    <input type="email" name="email" class="emailField" required>
+                    <label for="email" class="label-email">Enter your Email</label>
+                    
+                    <input type="tel" name="number" class="contactField" required>
+                    <label for="number" class="label-number">Contact No.</label>
+                    
+                    <input type="text" name="subject" class="subjectField" required>
+                    <label for="subject" class="label-subject">Subject</label>
+                    
+                    <textarea type="text" id="details" name="details" class="detailsField" cols="40" rows="10"></textarea>
+                    <label for="details" class="label-details">Enter details here...</label>
                 </div>
 
-                <div class ="row2">
-                    <div class="details">
-                        <input type="date" name="birthdate" class="field1" required>
-                        <label for="birthdate" class="bday">Birth date</label>
-                    </div>
-                    <div class="details">
-                        <input type="number" id="ageInput" min="1" max="99" name="age" class="field1" required>
-                        <label for="age" class="age1">Age</label>
-                    </div>
-
-                    <div class="details">
-                        <label for="belt" class="belt1" >Belt</label>
-                        <select id='belt' class="optionField" name="belt">
-                            <option value = "select"> Select Belt</option>
-                            <option value = "white"> White</option>
-                            <option value = "yellow"> Yellow</option>
-                            <option value = "orange"> Orange</option>
-                            <option value = "green"> Green</option>
-                            <option value = "purple"> Purple</option>
-                            <option value = "blue"> Blue</option>
-                            <option value = "brown"> Brown</option>
-                            <option value = "red"> Red</option>
-                            <option value = "black"> Black</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row3">
-                    <div class="details">
-                        <input type="text" name="gym" class="field" required>
-                        <label for="gym" class="gym1">Gym</label>
-                    </div>
-
-                    <div class ="details3">
-                        <label for="role" class="role" >Role</label>
-                        <select id='role' class="optionField" name="role">
-                            <option value = "select"> Select Role </option>
-                            <option value = "student"> Student </option>
-                            <option value = "coach"> Coach </option>
-                            <option value = "admin"> Referee / Admin </option>
-                        </select>
-                    </div>
-                </div>  
-
-                <div class="col1">    
-                    <div class="details">
-                        <input type="text" name="username" class="field" required>
-                        <label for="username" class="user">Username</label>
-                    </div>
-
-                    <div class="details">
-                        <input type="password" id="pass" name="password" class="field" required>
-                        <label for="password" class="pass">Password</label>
-                        <i class="fa-regular fa-eye" id="eye"></i>
-                    </div>
-
-                    <div class="details">
-                        <input type="password" id="cPass" name="confirm_password" class="field" required>
-                        <label for="confirm_password" class="repass">Confirm Password</label>
-                        <i class="fa-regular fa-eye icon" id="eye2"></i>
-                    </div>
-                </div>    
+                    
                 <p class="error--hidden"></p>
             
-                <input type="submit" class="input-submit" value="Register" class="btn">
+                <input type="submit" class="input-submit" value="Submit Registration" class="btn">
                 
                 <div class="loginzone">
-                    <span>Already have an account? <a href="{{ url_for('log') }}">
-                        Log in
+                    <span>Already submitted an email? <a href="{{ url_for('home') }}">
+                        Back to previous page
                     </a></span>
                 </div>
             </form>

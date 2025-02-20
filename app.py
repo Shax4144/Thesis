@@ -20,7 +20,7 @@ def login_required(f):
 # Routes
 @app.route('/')
 def home():
-    return render_template('homepage.html')
+    return render_template('home.html')
 
 @app.route('/login')
 def log():
@@ -30,7 +30,7 @@ def log():
 def reg():
     return render_template('reg.html')
 
-@app.route('/admin')
+@app.route('/api/admin')
 @login_required 
 def admin():
     return render_template('admin.html')

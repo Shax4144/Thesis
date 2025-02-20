@@ -65,5 +65,14 @@ $(document).ready(function () {
             }
         });
     });
+
+    const detailsField = $("#details");
+    detailsField.on("input", function () {
+        if (detailsField.val().trim() !== "") {
+            detailsField.addClass("not-empty");
+        } else {
+            detailsField.removeClass("not-empty");
+        }
+    });
 });
 

@@ -94,7 +94,7 @@ nav {
 }
 
 .nav__logo {
-  max-width: 150px;
+  max-width: 95px;
 }
 
 .nav__links {
@@ -517,7 +517,7 @@ nav {
 }
 
 .footer__logo {
-  max-width: 150px;
+  max-width: 110px;
   margin-bottom: 2rem;
 }
 
