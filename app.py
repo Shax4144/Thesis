@@ -41,6 +41,11 @@ def get_players():
     players = list(db.players.find({}, {'_id': 0}))  # Fetch all players, excluding _id
     return jsonify(players)
 
+@app.after_request
+def set_csp(response):
+    response.headers['Content-Security-Policy'] = "script-src 'self' 'unsafe-inline' https://accounts.google.com https://apis.google.com https://code.jquery.com;"
+    return response
+
 
 if __name__ == '__main__':
     app.run(debug=True)
