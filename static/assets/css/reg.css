@@ -44,7 +44,7 @@ body{
     position: relative;
     width: 550px;
     backdrop-filter: blur(30px);
-    border: 2px solid var(--black-color);
+    border: 2px solid var(--secondary-color);
     border-radius: 15px;
     padding: 4.5em 2.5em 4em 2.5em;
     color: var(--text-color);
@@ -58,14 +58,14 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--black-color);
+    background-color: var(--secondary-color);
     width: 140px;
     height: 60px;
     border-radius: 0 0 20px 20px;
 }
 .signup_header span{
     font-size: 30px;
-    color: var(--secondary-color-hover);
+    color: var(--black-color);
 }
 .signup_header::before{
     content: "";
@@ -76,7 +76,7 @@ body{
     height: 30px;
     border-top-right-radius: 50%;
     background: transparent;
-    box-shadow: 15px 0 0 0 var(--black-color);
+    box-shadow: 15px 0 0 0 var(--secondary-color);
 }
 .signup_header::after{
     content: "";
@@ -87,7 +87,7 @@ body{
     height: 30px;
     border-top-left-radius: 50%;
     background: transparent;
-    box-shadow: -15px 0 0 0 var(--black-color);
+    box-shadow: -15px 0 0 0 var(--secondary-color);
 }
 .inputBox{
     padding-top: 20px;
@@ -225,7 +225,7 @@ body{
 .input-submit{
     width: 100%;
     height: 50px;
-    background: var(--secondary-color-hover);
+    background: var(--text-color);
     font-size: 16px;
     font-weight: 550;
     border: none;
@@ -236,8 +236,8 @@ body{
     color: var(--black-color);
 }
 .input-submit:hover{
-    background: var(--secondary-color-hover);
-    box-shadow: 0 0 3px var(--secondary-color);
+    background: var(--text-color);
+    box-shadow: 0 0 3px var(--text-color);
 }
 .loginzone{
     text-align: center;
@@ -253,11 +253,11 @@ body{
     position: absolute;
     top: 74px;
     left: 95px;
-    font-weight: 550;
+    font-weight: 500;
     font-size: 14px;
     background-color: var(--secondary-color);
     border-radius: 30px;
-    color: var(--text-color);
+    color: var(--black-color);
     padding: 0 10px;
 
 }
@@ -267,10 +267,10 @@ body{
     top: 140px;
     left: 95px;
     font-size: 14px;
-    font-weight: 550;
+    font-weight: 500;
     background-color: var(--secondary-color-hover);
     border-radius: 30px;
-    color: var(--text-color);
+    color: var(--black-color);
     padding: 0 10px;
 }
 .contactField:focus ~ .label-number,
@@ -279,10 +279,10 @@ body{
     top: 206px;
     left: 95px;
     font-size: 14px;
-    font-weight: 550;
+    font-weight: 500;
     background-color: var(--secondary-color);
     border-radius: 30px;
-    color: var(--text-color);
+    color: var(--black-color);
     padding: 0 10px;
 }
 .subjectField:focus ~ .label-subject,
@@ -291,10 +291,10 @@ body{
     top: 273px;
     left: 95px;
     font-size: 14px;
-    font-weight: 550;
+    font-weight: 500;
     background-color: var(--secondary-color);
     border-radius: 30px;
-    color: var(--text-color);
+    color: var(--black-color);
     padding: 0 10px;
 }
 .detailsField:focus ~ .label-details,
@@ -303,10 +303,10 @@ body{
     top: 338px;
     left: 95px;
     font-size: 14px;
-    font-weight: 550;
+    font-weight: 500;
     background-color: var(--secondary-color);
     border-radius: 30px;
-    color: var(--text-color);
+    color: var(--black-color);
     padding: 0 10px;
 }
 
