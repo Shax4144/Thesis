@@ -10,14 +10,16 @@
 
 :root {
     --primary-color: #c6c3c3;
-    --secondary-color: #ffffff;
-    --black-color: #000000;
+    --secondary-color-hover: #d79447;
+    --secondary-color: #cb8d47;
+    --black-color: #111317;
+    --text-color: #ffffff;
 }
 
 body {
-    background:rgba(0, 0,  0, 0.1) url(../images/PTU.jpg);
+    background:rgba(0, 0,  0, 0.7) url(../images/PTU.jpg);
     background-position: center;
-    background-repeat: repeat;
+    background-repeat: no-repeat;
     background-attachment: fixed;
     background-blend-mode: darken;
 }
@@ -45,7 +47,7 @@ a:hover{
     border: 2px solid var(--secondary-color);
     border-radius: 15px;
     padding: 7.5em 2.5em 4em 2.5em;
-    color: var(--secondary-color);
+    color: var(--text-color);
     box-shadow: 0px 0px 10px 2px rgba(0, 0,  0, 0.3);
 }
 .header{
@@ -102,7 +104,7 @@ a:hover{
     height: 55px;
     font-size: 16px;
     background: transparent;
-    color: var(--secondary-color);
+    color: var(--text-color);
     padding-inline: 20px 80px;
     border: 2px solid var(--secondary-color);
     border-radius: 30px;
@@ -179,6 +181,10 @@ a:hover{
     border-radius: 30px;
     cursor: pointer;
     transition: 0.3s;
+}
+.btn:hover{
+    background: var(--text-color);
+    box-shadow: 0 0 3px var(--text-color);
 }
 .input-submit:hover{
     background: var(--secondary-color);

@@ -17,16 +17,16 @@
         <a href="#"><img src="../static/assets/images/icon.png" alt="logo" /></a>
       </div>
       <ul class="nav__links">
-        <li class="link"><a href="#">Home</a></li>
-        <li class="link"><a href="#">Program</a></li>
-        <li class="link"><a href="#">Service</a></li>
-        <li class="link"><a href="#">About</a></li>
-        <li class="link"><a href="#">Community</a></li>
+        <li class="link"><a href="#home">Home</a></li>
+        <li class="link"><a href="#program">Program</a></li>
+        <li class="link"><a href="#service">Service</a></li>
+        <li class="link"><a href="#about">About</a></li>
+        <li class="link"><a href="#community">Community</a></li>
       </ul>
       <button class="btn"><a href="{{ url_for('reg') }}">Join Now</a></button>
     </nav>
 
-    <header class="section__container header__container">
+    <header class="section__container header__container" id="home">
       <div class="header__content">
         <span class="bg__blur"></span>
         <span class="bg__blur header__blur"></span>
@@ -39,63 +39,59 @@
           with every stance and technique. Sign up now 
           and begin your journey toward mastery!
         </p>
-        <button class="btn">Get Started</button>
+        <button class="btn"><a href="{{ url_for('reg') }}">Get Started</a></button>
       </div>
       <div class="header__image">
         <img src="../static/assets/images/header.png" alt="header" />
       </div>
     </header>
 
-    <section class="section__container explore__container">
+    <section class="section__container explore__container" id="program">
       <div class="explore__header">
-        <h2 class="section__header">EXPLORE OUR PROGRAM</h2>
-        <div class="explore__nav">
-          <span><i class="ri-arrow-left-line"></i></span>
-          <span><i class="ri-arrow-right-line"></i></span>
-        </div>
+        <h2 class="section__header" >EXPLORE OUR PROGRAM</h2>
       </div>
       <div class="explore__grid">
         <div class="explore__card">
-          <span><i class="ri-boxing-fill"></i></span>
-          <h4>Strength</h4>
+          <span><i class="ri-walk-fill"></i></span>
+          <h4>Forms & Poomsae</h4>
           <p>
-            Embrace the essence of strength as we delve into its various
-            dimensions physical, mental, and emotional.
+            Master the art of Taekwondo forms with precision and discipline. 
+            Improve your techniques, balance, and focus while learning traditional poomsae movements.
           </p>
-          <a href="#">Join Now <i class="ri-arrow-right-line"></i></a>
+          <a href="{{ url_for('reg') }}">Join Now <i class="ri-arrow-right-line"></i></a>
+        </div>
+        <div class="explore__card">
+          <span><i class="ri-boxing-fill"></i></span>
+          <h4>Sparring & Combat</h4>
+          <p>
+            Enhance your reflexes, speed, and strategy through controlled sparring sessions. 
+            Develop confidence and real-world self-defense skills with expert guidance.
+          </p>
+          <a href="{{ url_for('reg') }}">Join Now <i class="ri-arrow-right-line"></i></a>
         </div>
         <div class="explore__card">
           <span><i class="ri-heart-pulse-fill"></i></span>
-          <h4>Physical Fitness</h4>
+          <h4>Flexibility & Conditioning</h4>
           <p>
-            It encompasses a range of activities that improve health, strength,
-            flexibility, and overall well-being.
+            Improve your agility, endurance, and overall fitness with specialized
+             training routines designed to enhance kicking power and flexibility.
           </p>
-          <a href="#">Join Now <i class="ri-arrow-right-line"></i></a>
+          <a href="{{ url_for('reg') }}">Join Now <i class="ri-arrow-right-line"></i></a>
         </div>
         <div class="explore__card">
           <span><i class="ri-run-line"></i></span>
-          <h4>Fat Lose</h4>
+          <h4>Strength & Stamina</h4>
           <p>
-            Through a combination of workout routines and expert guidance, we'll
-            empower you to reach your goals.
+            Build strength and stamina essential for Taekwondo through targeted drills and exercises. 
+            Develop core power for improved performance in every aspect of training.
           </p>
-          <a href="#">Join Now <i class="ri-arrow-right-line"></i></a>
-        </div>
-        <div class="explore__card">
-          <span><i class="ri-shopping-basket-fill"></i></span>
-          <h4>Weight Gain</h4>
-          <p>
-            Designed for individuals, our program offers an effective approach
-            to gaining weight in a sustainable manner.
-          </p>
-          <a href="#">Join Now <i class="ri-arrow-right-line"></i></a>
+          <a href="{{ url_for('reg') }}">Join Now <i class="ri-arrow-right-line"></i></a>
         </div>
       </div>
     </section>
 
-    <section class="section__container class__container">
-      <div class="class__image">
+    <section class="section__container class__container" id="service">
+      <div class="class__image" >
         <span class="bg__blur"></span>
         <img src="../static/assets/images/newclass-2.jpg" alt="class" class="class__img-1" />
         <img src="../static/assets/images/newclass-1.png" alt="class" class="class__img-2" />
@@ -113,11 +109,11 @@
             sparring skills, or building discipline and confidence, our training 
             keeps you engaged, challenged, and constantly improving.
         </p>
-        <button class="btn">Book A Class</button>
+        <button class="btn">Join Now</button>
       </div>
     </section>
 
-    <section class="section__container join__container">
+    <section class="section__container join__container" id="about">
       <h2 class="section__header">WHY TRAIN WITH US ?</h2>
       <p class="section__subheader">
             Join a welcoming and supportive Taekwondo community where you can train, 
@@ -152,121 +148,23 @@
       </div>
     </section>
 
-    <section class="section__container price__container">
-      <h2 class="section__header">OUR PRICING PLAN</h2>
-      <p class="section__subheader">
-        Our pricing plan comes with various membership tiers, each tailored to
-        cater to different preferences and fitness aspirations.
-      </p>
-      <div class="price__grid">
-        <div class="price__card">
-          <div class="price__card__content">
-            <h4>Basic Plan</h4>
-            <h3>$16</h3>
-            <p>
-              <i class="ri-checkbox-circle-line"></i>
-              Smart workout plan
-            </p>
-            <p>
-              <i class="ri-checkbox-circle-line"></i>
-              At home workouts
-            </p>
-          </div>
-          <button class="btn price__btn">Join Now</button>
-        </div>
-        <div class="price__card">
-          <div class="price__card__content">
-            <h4>Weekly Plan</h4>
-            <h3>$25</h3>
-            <p>
-              <i class="ri-checkbox-circle-line"></i>
-              PRO Gyms
-            </p>
-            <p>
-              <i class="ri-checkbox-circle-line"></i>
-              Smart workout plan
-            </p>
-            <p>
-              <i class="ri-checkbox-circle-line"></i>
-              At home workouts
-            </p>
-          </div>
-          <button class="btn price__btn">Join Now</button>
-        </div>
-        <div class="price__card">
-          <div class="price__card__content">
-            <h4>Monthly Plan</h4>
-            <h3>$45</h3>
-            <p>
-              <i class="ri-checkbox-circle-line"></i>
-              ELITE Gyms & Classes
-            </p>
-            <p>
-              <i class="ri-checkbox-circle-line"></i>
-              PRO Gyms
-            </p>
-            <p>
-              <i class="ri-checkbox-circle-line"></i>
-              Smart workout plan
-            </p>
-            <p>
-              <i class="ri-checkbox-circle-line"></i>
-              At home workouts
-            </p>
-            <p>
-              <i class="ri-checkbox-circle-line"></i>
-              Personal Training
-            </p>
-          </div>
-          <button class="btn price__btn">Join Now</button>
-        </div>
-      </div>
-    </section>
-
     <section class="review">
       <div class="section__container review__container">
-        <span><i class="ri-double-quotes-r"></i></span>
         <div class="review__content">
-          <h4>MEMBER REVIEW</h4>
-          <p>
-            What truly sets this gym apart is their expert team of trainers. The
-            trainers are knowledgeable, approachable, and genuinely invested in
-            helping members achieve their fitness goals. They take the time to
-            understand individual needs and create personalized workout plans,
-            ensuring maximum results and safety.
-          </p>
-          <div class="review__rating">
-            <span><i class="ri-star-fill"></i></span>
-            <span><i class="ri-star-fill"></i></span>
-            <span><i class="ri-star-fill"></i></span>
-            <span><i class="ri-star-fill"></i></span>
-            <span><i class="ri-star-half-fill"></i></span>
-          </div>
-          <div class="review__footer">
-            <div class="review__member">
-              <img src="../static/assets/images/member.jpg" alt="member" />
-              <div class="review__member__details">
-                <h4>Jane Cooper</h4>
-                <p>Software Developer</p>
-              </div>
-            </div>
-            <div class="review__nav">
-              <span><i class="ri-arrow-left-line"></i></span>
-              <span><i class="ri-arrow-right-line"></i></span>
-            </div>
-          </div>
+          <video id="reviewVideo" autoplay loop muted>
+            <source src="../static/assets/images/Clip.mp4" type="video/mp4" />
+          </video>
         </div>
-      </div>
     </section>
 
-    <footer class="section__container footer__container">
+    <footer class="section__container footer__container" id="community">
       <span class="bg__blur"></span>
       <span class="bg__blur footer__blur"></span>
       <div class="footer__col">
         <div class="footer__logo"><img src="../static/assets/images/icon.png" alt="logo" /></div>
         <p>
-          Take the first step towards a healthier, stronger you with our
-          unbeatable pricing plans. Let's sweat, achieve, and conquer together!
+          Take the first step towards mastering the art of Taekwondo with our specialized 
+          training programs. Develop strength, discipline, and confidence. Let’s train, achieve, and conquer together!
         </p>
         <div class="footer__socials">
           <a href="#"><i class="ri-facebook-fill"></i></a>
@@ -276,27 +174,35 @@
       </div>
       <div class="footer__col">
         <h4>Company</h4>
-        <a href="#">Business</a>
-        <a href="#">Franchise</a>
-        <a href="#">Partnership</a>
-        <a href="#">Network</a>
+        <a href="#">Training Programs</a>
+        <a href="#">Belt Ranking System</a>
+        <a href="#">Instructor Certification</a>
+        <a href="#">Taekwondo Affiliations</a>
       </div>
       <div class="footer__col">
         <h4>About Us</h4>
-        <a href="#">Blogs</a>
-        <a href="#">Security</a>
+        <a href="#">Taekwondo Blog</a>
+        <a href="#">Safety & Injury Prevention</a>
+        <a href="#">Our Instructos</a>
         <a href="#">Careers</a>
       </div>
       <div class="footer__col">
         <h4>Contact</h4>
         <a href="#">Contact Us</a>
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms & Conditions</a>
-        <a href="#">BMI Calculator</a>
+        <a href="#">Dojang Locations</a>
+        <a href="#">Membership Policy</a>
+        <a href="#">Competition Guidelines</a>
       </div>
     </footer>
     <div class="footer__bar">
-      Copyright © 2023 Web Design Mastery. All rights reserved.
+      Copyright © 2025 4A-11. All rights reserved.
     </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const video = document.getElementById('reviewVideo');
+        video.play()
+      });
+    </script>
   </body>
 </html>
