@@ -208,8 +208,8 @@
         </div>
     
         <h3>Registered Players</h3>
-        <button id="print-button">Print All Registered Players</button>
-        <button type="button" class="btn-refresh">Refresh</button> <!-- Refresh Button -->
+        <button id="print-button" class="player-btn">Print All Registered Players</button>
+        <button type="button" class="btn-refresh player-btn">Refresh</button> <!-- Refresh Button -->
         <div class="history-box">
             <table id="players-table">
                 <thead>
@@ -257,40 +257,41 @@
                 <form name="signup_form" class="inputBox">
                     <div class="row">
                         <div class="details">
-                            <input type="text" name="rfid" class="field" id="rfid" disabled required>
                             <label for="rfid">RFID</label>
+                            <input type="text" name="rfid" class="field" id="rfid" disabled required>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row1">
                         <div class="details">
-                            <input type="text" name="firstname" class="field" required>
                             <label for="firstname">First Name</label>
-                        </div>
-                        <div class="details">    
-                            <input type="text" name="middlename" class="field" required>
-                            <label for="middlename">Middle Name</label>
+                            <input type="text" name="firstname" class="field" required>
                         </div>
                         <div class="details">  
+                            <label for="middlename">Middle Name</label>  
+                            <input type="text" name="middlename" class="field" required>
+                        </div>
+                        <div class="details"> 
+                            <label for="lastname">Last Name</label> 
                             <input type="text" name="lastname" class="field" required>
-                            <label for="lastname">Last Name</label>
                         </div>
                     </div>
                     
-                    <div class="row">
+                    <div class="row2">
                         <div class="details">
+                            <label for="category">Category</label>
                             <select name="category" class="field">
                                 <option value="select">Select Category</option>
                                 <option value="Kids">Kids</option>
                                 <option value="Juniors">Juniors</option>
                                 <option value="Seniors">Seniors</option>
                             </select>
-                            <label for="category">Category</label>
                         </div>
                         <div class="details">
-                            <input type="number" name="age" class="field" min="1" max="99" required>
                             <label for="age">Age</label>
+                            <input type="number" name="age" class="field" min="1" max="99" required>
                         </div>
                         <div class="details">
+                            <label for="belt">Belt</label>
                             <select name="belt" class="field">
                                 <option value="select">Select Belt</option>
                                 <option value="White">White</option>
@@ -312,20 +313,20 @@
                                 <option value="9th Dan Black Belt">9th Dan</option>
                                 <option value="10th Dan Black Belt">10th Dan</option>
                             </select>
-                            <label for="belt">Belt</label>
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row3">
                         <div class="details">
-                            <input type="text" name="gym" class="field" required>
                             <label for="gym">Gym</label>
+                            <input type="text" name="gym" class="field" required>
                         </div>
                         <div class="details">
-                            <input type="number" name="weight" class="field" min="1" step="0.1" required>
                             <label for="weight">Weight (kg)</label>
+                            <input type="number" name="weight" class="field" min="1" step="0.1" required>
                         </div>
                         <div class="details">
+                            <label for="weight_category">Weight Category</label>
                             <select name="weight_category" class="field">
                                 <option value="select">Select Weight Category</option>
                                 <option value="Flyweight">Flyweight</option>
@@ -336,7 +337,6 @@
                                 <option value="Middleweight">Middleweight</option>
                                 <option value="Heavyweight">Heavyweight</option>
                             </select>
-                            <label for="weight_category">Weight Category</label>
                         </div>
                     </div>
 
