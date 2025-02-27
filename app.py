@@ -36,7 +36,15 @@ def admin():
     return render_template('admin.html')
 
 
-@app.route('/api/players', methods=['GET'])
+@app.route('/api/audienceSB')
+def audienceSB():
+    return render_template('audienceSB.html')  # Call static method
+
+@app.route('/api/adminSB')
+def adminSB():
+    return render_template('adminSB.html')  # Call static method
+
+@app.route('/api/players')
 def get_players():
     players = list(db.players.find({}, {'_id': 0}))  # Fetch all players, excluding _id
     return jsonify(players)

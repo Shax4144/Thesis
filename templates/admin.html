@@ -236,10 +236,12 @@
     <div class="record-content" id="record-content">
         <h2>Record Content</h2>
         <div class="record-box">
-
+            
         </div>
-        <a href="scoreboard.html" target="_blank" class="btn-scoreboard">View Scoreboard</a>
-
+        <div class="scoreboard-button">
+            <button onclick="window.open('{{ url_for('audienceSB')}}', '_blank')">Audience</button>
+            <button onclick="window.location.href='{{ url_for('adminSB')}}'">Admin Scoreboard</button>
+        </div>
     </div>
 
 
