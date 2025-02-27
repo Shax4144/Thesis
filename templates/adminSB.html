@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Taekwondo Scoreboard</title>
+    <style>
+        body,
+        html {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: white;
+            color: black;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            /* Prevents scrolling */
+        }
+
+        .container {
+            width: 70vw;
+            max-width: 800px;
+            height: 90vh;
+            /* Adjusted from 92vh to 90vh */
+            background: black;
+            color: white;
+            padding: 15px;
+            /* Slightly reduced padding */
+            border-radius: 15px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            align-items: center;
+            flex-wrap: wrap;
+            /* Ensures better fit */
+        }
+
+        h1,
+        h2 {
+            font-size: 4vh;
+            color: orange;
+            margin: 5px 0;
+        }
+
+        .score {
+            font-size: 5vh;
+            /* Adjusted from 6vh */
+            font-weight: bold;
+            color: orange;
+        }
+
+        .deduction-input {
+            width: 65%;
+            max-width: 230px;
+            height: 4.5vh;
+            font-size: 2vh;
+            text-align: center;
+            border-radius: 5px;
+            border: none;
+            background: white;
+            color: black;
+        }
+
+        .btn {
+            padding: 8px 18px;
+            font-size: 2vh;
+            margin: 15px;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            background: orange;
+            color: white;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #e69500;
+        }
+
+        .highlight {
+            font-size: 5.5vh;
+            /* Adjusted slightly smaller */
+            font-weight: bold;
+            background-color: orange;
+            padding: 8px 18px;
+            border-radius: 10px;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Admin Panel</h1>
+
+        <div>
+            <h2>Accuracy</h2>
+            <p class="score" id="accuracy-score">4.0</p>
+            <input type="number" id="accuracy-deduction" class="deduction-input" step="0.1" min="0"
+                placeholder="Enter Deduction">
+        </div>
+
+        <div>
+            <h2>Presentation</h2>
+            <p class="score" id="presentation-score">6.0</p>
+            <input type="number" id="presentation-deduction" class="deduction-input" step="0.1" min="0"
+                placeholder="Enter Deduction">
+        </div>
+
+        <button class="btn" onclick="applyDeductions()">Submit Scores</button>
+
+        <h2 class="highlight">Total Score: <span id="total-score">10.0</span></h2>
+    </div>
+
+    <script>
+        function applyDeductions() {
+            let accuracy = parseFloat(localStorage.getItem("accuracyScore")) || 4.0;
+            let presentation = parseFloat(localStorage.getItem("presentationScore")) || 6.0;
+
+            let accuracyDeduction = parseFloat(document.getElementById("accuracy-deduction").value) || 0;
+            let presentationDeduction = parseFloat(document.getElementById("presentation-deduction").value) || 0;
+
+            accuracy = Math.max(0, accuracy - accuracyDeduction);
+            presentation = Math.max(0, presentation - presentationDeduction);
+
+            let totalScore = accuracy + presentation;
+
+            // Fix floating-point issues and ensure total score doesn't go negative
+            if (totalScore < 0.05) {
+                totalScore = 0.0;
+                accuracy = 0.0;
+                presentation = 0.0;
+            }
+
+            localStorage.setItem("accuracyScore", accuracy);
+            localStorage.setItem("presentationScore", presentation);
+
+            document.getElementById("accuracy-score").textContent = accuracy.toFixed(1);
+            document.getElementById("presentation-score").textContent = presentation.toFixed(1);
+            document.getElementById("total-score").textContent = totalScore.toFixed(1);
+        }
+
+    </script>
+</body>
+
+</html>

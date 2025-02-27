@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taekwondo Scoreboard</title>
+    <style>
+        /* White, Orange, Black Theme */
+        body,
+        html {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: white;
+            color: black;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 70vw;
+            /* Wider for better fit */
+            max-width: 800px;
+            height: 85vh;
+            /* Fits within screen */
+            background: black;
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 5vh;
+            color: orange;
+        }
+
+        h2 {
+            font-size: 3vh;
+            margin: 5px 0;
+        }
+
+        .score {
+            font-size: 6vh;
+            font-weight: bold;
+            color: orange;
+        }
+
+        .highlight {
+            font-size: 7vh;
+            font-weight: bold;
+            color: white;
+            background-color: orange;
+            padding: 10px 20px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Taekwondo Scoreboard</h1>
+        <h2>Accuracy</h2>
+        <p class="score" id="accuracy-score">4.0</p>
+        <h2>Presentation</h2>
+        <p class="score" id="presentation-score">6.0</p>
+        <h2 class="highlight">Total Score: <span id="total-score">10.0</span></h2>
+    </div>
+
+    <script>
+        function updateDisplay() {
+            const accuracy = parseFloat(localStorage.getItem("accuracyScore")) || 4.0;
+            const presentation = parseFloat(localStorage.getItem("presentationScore")) || 6.0;
+
+            document.getElementById("accuracy-score").textContent = accuracy.toFixed(1);
+            document.getElementById("presentation-score").textContent = presentation.toFixed(1);
+            document.getElementById("total-score").textContent = (accuracy + presentation).toFixed(1);
+        }
+
+        setInterval(updateDisplay, 1000);
+        window.onload = updateDisplay;
+    </script>
+</body>
+
+</html>
