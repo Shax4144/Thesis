@@ -509,16 +509,21 @@ h1 {
     color: var(--text-light);
     text-align: center;
 }
-
-.btn-scoreboard{
-    color: var(--secondary-color-dark);
-    font-weight: 500;
-    text-decoration: none;
+.scoreboard-button {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
 }
 
-.btn-scoreboard:hover{
-    color: var(--secondary-color);
-    text-decoration: underline;
+.scoreboard-button button {
+    padding: 10px 20px;
+    margin: 0 10px;
+    background-color: var(--secondary-color-dark);
+    color: var(--white);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
 }
 .news-content {
     width: 100%;
