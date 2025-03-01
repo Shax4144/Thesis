@@ -8,8 +8,9 @@
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' https://accounts.google.com https://apis.google.com;">
     <title>PTU</title>
     <link rel="stylesheet" href="../static/assets/css/admin.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <script src="../static/assets/js/drive.js"></script>
 </head>
 
 <body>
@@ -236,11 +237,22 @@
     <div class="record-content" id="record-content">
         <h2>Record Content</h2>
         <div class="record-box">
-            
+            {% for file in files %}
+            <div>
+                {% if file.mimeType == "application/vnd.google-apps.folder" %}
+                <i class="fa-solid fa-folder folder-icon" data-folder-id="{{ file.id }}" onclick="toggleFolder('{{ file.id }}')"></i>
+
+                    <span class="folder" onclick="toggleFolder('{{ file.id }}')">{{ file.name }}</span>
+                    <div id="folder-{{ file.id }}" class="folder-contents"></div>
+                {% else %}
+                    <i class="fa-solid fa-file"></i> {{ file.name }}
+                {% endif %}
+            </div>
+        {% endfor %}
         </div>
         <div class="scoreboard-button">
             <button onclick="window.open('{{ url_for('audienceSB')}}', '_blank')">Audience</button>
-            <button onclick="window.location.href='{{ url_for('adminSB')}}'">Admin Scoreboard</button>
+            <button onclick="window.open('{{ url_for('adminSB')}}', '_blank')">Admin Scoreboard</button>
         </div>
     </div>
 
@@ -333,7 +345,7 @@
                                 <option value="select">Select Weight Category</option>
                                 <option value="Flyweight">Flyweight</option>
                                 <option value="Bantamweight">Bantamweight</option>
-                                <option value=Featherweight">Featherweight</option>
+                                <option value="Featherweight">Featherweight</option>
                                 <option value="Lightweight">Lightweight</option>
                                 <option value="Welterweight">Welterweight</option>
                                 <option value="Middleweight">Middleweight</option>
@@ -425,21 +437,12 @@
 
 
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="../static/assets/js/scripts.js"></script>
+
+
+
 <script src="../static/assets/js/admin.js"></script>
-<script src="https://accounts.google.com/gsi/client" async defer></script>
-<script src="https://apis.google.com/js/api.js"></script>
-<script src="../static/assets/js/drive.js"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        if (typeof loadGDriveAPI === "function") {
-            loadGDriveAPI();  // Ensure the function is defined before calling
-        } else {
-            console.error("loadGDriveAPI is not defined. Check if drive.js is loading correctly.");
-        }
-    });
-</script>
+
+
 
 
 </body>

@@ -1,87 +1,54 @@
-function loadGDriveAPI() {
-    gapi.load('client', initClient);
-}
+function toggleFolder(folderId) {
+    let folderIcon = document.querySelector(`i[data-folder-id="${folderId}"]`);
+    let folderContents = document.getElementById(`folder-${folderId}`);
 
-function initClient() {
-    gapi.client.init({
-        clientId: 'YOUR_CLIENT_ID',
-        discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
-        scope: 'https://www.googleapis.com/auth/drive.file',
-    }).then(() => {
-        console.log('Google Drive API Initialized');
-    }).catch(error => {
-        console.error('Error initializing Drive API:', error);
-    });
-}
+    if (!folderContents || !folderIcon) return;
 
-// Use Google Identity Services to sign in
-function signIn() {
-    google.accounts.oauth2.initTokenClient({
-        client_id: 'YOUR_CLIENT_ID',
-        scope: 'https://www.googleapis.com/auth/drive.file',
-        callback: (response) => {
-            if (response.access_token) {
-                console.log("Authenticated successfully!");
-                listFiles(response.access_token);
-            } else {
-                console.error("Authentication failed");
-            }
-        }
-    }).requestAccessToken();
-}
+    if (folderContents.style.display === "none" || folderContents.innerHTML === "") {
+        // Fetch folder contents from the backend
+        fetch(`/folder/${folderId}`)
+            .then(response => response.json())
+            .then(files => {
+                folderContents.innerHTML = ""; // Clear previous content
 
-// Get authentication token
-function getAuthToken() {
-    return gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
-}
+                files.forEach(file => {
+                    let div = document.createElement("div");
 
-// Fetch files from "records" folder
-function listFiles() {
-    const folderName = "Records";
+                    if (file.mimeType === "application/vnd.google-apps.folder") {
+                        // Folder item
+                        div.innerHTML = `
+                            <i class="fa-solid fa-folder folder-icon" data-folder-id="${file.id}" onclick="toggleFolder('${file.id}')"></i> 
+                            <span class="folder" onclick="toggleFolder('${file.id}')">${file.name}</span>
+                            <div id="folder-${file.id}" class="folder-contents" style="display:none;"></div>
+                        `;
+                    } else {
+                        // File item (make clickable)
+                        let fileLink = file.webViewLink ? file.webViewLink : "#";  
+                        let clickEvent = file.webViewLink ? `target="_blank"` : `style="pointer-events: none; opacity: 0.5;"`; 
 
-    // Search for the folder ID
-    gapi.client.drive.files.list({
-        q: `name='${folderName}' and mimeType='application/vnd.google-apps.folder'`,
-        fields: "files(id)"
-    }).then(response => {
-        if (response.result.files.length > 0) {
-            const folderId = response.result.files[0].id;
-            getFolderContents(folderId);
-        } else {
-            console.log("Folder not found");
-        }
-    });
-}
+                        div.innerHTML = `
+                            <i class="fa-solid fa-file"></i> 
+                            <a href="${fileLink}" ${clickEvent} class="file-link">${file.name}</a>
+                        `;
+                    }
 
-// Get files inside the folder
-function getFolderContents(folderId) {
-    gapi.client.drive.files.list({
-        q: `'${folderId}' in parents`,
-        fields: "files(id, name, webViewLink, mimeType)"
-    }).then(response => {
-        displayFiles(response.result.files);
-    });
-}
+                    folderContents.appendChild(div);
+                });
 
-// Display files in the HTML
-function displayFiles(files) {
-    const recordBox = document.querySelector('.record-box');
-    recordBox.innerHTML = "";
-
-    if (files.length === 0) {
-        recordBox.innerHTML = "<p>No records found.</p>";
-        return;
+                folderContents.style.display = "block";
+                folderIcon.classList.replace("fa-folder", "fa-folder-open"); // Change to open icon
+            })
+            .catch(error => console.error("Error fetching folder contents:", error));
+    } else {
+        // Collapse folder
+        folderContents.style.display = "none";
+        folderIcon.classList.replace("fa-folder-open", "fa-folder"); // Change back to closed icon
     }
-
-    files.forEach(file => {
-        const fileElement = document.createElement("div");
-        fileElement.classList.add("file-item");
-
-        fileElement.innerHTML = `
-            <p>${file.name}</p>
-            <a href="${file.webViewLink}" target="_blank">View</a>
-        `;
-
-        recordBox.appendChild(fileElement);
-    });
+}
+function refreshFolder(folderId) {
+    let folderContents = document.getElementById(`folder-${folderId}`);
+    if (folderContents) {
+        folderContents.innerHTML = ""; // Clear before fetching again
+        toggleFolder(folderId); // Reload contents
+    }
 }
