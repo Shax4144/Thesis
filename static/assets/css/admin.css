@@ -498,14 +498,13 @@ h1 {
     background-color: var(--primary-color-extra-light); /* Light background for contrast */
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    /* This will center the content when you add it */
+    align-items: left;
+    justify-content: left;
+    font-size: 20px;
 }
 
 /* Placeholder for future content */
 .record-box::before {
-    content: '{Content will be loaded here via API}';
     color: var(--text-light);
     text-align: center;
 }
