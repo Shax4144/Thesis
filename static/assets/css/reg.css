@@ -37,7 +37,7 @@ body{
 }
 
 .form-container{
-    height: 60vh;   
+    height: auto;   
     position: relative;
     width: 750px;
     backdrop-filter: blur(30px);
