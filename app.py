@@ -11,7 +11,7 @@ app.register_blueprint(user_bp, url_prefix='/api')  # Register Blueprint
 
 # Google Drive API Setup
 SCOPES = ["https://www.googleapis.com/auth/drive.readonly"]
-SERVICE_ACCOUNT_FILE = r"C:\Users\chest\thesis\Thesis\i-freedom-451713-c7-af50c89329a5.json"
+SERVICE_ACCOUNT_FILE = r"C:\Users\chest\thesis\Thesis\eternal-tempest-451603-c6-670e90d8999c.json"
 ROOT_FOLDER_ID = "1NndBdfWTZl4ZMjGZWWb1UjgeVijl986v"  # Your root folder ID
 creds = service_account.Credentials.from_service_account_file(
     SERVICE_ACCOUNT_FILE, scopes=SCOPES
@@ -78,5 +78,5 @@ def folder_contents(folder_id):
     return jsonify(files)
 
 if __name__ == '__main__':
-    app.run(debug=False)  # Set to False for production
+    app.run(debug=True)  # Set to False for production
 
