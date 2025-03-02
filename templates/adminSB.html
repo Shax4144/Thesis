@@ -10,67 +10,66 @@
         html {
             font-family: Arial, sans-serif;
             text-align: center;
-            background-color: white;
-            color: black;
+            background-color: black;
+            color: white;
             height: 100vh;
             margin: 0;
             padding: 0;
             display: flex;
-            justify-content: center;
-            align-items: center;
+            flex-direction: column;
+            justify-content: space-between;
             overflow: hidden;
-            /* Prevents scrolling */
         }
 
         .container {
-            width: 70vw;
-            max-width: 800px;
-            height: 90vh;
-            /* Adjusted from 92vh to 90vh */
-            background: black;
-            color: white;
-            padding: 15px;
-            /* Slightly reduced padding */
-            border-radius: 15px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            height: 100%;
             display: flex;
             flex-direction: column;
-            justify-content: space-evenly;
-            align-items: center;
-            flex-wrap: wrap;
-            /* Ensures better fit */
+            justify-content: space-between;
+            padding: 20px;
+            box-sizing: border-box;
         }
 
-        h1,
-        h2 {
-            font-size: 4vh;
-            color: orange;
-            margin: 5px 0;
-        }
-
-        .score {
+        h1 {
             font-size: 5vh;
-            /* Adjusted from 6vh */
-            font-weight: bold;
             color: orange;
+            margin-bottom: 10px;
         }
 
-        .deduction-input {
-            width: 65%;
-            max-width: 230px;
-            height: 4.5vh;
-            font-size: 2vh;
+        .top-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .highlight {
+            background-color: orange;
+            width: 50%;
+            max-width: 650px;
+            height: 15vh;
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
             text-align: center;
-            border-radius: 5px;
-            border: none;
-            background: white;
-            color: black;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 4vh;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
         }
 
         .btn {
-            padding: 8px 18px;
+            padding: 10px 20px;
             font-size: 2vh;
-            margin: 15px;
             cursor: pointer;
             border: none;
             border-radius: 8px;
@@ -83,13 +82,89 @@
             background: #e69500;
         }
 
-        .highlight {
-            font-size: 5.5vh;
-            /* Adjusted slightly smaller */
-            font-weight: bold;
-            background-color: orange;
-            padding: 8px 18px;
+        .scoreboard {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 10px;
+
+        }
+
+        .column {
+            flex: 1;
+            background: #222;
+            padding: 10px;
             border-radius: 10px;
+            text-align: center;
+            align-self: center;
+            align-content: center;
+            max-width: 650;
+        }
+
+        h2 {
+            font-size: 3vh;
+            color: orange;
+            margin-bottom: 10px;
+        }
+
+        .score {
+            font-size: 5vh;
+            font-weight: bold;
+            color: orange;
+        }
+
+        .deduction-input {
+            width: 50%;
+            height: 5vh;
+            font-size: 2vh;
+            text-align: center;
+            border-radius: 5px;
+            border: none;
+            background: white;
+            color: black;
+            margin-top: 10px;
+            appearance: textfield;
+        }
+
+        .deduction-input::-webkit-inner-spin-button,
+        .deduction-input::-webkit-outer-spin-button {
+            opacity: 1;
+            width: 50px;
+            height: 60px;
+            padding: 2px;
+            cursor: pointer;
+        }
+
+        .player-info {
+            background: #222;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 2vh;
+            margin-top: 5px;
+            display: flex;
+            flex-direction: column;
+            align-self: center;
+            width: 50%;
+            color: white;
+        }
+
+        .player-info .info-columns {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .player-info .info-column {
+            flex: 1;
+            padding: 10px;
+        }
+
+        .player-info strong {
+            color: orange;
+        }
+
+        .player-info span {
             color: white;
         }
     </style>
@@ -99,53 +174,194 @@
     <div class="container">
         <h1>Admin Panel</h1>
 
-        <div>
-            <h2>Accuracy</h2>
-            <p class="score" id="accuracy-score">4.0</p>
-            <input type="number" id="accuracy-deduction" class="deduction-input" step="0.1" min="0"
-                placeholder="Enter Deduction">
+        <div class="top-row">
+            <h2 class="highlight">Total Score: <span id="total-score">16</span></h2>
+            <div class="buttons">
+                <button class="btn" onclick="applyDeductions()">Submit Scores</button>
+                <button class="btn" onclick="undo()">Undo</button>
+                <button class="btn" onclick="redo()">Redo</button>
+            </div>
         </div>
 
-        <div>
-            <h2>Presentation</h2>
-            <p class="score" id="presentation-score">6.0</p>
-            <input type="number" id="presentation-deduction" class="deduction-input" step="0.1" min="0"
-                placeholder="Enter Deduction">
+        <div class="scoreboard">
+            <div class="column">
+                <h2>Accuracy</h2>
+                <p class="score" id="accuracy-score">10</p>
+                <input type="number" id="accuracy-deduction" class="deduction-input" step="0.1" min="0"
+                    placeholder="Enter Deduction">
+            </div>
+
+            <div class="column">
+                <h2>Presentation</h2>
+                <p class="score" id="presentation-score">6</p>
+                <input type="number" id="presentation-deduction" class="deduction-input" step="0.1" min="0"
+                    placeholder="Enter Deduction">
+            </div>
         </div>
 
-        <button class="btn" onclick="applyDeductions()">Submit Scores</button>
-
-        <h2 class="highlight">Total Score: <span id="total-score">10.0</span></h2>
+        <div class="player-info">
+            <h2>Player Information</h2>
+            <div class="info-columns">
+                <div class="info-column">
+                    <p><strong>Player:</strong> <span id="player-name">francis erick datu</span></p>
+                    <p><strong>Category:</strong> <span id="player-poomsae">legendary heavyweight</span></p>
+                </div>
+                <div class="info-column">
+                    <p><strong>Belt:</strong> <span id="player-belt">Legendary belt</span></p>
+                    <p><strong>Gym:</strong> <span id="player-gym">Samahan ng mga Malakas sumipa ng Bading</span></p>
+                </div>
+            </div>
+            <button class="btn" onclick="nextPlayer()">Next</button>
+        </div>
     </div>
 
     <script>
-        function applyDeductions() {
-            let accuracy = parseFloat(localStorage.getItem("accuracyScore")) || 4.0;
-            let presentation = parseFloat(localStorage.getItem("presentationScore")) || 6.0;
+        let historyStack = [];
+        let redoStack = [];
+        let currentPlayerIndex = 0;
+        let players = [];
+
+        async function saveToHistory(accuracy, presentation) {
+            historyStack.push({ accuracy, presentation });
+            redoStack = [];
+        }
+
+        async function applyDeductions() {
+            let accuracy = parseFloat(document.getElementById("accuracy-score").textContent);
+            let presentation = parseFloat(document.getElementById("presentation-score").textContent);
+
+            if (isNaN(accuracy) || isNaN(presentation)) {
+                alert("Scores must be fetched from the database before applying deductions.");
+                return;
+            }
 
             let accuracyDeduction = parseFloat(document.getElementById("accuracy-deduction").value) || 0;
             let presentationDeduction = parseFloat(document.getElementById("presentation-deduction").value) || 0;
 
+            if (accuracyDeduction > accuracy) {
+                alert("Accuracy deduction cannot exceed available points!");
+                document.getElementById("accuracy-deduction").value = accuracy.toFixed(1);
+                accuracyDeduction = accuracy;
+            }
+
+            if (presentationDeduction > presentation) {
+                alert("Presentation deduction cannot exceed available points!");
+                document.getElementById("presentation-deduction").value = presentation.toFixed(1);
+                presentationDeduction = presentation;
+            }
+
+            await saveToHistory(accuracy, presentation);
+
             accuracy = Math.max(0, accuracy - accuracyDeduction);
             presentation = Math.max(0, presentation - presentationDeduction);
-
             let totalScore = accuracy + presentation;
 
-            // Fix floating-point issues and ensure total score doesn't go negative
             if (totalScore < 0.05) {
                 totalScore = 0.0;
                 accuracy = 0.0;
                 presentation = 0.0;
             }
 
-            localStorage.setItem("accuracyScore", accuracy);
-            localStorage.setItem("presentationScore", presentation);
+            const scores = { accuracy, presentation };
+            await fetch('/api/scores', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(scores)
+            });
 
-            document.getElementById("accuracy-score").textContent = accuracy.toFixed(1);
-            document.getElementById("presentation-score").textContent = presentation.toFixed(1);
-            document.getElementById("total-score").textContent = totalScore.toFixed(1);
+            updateDisplay();
+            document.getElementById("accuracy-deduction").value = "";
+            document.getElementById("presentation-deduction").value = "";
         }
 
+        async function undo() {
+            if (historyStack.length > 0) {
+                let lastState = historyStack.pop();
+                redoStack.push({
+                    accuracy: parseFloat(document.getElementById("accuracy-score").textContent),
+                    presentation: parseFloat(document.getElementById("presentation-score").textContent)
+                });
+
+                const scores = { accuracy: lastState.accuracy, presentation: lastState.presentation };
+                await fetch('/api/scores', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(scores)
+                });
+
+                updateDisplay();
+            } else {
+                alert("No more undos available!");
+            }
+        }
+
+        async function redo() {
+            if (redoStack.length > 0) {
+                let redoState = redoStack.pop();
+                historyStack.push({
+                    accuracy: parseFloat(document.getElementById("accuracy-score").textContent),
+                    presentation: parseFloat(document.getElementById("presentation-score").textContent)
+                });
+
+                const scores = { accuracy: redoState.accuracy, presentation: redoState.presentation };
+                await fetch('/api/scores', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(scores)
+                });
+
+                updateDisplay();
+            } else {
+                alert("No more redos available!");
+            }
+        }
+
+        async function fetchPlayers() {
+            const response = await fetch('/api/players');
+            players = await response.json();
+            updatePlayerInfo();
+        }
+
+        function updatePlayerInfo() {
+            if (players.length > 0) {
+                const player = players[currentPlayerIndex];
+                document.getElementById('player-name').textContent = player.firstname + ' ' + player.lastname;
+                document.getElementById('player-poomsae').textContent = player.category;
+                document.getElementById('player-belt').textContent = player.belt;
+                document.getElementById('player-gym').textContent = player.gym;
+            }
+        }
+
+        function nextPlayer() {
+            currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
+            updatePlayerInfo();
+        }
+
+        async function updateDisplay() {
+            const response = await fetch('/api/scores');
+            const scores = await response.json();
+            const accuracy = scores.accuracy;
+            const presentation = scores.presentation;
+
+            if (accuracy !== undefined && presentation !== undefined) {
+                document.getElementById("accuracy-score").textContent = accuracy.toFixed(1);
+                document.getElementById("presentation-score").textContent = presentation.toFixed(1);
+                document.getElementById("total-score").textContent = (accuracy + presentation).toFixed(1);
+            } else {
+                alert("Failed to fetch scores from the database.");
+            }
+        }
+
+        window.onload = () => {
+            fetchPlayers();
+            updateDisplay();
+        };
     </script>
 </body>
 
