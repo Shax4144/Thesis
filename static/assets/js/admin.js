@@ -49,3 +49,119 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.querySelector("form");
+    const submitButton = document.querySelector(".btn-submit");
+
+    if (!form || !submitButton) {
+        console.error("Form or submit button not found.");
+        return;
+    }
+
+    submitButton.addEventListener("click", async function (event) {
+        event.preventDefault(); // Prevent default form submission
+
+        // Gather form data
+        const formData = new FormData(form);
+        let data = {};
+        formData.forEach((value, key) => {
+            data[key] = value.trim(); // Trim input values
+        });
+
+        // Ensure all required fields are filled
+        const requiredFields = ["firstname", "lastname", "category", "age", "belt", "gym", "weight", "weight_category"];
+        const missingFields = requiredFields.filter(field => !data[field]);
+
+        if (missingFields.length > 0) {
+            alert("Please fill in all required fields: " + missingFields.join(", "));
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/players/signup', {
+                method: 'POST',
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            console.log("Server Response:", result);
+
+            if (result.message) {
+                alert("Player registered successfully!");
+                form.reset();
+            } else {
+                alert("Error: " + (result.error || "Unknown error"));
+            }
+        } catch (error) {
+            console.error("Fetch error:", error);
+            alert("An error occurred: " + error.message);
+        }
+    });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    const tableBody = document.querySelector("#players-table tbody");
+    const printButton = document.getElementById("print-button");
+    const refreshButton = document.querySelector(".btn-refresh"); // Select refresh button
+    const playersTable = document.querySelector(".history-box"); // Select table container
+
+    // Fetch registered players from Flask API
+    async function fetchPlayers() {
+        try {
+            const response = await fetch('/api/players'); // Ensure this matches your Flask route
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const players = await response.json();
+            tableBody.innerHTML = ""; // Clear existing data
+
+            players.forEach(player => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${player.firstname}</td>
+                    <td>${player.lastname}</td>
+                    <td>${player.category}</td>
+                    <td>${player.age}</td>
+                    <td>${player.belt}</td>
+                    <td>${player.gym}</td>
+                    <td>${player.weight}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+
+        } catch (error) {
+            console.error("Error fetching players:", error);
+            tableBody.innerHTML = `<tr><td colspan="7">Failed to load data</td></tr>`; // Adjusted colspan
+        }
+    }
+
+    // Print only the table
+    printButton.addEventListener("click", function () {
+        const originalContent = document.body.innerHTML; // Store full page content
+        const tableContent = playersTable.innerHTML; // Get only the table content
+
+        document.body.innerHTML = `<div>${tableContent}</div>`; // Replace body with table only
+        window.print(); // Open print dialog
+        document.body.innerHTML = originalContent; // Restore original content
+    });
+
+    // Refresh players list
+    refreshButton.addEventListener("click", function () {
+        fetchPlayers();
+    });
+
+    // Fetch players when the page loads
+    fetchPlayers();
+});
