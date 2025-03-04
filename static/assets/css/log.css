@@ -21,7 +21,7 @@ body {
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    background-blend-mode: darken;
+    background-blend-mode: darken;  
 }
 a{
     text-decoration: none;
@@ -157,17 +157,19 @@ a:hover{
     right: 25px;
     font-size: 17px;
 }
-.fa-eye{
+
+#eye {
     position: absolute;
-    top: 20px;
-    right: 55px;
-    font-size: 17px;
-    color: var(--primary-color);
-}
-.fa-eye:hover{
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
     cursor: pointer;
+    font-size: 1.2rem;
+    color: var(--text-light);
+    transition: color 0.3s ease;
 }
-.fa-eye.active{
+
+#eye:hover {
     color: var(--secondary-color);
 }
 

@@ -1,5 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
 
+html {
+  scroll-behavior: smooth;
+}
+
 :root {
   --primary-color: #111317;
   --primary-color-light: #1f2125;
@@ -279,32 +283,67 @@ nav {
   color: var(--secondary-color);
 }
 
+.section__container {
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
 .class__container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 4rem 0;
 }
 
 .class__image {
-  position: relative;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
 }
 
 .class__image .class__img-1 {
   position: absolute;
-  right: 0;
-  top: 0;
-  max-width: 500px;
-  border-radius: 10px;
+  top: -10%;
+  right: -2%;
+  width: 60%;
+  max-width: none;
+  opacity: 0.7;
 }
 
 .class__image .class__img-2 {
   position: absolute;
-  left: 0;
-  bottom: 0;
-  max-width: 300px;
-  border-radius: 10px;
+  bottom: -10%;
+  left: -2%;
+  width: 50%;
+  max-width: none;
+  opacity: 0.7;
 }
 
+.class__content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 800px;
+  padding: 2rem;
+}
+
+@media (max-width: 768px) {
+  .class__container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .class__image .class__img-1 {
+    width: 80%;
+    right: -5%;
+  }
+
+  .class__image .class__img-2 {
+    width: 70%;
+    left: -5%;
+  }
+}
 .class__content {
   padding: 2rem 0;
 }
@@ -562,12 +601,6 @@ nav {
   }
 }
 
-@media (max-width: 780px) {
-  .header__container::before {
-    right: 14rem;
-    font-size: 7rem;
-    top: 8rem;
-  }
   .explore__header {
     flex-direction: column;
   }
@@ -606,12 +639,149 @@ nav {
   .footer__bar {
     text-align: center;
   }
-}
 
 @media (max-width: 520px) {
   .header__container::before {
     font-size: 7rem;
     right: 5rem;
     top: 9rem;
+  }
+}
+
+@media (max-width: 1200px) {
+  .header__content h1 {
+    font-size: 4rem;
+    line-height: 5rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .header__container {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .header__image img {
+    max-width: 80%;
+  }
+
+  .explore__grid,
+  .price__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .nav__links {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    margin-top: 40px;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    background-color: var(--primary-color);
+    padding: 1rem 0;
+    text-align: center;
+    z-index: 1000;
+    /* Ensures it's above other elements */
+  }
+
+  .nav__links.active {
+    display: flex;
+    opacity: 70%;
+  }
+
+  .nav__links a {
+    padding: 10px 15px;
+    display: block;
+    /* Ensures full width is clickable */
+  }
+
+  .hamburger {
+    display: block;
+    font-size: 2rem;
+    cursor: pointer;
+    z-index: 1100;
+    color: var(--secondary-color-dark)  ;
+    /* Ensures it is clickable */
+  }
+}
+  .header__content h1 {
+    font-size: 3.5rem;
+    line-height: 4.5rem;
+  }
+
+  .explore__grid,
+  .price__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .class__container {
+    grid-template-columns: 1fr;
+  }
+
+  .footer__container {
+    grid-template-columns: 1fr;
+  }
+#backToTop {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  background-color: var(--secondary-color-dark);
+  color: var(--white);
+  text-decoration: none;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+#backToTop:hover {
+  background-color: var(--secondary-color);
+}
+
+/* Ensure visibility on scroll */
+.show {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  #backToTop {
+    width: 35px;
+    height: 35px;
+    font-size: 1.2rem;
+    bottom: 15px;
+    right: 15px;
+  }
+}
+
+
+@media (max-width: 480px) {
+  .header__content h1 {
+    font-size: 3rem;
+    line-height: 4rem;
+  }
+
+  .header__container::before {
+    font-size: 5rem;
+  }
+
+  .explore__card {
+    padding: 0.5rem;
+  }
+
+  .btn {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.9rem;
   }
 }

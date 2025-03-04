@@ -22,3 +22,13 @@ function togglePass1() {
     eye2.classList.toggle('active');
     confirmPass.type = (confirmPass.type === 'password') ? 'text' : 'password';
 }
+document.getElementById("eye").addEventListener("click", function () {
+    const passwordField = document.getElementById("password");
+    if (passwordField.type === "password") {
+      passwordField.type = "text";
+      this.classList.replace("fa-eye-slash", "fa-eye"); // Change icon
+    } else {
+      passwordField.type = "password";
+      this.classList.replace("fa-eye", "fa-eye-slash"); // Change back
+    }
+  });

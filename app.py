@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session, redirect, jsonify
+from flask import Flask, render_template, session, redirect, jsonify, make_response
 from functools import wraps
 from user.routes import user_bp  
 from database import db
@@ -11,7 +11,7 @@ app.register_blueprint(user_bp, url_prefix='/api')  # Register Blueprint
 
 # Google Drive API Setup
 SCOPES = ["https://www.googleapis.com/auth/drive.readonly"]
-SERVICE_ACCOUNT_FILE = r"C:\Users\chest\thesis\Thesis\i-freedom-451713-c7-af50c89329a5.json"
+SERVICE_ACCOUNT_FILE = r"C:\Users\Syree\THESIS FRONTEND\v3\Thesis\eternal-tempest-451603-c6-ebb595a1e8be.json"
 ROOT_FOLDER_ID = "1NndBdfWTZl4ZMjGZWWb1UjgeVijl986v"  # Your root folder ID
 creds = service_account.Credentials.from_service_account_file(
     SERVICE_ACCOUNT_FILE, scopes=SCOPES
@@ -22,7 +22,7 @@ service = build("drive", "v3", credentials=creds)
 def get_files(folder_id=ROOT_FOLDER_ID):
     """Fetch files from a given Google Drive folder."""
     query = f"'{folder_id}' in parents and trashed = false"
-    fields = "files(id, name, mimeType, webViewLink)"  # Ensure webViewLink is included
+    fields = "files(id, name, mimeType, webViewLink)"  # Ensure webViewLink igit s included
 
     results = service.files().list(q=query, fields=fields).execute()
     return results.get("files", [])
@@ -53,10 +53,14 @@ def reg():
 
 
 @app.route('/api/admin')
-@login_required 
+@login_required
 def admin():
-    files = get_files() 
-    return render_template('admin.html', files=files)
+    files = get_files()
+    response = make_response(render_template('admin.html', files=files))
+    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    return response
 
 
 @app.route('/api/audienceSB')

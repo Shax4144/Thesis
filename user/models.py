@@ -38,7 +38,7 @@ class User:
     @staticmethod
     def signout():
         session.clear()  # Clears session
-        return redirect('/login')  # Redirects to login page
+        return redirect('/login')
     
     @staticmethod
     def login():

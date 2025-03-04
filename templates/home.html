@@ -16,6 +16,7 @@
       <div class="nav__logo">
         <a href="#"><img src="../static/assets/images/icon.png" alt="logo" /></a>
       </div>
+      <div class="hamburger" onclick="toggleMenu()">☰</div>
       <ul class="nav__links">
         <li class="link"><a href="#home">Home</a></li>
         <li class="link"><a href="#program">Program</a></li>
@@ -25,6 +26,7 @@
       </ul>
       <a class="btn" href="{{ url_for('reg') }}">Join Now</a>
     </nav>
+
 
     <header class="section__container header__container" id="home">
       <div class="header__content">
@@ -203,6 +205,49 @@
         const video = document.getElementById('reviewVideo');
         video.play()
       });
+
+      function toggleMenu() {
+          document.querySelector(".nav__links").classList.toggle("active");
+        }
+
+        window.addEventListener("resize", function () {
+          if (window.innerWidth > 768) {
+            document.querySelector(".nav__links").classList.remove("active");
+          }
+        });
+
+        document.querySelectorAll('.nav__links a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+              e.preventDefault();
+
+              const targetId = this.getAttribute('href').substring(1);
+              const targetElement = document.getElementById(targetId);
+
+              if (targetElement) {
+                window.scrollTo({
+                  top: targetElement.offsetTop - 50, 
+                  behavior: 'smooth' 
+                });
+              }
+            });
+          });
+      document.addEventListener("DOMContentLoaded", function () {
+          const backToTopBtn = document.getElementById("backToTop");
+
+          window.addEventListener("scroll", () => {
+            if (window.scrollY > 300) {
+              backToTopBtn.classList.add("show");
+            } else {
+              backToTopBtn.classList.remove("show");
+            }
+          });
+
+          backToTopBtn.addEventListener("click", (event) => {
+            event.preventDefault();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          });
+        });
     </script>
+    <button id="backToTop" onclick="scrollToTop()">▲</button>
   </body>
 </html>

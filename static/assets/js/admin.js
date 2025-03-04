@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // Get all main page content sections
     const contentSections = {
         dashboard: document.getElementById("dashboard-content"),
-        profile: document.getElementById("profile-content"),
         history: document.getElementById("history-content"),
         record: document.getElementById("record-content"),
         news: document.getElementById("news-content")
