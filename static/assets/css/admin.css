@@ -200,10 +200,11 @@ h1 {
     margin-left: 90px; 
     margin-top: 50px;
     
-}
-.contents-container-mainpage {
-    margin-top: 40px;
-}
+    }
+    .contents-container-mainpage {
+        margin-top: 40px;
+       
+    }
     /* Active Sidebar Button */
 .container-nav-circle.active .circle-container {
     background-color: var(--secondary-color-dark); /* Change background */
@@ -217,6 +218,17 @@ h1 {
     color: var(--secondary-color-dark); /* Change text color */
     font-weight: bold;
 }
+.dashboard-content{
+    padding: 20px;
+    background-color: var(--primary-color);
+    border-radius: 10px;
+}
+
+.dashboard-content h2{
+    font-size: 30px;
+    color: var(--white);
+}
+
 
 .content-boxes {
     display: flex;
@@ -235,7 +247,6 @@ h1 {
     text-align: center;
 }
 .box-content {
-    
     padding: 20px;
 }
 
@@ -245,8 +256,8 @@ h1 {
 .incoming-events-box h2, 
 .news-box h2 {
     margin: 0;
-    font-size: 18px;
-    color: var(--white);
+    font-size: 30px;
+    color: var(--text-light);
 }
 
 /* Numbers inside Boxes */
@@ -260,8 +271,96 @@ h1 {
     color: var(--secondary-color);
 }
 
-.history-content {
+
+
+.profile-content {
     font-family: Arial, sans-serif;
+    max-width: 1000px; /* Increased for more content */
+    
+    /* Removed background-color */
+    box-shadow: none; /* Removed shadow */
+}
+
+.profile-content h2 {
+    text-align: left; /* Changed from center to left */
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.profile-header {
+    display: flex;
+    align-items: flex-start; /* Align items to the top */
+    margin-bottom: 20px;
+}
+
+.profile-image-mainpage img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 30px; /* Increased margin for spacing */
+}
+
+.profile-header-info h1 {
+    margin: 0;
+    font-size: 24px;
+    color: var(--white);
+}
+
+.profile-header-info p {
+    margin: 5px 0;
+    color: var(--text-light);
+}
+
+.profile-details {
+    margin-bottom: 20px;
+}
+
+.profile-details h2 {
+    font-size: 20px;
+    color: var(--white);
+    margin-bottom: 10px;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+}
+
+.detail-label {
+    font-weight: bold;
+    color: var(--secondary-color-dark);
+    width: 150px; /* Fixed width for better alignment */
+}
+
+.detail-value {
+    color: var(--text-light);
+    flex: 1; /* Allows the value to take remaining space */
+}
+
+.mainpage-profile-button {
+    display: inline-block; /* Changed to inline-block for side alignment */
+    padding: 10px 20px;
+    background-color: var(--secondary-color-dark);
+    color: var(--white);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px; /* Added margin for spacing */
+}
+
+.mainpage-profile-button:hover {
+    background-color: var(--secondary-color);
+}
+
+
+.history-content {
+    padding: 20px;
+    background-color: var(--primary-color);
+    font-family: Arial, sans-serif;
+    border-radius: 10px;
     
    
 }
@@ -270,6 +369,7 @@ h1 {
     text-align: left;
     margin-bottom: 20px;
     color: var(--white);
+    font-size: 30px;
     
 }
 
@@ -288,11 +388,13 @@ h1 {
     width: 100%;
     background-color: var(--primary-color-extra-light); /* Placeholder background */
     border-radius: 5px;
+    min-width: 600px;
 }
 
 .history-box table {
     width: 100%;
     border-collapse: collapse;
+    min-width: 600px;
 }
 
 .history-box th, .history-box td {
@@ -314,14 +416,15 @@ h1 {
 
 .player-btn{
     display: inline-block;
-    padding: 2px 4px;
-    background-color: var(--primary-color);
-    color: var(--text-light);
+    padding: 5px 5px;
+    background-color: var(--secondary-color-dark);
+    color: var(--primary-color);
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
     cursor: pointer;
     font-size: 10px;
-    margin-bottom: 1px;
+    margin-bottom: 7px;
+    font-weight: 550;
 }
 .player-btn:hover {
     background-color: var(--secondary-color);
@@ -332,27 +435,36 @@ h1 {
 .record-content {
     font-family: Arial, sans-serif;
     max-width: 100%;
-    margin-right: 50px;
+    background-color: var(--primary-color);
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     
 }
 
 .record-content h2 {
     text-align: left;
     margin-bottom: 20px;
+    color: var(--white);
+    font-size: 30px;
 }
 
 .record-box {
-    width: 100%;
-    min-height: 300px; /* Placeholder height, adjust as needed */
-    border: 1px solid var(--primary-color);
+    width: 95%;
+    min-height: 300px;
+    margin: auto; /* Placeholder height, adjust as needed */
+    border: 1px solid var(--primary-color--extra-light);
     border-radius: 10px;
-    padding: 20px;
+    padding: 10px;
     background-color: var(--primary-color-extra-light); /* Light background for contrast */
     display: flex;
     flex-direction: column;
-    align-items: left;
     justify-content: left;
     font-size: 20px;
+    color: var(--text-light);
 }
 
 /* Placeholder for future content */
@@ -390,9 +502,9 @@ h1 {
 
 .news-content h2 {
     text-align: center;
-    font-size: 24px;
+    font-size: 30px;
     margin-bottom: 15px;
-    color: var(--text-light);
+    color: var(--white);
 }
 
 .news-box-content {

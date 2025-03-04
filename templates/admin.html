@@ -237,6 +237,29 @@
                                         </select>
                                     </div>
                                 </div>
+                                <div class="row3">
+                                    <div class="details">
+                                        <label for="gym">Gym</label>
+                                        <input type="text" name="gym" class="field" required>
+                                    </div>
+                                    <div class="details">
+                                        <label for="weight">Weight (kg)</label>
+                                        <input type="number" name="weight" class="field" min="1" step="0.1" required>
+                                    </div>
+                                    <div class="details">
+                                        <label for="weight_category">Weight Category</label>
+                                        <select name="weight_category" class="field">
+                                            <option value="select">Select Weight Category</option>
+                                            <option value="Flyweight">Flyweight</option>
+                                            <option value="Bantamweight">Bantamweight</option>
+                                            <option value="Featherweight">Featherweight</option>
+                                            <option value="Lightweight">Lightweight</option>
+                                            <option value="Welterweight">Welterweight</option>
+                                            <option value="Middleweight">Middleweight</option>
+                                            <option value="Heavyweight">Heavyweight</option>
+                                        </select>
+                                    </div>
+                                </div>
 
                                 <p class="error-message hidden"></p>
                                 <input type="submit" class="btn-submit" value="Register">
