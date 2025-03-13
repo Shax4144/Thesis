@@ -11,7 +11,7 @@ app.register_blueprint(user_bp, url_prefix='/api')  # Register Blueprint
 
 # Google Drive API Setup
 SCOPES = ["https://www.googleapis.com/auth/drive.readonly"]
-SERVICE_ACCOUNT_FILE = r"C:\Users\Syree\THESIS FRONTEND\v3\Thesis\eternal-tempest-451603-c6-ebb595a1e8be.json"
+SERVICE_ACCOUNT_FILE = r"C:\Users\chest\thesis\Thesis\eternal-tempest-451603-c6-ca1051611364.json"
 ROOT_FOLDER_ID = "1NndBdfWTZl4ZMjGZWWb1UjgeVijl986v"  # Your root folder ID
 creds = service_account.Credentials.from_service_account_file(
     SERVICE_ACCOUNT_FILE, scopes=SCOPES
