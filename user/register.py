@@ -1,11 +1,34 @@
+from googleapiclient.discovery import build
+from google.oauth2 import service_account
 from flask import jsonify, request
 import uuid
-from database import db  # Ensure database connection is imported
+from database import db  
+
+# Google Drive API Setup
+SCOPES = ["https://www.googleapis.com/auth/drive"]
+SERVICE_ACCOUNT_FILE = "C:/Users/chest/thesis/Thesis/eternal-tempest-451603-c6-ca1051611364.json"
+ROOT_FOLDER_ID = "1NndBdfWTZl4ZMjGZWWb1UjgeVijl986v"  # Your root Google Drive folder
+
+creds = service_account.Credentials.from_service_account_file(
+    SERVICE_ACCOUNT_FILE, scopes=SCOPES
+)
+service = build("drive", "v3", credentials=creds)
+
+def create_drive_folder(folder_name, parent_folder_id=ROOT_FOLDER_ID):
+    """Create a new folder in Google Drive."""
+    file_metadata = {
+        "name": folder_name,
+        "mimeType": "application/vnd.google-apps.folder",
+        "parents": [parent_folder_id]
+    }
+    
+    folder = service.files().create(body=file_metadata, fields="id").execute()
+    return folder.get("id")
 
 class Players:
-
     @staticmethod
     def signup():
+        # Get form data
         players = {
             "_id": uuid.uuid4().hex,
             "firstname": request.json.get('firstname'),  
@@ -17,7 +40,6 @@ class Players:
             "gym": request.json.get('gym'),
             "weight": request.json.get('weight'),
             "weight_category": request.json.get('weight_category'),
-            #"rfid": request.json.get('rfid'),
         }
 
         # Validate required fields
@@ -25,9 +47,18 @@ class Players:
         if missing_fields:
             return jsonify({"error": f"Missing fields: {', '.join(missing_fields)}"}), 400
 
+        # Generate full name for folder
+        full_name = f"{players['firstname']} {players['middlename']} {players['lastname']}"
+
+        # Create Google Drive folder with player's full name
+        folder_id = create_drive_folder(full_name)
+
+        # Store folder ID in the database
+        players["folder_id"] = folder_id
+
         # Insert into the database
         result = db.players.insert_one(players)  
         if result.acknowledged:
-            return jsonify({"message": "Signup successful"}), 200
+            return jsonify({"message": "Signup successful", "folder_id": folder_id}), 200
         
         return jsonify({"error": "Signup failed"}), 400
