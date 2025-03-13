@@ -9,9 +9,10 @@ app = Flask(__name__)
 app.secret_key = "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"  # Secure secret key
 app.register_blueprint(user_bp, url_prefix='/api')  # Register Blueprint
 
+
 # Google Drive API Setup
 SCOPES = ["https://www.googleapis.com/auth/drive.readonly"]
-SERVICE_ACCOUNT_FILE = r"C:\Users\Syree\THESIS FRONTEND\v3\Thesis\eternal-tempest-451603-c6-ebb595a1e8be.json"
+SERVICE_ACCOUNT_FILE = r"C:\Users\Syree\THESIS FRONTEND\v4\Thesis\eternal-tempest-451603-c6-16142c4c1d90.json"
 ROOT_FOLDER_ID = "1NndBdfWTZl4ZMjGZWWb1UjgeVijl986v"  # Your root folder ID
 creds = service_account.Credentials.from_service_account_file(
     SERVICE_ACCOUNT_FILE, scopes=SCOPES
@@ -62,6 +63,13 @@ def admin():
     response.headers['Expires'] = '0'
     return response
 
+@app.route('/api/dashboard_data')
+def dashboard_data():
+    players_count = db.players.count_documents({})
+    
+    return jsonify({
+        'players': players_count
+    })
 
 @app.route('/api/audienceSB')
 def audienceSB():
@@ -70,6 +78,7 @@ def audienceSB():
 @app.route('/api/adminSB')
 def adminSB():
     return render_template('adminSB.html')  # Call static method
+
 
 @app.route('/api/players')
 def get_players():

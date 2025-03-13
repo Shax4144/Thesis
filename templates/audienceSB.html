@@ -167,27 +167,34 @@
             <h2>Player Information</h2>
             <div class="info-columns">
                 <div class="info-column">
-                    <p><strong>Player:</strong> <span id="player-name"> francis erick datu</span></p>
-                    <p><strong>Category:</strong> <span id="player-poomsae">legendary heavyweight</span></p>
+                    <p><strong>Player:</strong> <span id="player-name"></span></p>
+                    <p><strong>Category:</strong> <span id="player-poomsae"></span></p>
                 </div>
                 <div class="info-column">
-                    <p><strong>Belt:</strong> <span id="player-belt">Legendary belt</span></p>
-                    <p><strong>Gym:</strong> <span id="player-gym">Samahan ng mga Malakas sumipa ng Bading</span></p>
+                    <p><strong>Belt:</strong> <span id="player-belt"></span></p>
+                    <p><strong>Gym:</strong> <span id="player-gym"></span></p>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        async function fetchPlayerInfo() {
-            const response = await fetch('/api/players');
-            const players = await response.json();
-            const player = players[0];  // Assuming you want the first player
-            document.getElementById('player-name').textContent = player.firstname + ' ' + player.lastname;
-            document.getElementById('player-poomsae').textContent = player.category;
-            document.getElementById('player-belt').textContent = player.belt;
-            document.getElementById('player-gym').textContent = player.gym;
+        function fetchPlayerFromAdmin() {
+            const storedPlayer = localStorage.getItem("currentPlayer");
+            if (storedPlayer) {
+                const player = JSON.parse(storedPlayer);
+
+                // Update audience UI
+                document.getElementById('player-name').textContent = player.firstname + ' ' + player.lastname;
+                document.getElementById('player-poomsae').textContent = player.category;
+                document.getElementById('player-belt').textContent = player.belt;
+                document.getElementById('player-gym').textContent = player.gym;
+            }
         }
+
+        // Refresh the audience UI every second
+        setInterval(fetchPlayerFromAdmin, 1000);
+        window.onload = fetchPlayerFromAdmin;
 
         async function fetchScores() {
             const response = await fetch('/api/scores');

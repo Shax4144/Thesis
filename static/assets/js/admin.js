@@ -163,4 +163,27 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Fetch players when the page loads
     fetchPlayers();
+
+    setInterval(fetchPlayers, 5000);
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    async function fetchDashboardData() {
+        try {
+            const response = await fetch('/api/dashboard_data');
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            document.getElementById('number-players').textContent = data.players;
+        } catch (error) {
+            console.error("Error fetching dashboard data:", error);
+        }
+    }
+
+    fetchDashboardData();
+
+    // Auto-refresh dashboard data every 5 seconds
+    setInterval(fetchDashboardData, 5000);
 });

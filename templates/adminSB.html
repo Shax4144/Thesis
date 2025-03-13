@@ -321,6 +321,7 @@
                 alert("No more redos available!");
             }
         }
+        
 
         async function fetchPlayers() {
             const response = await fetch('/api/players');
@@ -335,13 +336,28 @@
                 document.getElementById('player-poomsae').textContent = player.category;
                 document.getElementById('player-belt').textContent = player.belt;
                 document.getElementById('player-gym').textContent = player.gym;
+
+                localStorage.setItem("currentPlayer", JSON.stringify(player));
             }
         }
 
         function nextPlayer() {
-            currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
-            updatePlayerInfo();
-        }
+                if (players.length > 0) {
+                    currentPlayerIndex = (currentPlayerIndex + 1) % players.length;  // Circulate through players
+                    updatePlayerInfo();
+                }
+            }
+
+            // Fetch players on load and refresh every second
+        window.onload = () => {
+            fetchPlayers();
+            setInterval(fetchPlayers, 1000);
+        };
+
+
+
+
+
 
         async function updateDisplay() {
             const response = await fetch('/api/scores');
