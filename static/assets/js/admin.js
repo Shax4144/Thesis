@@ -79,7 +79,12 @@ document.addEventListener("DOMContentLoaded", function () {
       "weight",
       "weight_category",
     ];
-    const missingFields = requiredFields.filter((field) => !data[field]);
+    const missingFields = requiredFields.filter((field) => {
+      if (field === "category" || field === "belt" || field === "weight_category") {
+        return !data[field] || data[field] === "select";
+      }
+      return !data[field];
+    });
 
     if (missingFields.length > 0) {
       alert("Please fill in all required fields: " + missingFields.join(", "));
@@ -168,35 +173,8 @@ document.addEventListener("DOMContentLoaded", function () {
   fetchPlayers();
 });
 
-submitButton.addEventListener("click", async function (event) {
-  event.preventDefault();
-
-  const formData = new FormData(form);
-  let data = {};
-  formData.forEach((value, key) => {
-    data[key] = value.trim();
+document.querySelectorAll(".open-window").forEach((button) => {
+  button.addEventListener("click", function () {
+    window.open(this.getAttribute("data-url"), "_blank");
   });
-
-  try {
-    const response = await fetch("/api/players/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
-
-    const result = await response.json();
-    console.log("Server Response:", result);
-
-    if (response.ok) {
-      alert(
-        `Player registered successfully! Folder created in Google Drive: ${result.folder_id}`
-      );
-      form.reset();
-    } else {
-      alert("Error: " + (result.error || "Unknown error"));
-    }
-  } catch (error) {
-    console.error("Fetch error:", error);
-    alert("An error occurred: " + error.message);
-  }
 });
