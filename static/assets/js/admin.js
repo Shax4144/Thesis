@@ -167,6 +167,10 @@ document.addEventListener("DOMContentLoaded", function () {
   // Refresh players list
   refreshButton.addEventListener("click", function () {
     fetchPlayers();
+
+
+    setInterval(fetchPlayers, 5000);
+
   });
 
   // Fetch players when the page loads
@@ -177,4 +181,50 @@ document.querySelectorAll(".open-window").forEach((button) => {
   button.addEventListener("click", function () {
     window.open(this.getAttribute("data-url"), "_blank");
   });
+
+
+  try {
+    const response = await fetch("/api/players/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+
+    const result = await response.json();
+    console.log("Server Response:", result);
+
+    if (response.ok) {
+      alert(
+        `Player registered successfully! Folder created in Google Drive: ${result.folder_id}`
+      );
+      form.reset();
+    } else {
+      alert("Error: " + (result.error || "Unknown error"));
+    }
+  } catch (error) {
+    console.error("Fetch error:", error);
+    alert("An error occurred: " + error.message);
+  }
+
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    async function fetchDashboardData() {
+        try {
+            const response = await fetch('/api/dashboard_data');
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            document.getElementById('number-players').textContent = data.players;
+        } catch (error) {
+            console.error("Error fetching dashboard data:", error);
+        }
+    }
+
+    fetchDashboardData();
+
+    // Auto-refresh dashboard data every 5 seconds
+    setInterval(fetchDashboardData, 5000);
 });

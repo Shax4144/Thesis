@@ -152,6 +152,7 @@
           <h2>Presentation</h2>
           <p class="score" id="presentation-score">10</p>
         </div>
+
       </div>
 
       <div class="total-score-container">
@@ -184,11 +185,25 @@
               >
             </p>
           </div>
+
+        <div class="player-info">
+            <h2>Player Information</h2>
+            <div class="info-columns">
+                <div class="info-column">
+                    <p><strong>Player:</strong> <span id="player-name"></span></p>
+                    <p><strong>Category:</strong> <span id="player-poomsae"></span></p>
+                </div>
+                <div class="info-column">
+                    <p><strong>Belt:</strong> <span id="player-belt"></span></p>
+                    <p><strong>Gym:</strong> <span id="player-gym"></span></p>
+                </div>
+            </div>
         </div>
       </div>
     </div>
 
     <script>
+
       async function fetchPlayerInfo() {
         const response = await fetch("/api/players");
         const players = await response.json();
@@ -221,6 +236,42 @@
         fetchPlayerInfo();
         /* updateDisplay(); */
       };
+
+        function fetchPlayerFromAdmin() {
+            const storedPlayer = localStorage.getItem("currentPlayer");
+            if (storedPlayer) {
+                const player = JSON.parse(storedPlayer);
+
+                // Update audience UI
+                document.getElementById('player-name').textContent = player.firstname + ' ' + player.lastname;
+                document.getElementById('player-poomsae').textContent = player.category;
+                document.getElementById('player-belt').textContent = player.belt;
+                document.getElementById('player-gym').textContent = player.gym;
+            }
+        }
+
+        // Refresh the audience UI every second
+        setInterval(fetchPlayerFromAdmin, 1000);
+        window.onload = fetchPlayerFromAdmin;
+
+        async function fetchScores() {
+            const response = await fetch('/api/scores');
+            const scores = await response.json();
+            document.getElementById('accuracy-score').textContent = scores.accuracy.toFixed(1);
+            document.getElementById('presentation-score').textContent = scores.presentation.toFixed(1);
+            document.getElementById('total-score').textContent = (scores.accuracy + scores.presentation).toFixed(1);
+        }
+
+        function updateDisplay() {
+            fetchScores();
+        }
+
+        setInterval(updateDisplay, 1000);
+        window.onload = () => {
+            fetchPlayerInfo();
+            updateDisplay();
+        };
+
     </script>
   </body>
 </html>
