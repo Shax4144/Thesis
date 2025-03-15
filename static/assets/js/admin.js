@@ -79,7 +79,12 @@ document.addEventListener("DOMContentLoaded", function () {
       "weight",
       "weight_category",
     ];
-    const missingFields = requiredFields.filter((field) => !data[field]);
+    const missingFields = requiredFields.filter((field) => {
+      if (field === "category" || field === "belt" || field === "weight_category") {
+        return !data[field] || data[field] === "select";
+      }
+      return !data[field];
+    });
 
     if (missingFields.length > 0) {
       alert("Please fill in all required fields: " + missingFields.join(", "));
@@ -162,24 +167,21 @@ document.addEventListener("DOMContentLoaded", function () {
   // Refresh players list
   refreshButton.addEventListener("click", function () {
     fetchPlayers();
-<<<<<<< HEAD
+
 
     setInterval(fetchPlayers, 5000);
-=======
+
   });
 
   // Fetch players when the page loads
   fetchPlayers();
 });
 
-submitButton.addEventListener("click", async function (event) {
-  event.preventDefault();
-
-  const formData = new FormData(form);
-  let data = {};
-  formData.forEach((value, key) => {
-    data[key] = value.trim();
+document.querySelectorAll(".open-window").forEach((button) => {
+  button.addEventListener("click", function () {
+    window.open(this.getAttribute("data-url"), "_blank");
   });
+
 
   try {
     const response = await fetch("/api/players/signup", {
@@ -203,7 +205,7 @@ submitButton.addEventListener("click", async function (event) {
     console.error("Fetch error:", error);
     alert("An error occurred: " + error.message);
   }
->>>>>>> 0ca4db973460100032efc854f5ab626c2b3b9577
+
 });
 
 document.addEventListener("DOMContentLoaded", function () {

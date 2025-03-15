@@ -1,167 +1,190 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Taekwondo Scoreboard</title>
     <style>
-        body,
-        html {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: black;
-            color: white;
-            height: 100vh;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            overflow: hidden;
-        }
+      body,
+      html {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background-color: black;
+        color: white;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
 
-        .container {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 20px;
-            box-sizing: border-box;
-        }
+      .container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 20px;
+        box-sizing: border-box;
+      }
 
-        h1 {
-            font-size: 5vh;
-            color: orange;
-            margin-bottom: 10px;
-        }
+      h1 {
+        font-size: 5vh;
+        color: orange;
+        margin-bottom: 10px;
+      }
 
-        .highlight {
-            background-color: orange;
-            width: 50%;
-            height: 15vh;
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            font-size: 4vh;
-        }
+      .highlight {
+        background-color: orange;
+        width: 50%;
+        height: 15vh;
+        color: white;
+        padding: 20px;
+        border-radius: 15px;
+        text-align: center;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-size: 4vh;
+      }
 
-        .scoreboard {
-            display: flex;
-            justify-content: space-between;
-            gap: 50px;
-            margin-bottom: 10px;
-            align-self: center;
-        }
+      .scoreboard {
+        display: flex;
+        justify-content: space-between;
+        gap: 50px;
+        margin-bottom: 10px;
+        align-self: center;
+      }
 
-        .column {
-            background: #222;
-            padding: 10px;
-            border-radius: 10px;
-            color: orange;
-            font-weight: bold;
-            width: 550px;
-            height: 200px;
+      .column {
+        background: #222;
+        padding: 10px;
+        border-radius: 10px;
+        color: orange;
+        font-weight: bold;
+        width: 30vw;
+        height: 20vh;
+      }
 
-        }
+      .column p {
+        font-size: 90px;
+        margin: 0;
+      }
 
-        .column p {
-            font-size: 90px;
-            margin: 0;
-        }
+      .player-info {
+        background: #222;
+        padding: 40px;
+        border-radius: 15px;
+        text-align: center;
+        font-size: 2vh;
+        margin-top: 5px;
+        display: flex;
+        flex-direction: column;
+        align-self: center;
+        width: 50%;
+        color: white;
+      }
 
-        .player-info {
-            background: #222;
-            padding: 40px;
-            border-radius: 15px;
-            text-align: center;
-            font-size: 2vh;
-            margin-top: 5px;
-            display: flex;
-            flex-direction: column;
-            align-self: center;
-            width: 50%;
-            color: white;
-        }
+      .player-info .info-columns {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+      }
 
-        .player-info .info-columns {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-        }
+      .player-info .info-column {
+        flex: 1;
+        padding: 10px;
+      }
 
-        .player-info .info-column {
-            flex: 1;
-            padding: 10px;
-        }
+      .player-info strong {
+        color: orange;
+      }
 
-        .player-info strong {
-            color: orange;
-        }
+      .player-info span {
+        color: white;
+      }
 
-        .player-info span {
-            color: white;
-        }
+      .total-score-container {
+        background-color: orange;
+        align-self: center;
+        width: 35%;
+        height: 25vh;
+        color: white;
+        border-radius: 15px;
+        text-align: center;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
 
-        .total-score-container {
-            background-color: orange;
-            align-self: center;
-            width: 40%;
-            height: 400px;
-            color: white;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
+      .total-score-title {
+        color: aliceblue;
+        font-size: 6vh;
+        font-weight: bold;
+        margin: 0;
+        text-transform: uppercase;
+      }
 
-        .total-score-title {
-            color: aliceblue;
-            font-size: 6vh;
-            font-weight: bold;
-            margin: 0;
-            text-transform: uppercase;
-        }
-
-        .total-score-value {
-            font-size: 14vh;
-            font-weight: bold;
-            display: block;
-            margin-top: 10px;
-        }
+      .total-score-value {
+        font-size: 14vh;
+        font-weight: bold;
+        display: block;
+        margin-top: 10px;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <div class="container">
-        <h1>Taekwondo Scoreboard</h1>
+      <h1>Taekwondo Scoreboard</h1>
 
-        <div class="total-score-container">
-            <h2 class="total-score-title">Total Score</h2>
-            <span class="total-score-value" id="total-score">16</span>
+      <div class="scoreboard">
+        <div class="column">
+          <h2>Accuracy</h2>
+          <p class="score" id="accuracy-score">6</p>
+        </div>
+        <div class="column">
+          <h2>Presentation</h2>
+          <p class="score" id="presentation-score">10</p>
         </div>
 
-        <div class="scoreboard">
-            <div class="column">
-                <h2>Accuracy</h2>
-                <p class="score" id="accuracy-score">6</p>
-            </div>
-            <div class="column">
-                <h2>Presentation</h2>
-                <p class="score" id="presentation-score">10</p>
-            </div>
-        </div>
+      </div>
+
+      <div class="total-score-container">
+        <h2 class="total-score-title">Total Score</h2>
+        <span class="total-score-value" id="total-score">16</span>
+      </div>
+
+      <div class="player-info">
+        <h2>Player Information</h2>
+        <div class="info-columns">
+          <div class="info-column">
+            <p>
+              <strong>Player:</strong>
+              <span id="player-name"> francis erick datu</span>
+            </p>
+            <p>
+              <strong>Category:</strong>
+              <span id="player-poomsae">legendary heavyweight</span>
+            </p>
+          </div>
+          <div class="info-column">
+            <p>
+              <strong>Belt:</strong>
+              <span id="player-belt">Legendary belt</span>
+            </p>
+            <p>
+              <strong>Gym:</strong>
+              <span id="player-gym"
+                >Samahan ng mga Malakas sumipa ng Bading</span
+              >
+            </p>
+          </div>
 
         <div class="player-info">
             <h2>Player Information</h2>
@@ -176,9 +199,44 @@
                 </div>
             </div>
         </div>
+      </div>
     </div>
 
     <script>
+
+      async function fetchPlayerInfo() {
+        const response = await fetch("/api/players");
+        const players = await response.json();
+        const player = players[0]; // Assuming you want the first player
+        document.getElementById("player-name").textContent =
+          player.firstname + " " + player.lastname;
+        document.getElementById("player-poomsae").textContent = player.category;
+        document.getElementById("player-belt").textContent = player.belt;
+        document.getElementById("player-gym").textContent = player.gym;
+      }
+
+      /* async function fetchScores() {
+        const response = await fetch("/api/scores");
+        const scores = await response.json();
+        document.getElementById("accuracy-score").textContent =
+          scores.accuracy.toFixed(1);
+        document.getElementById("presentation-score").textContent =
+          scores.presentation.toFixed(1);
+        document.getElementById("total-score").textContent = (
+          scores.accuracy + scores.presentation
+        ).toFixed(1);
+      } */
+
+      /* function updateDisplay() {
+        fetchScores();
+      } */
+
+      /* setInterval(updateDisplay, 1000); */
+      window.onload = () => {
+        fetchPlayerInfo();
+        /* updateDisplay(); */
+      };
+
         function fetchPlayerFromAdmin() {
             const storedPlayer = localStorage.getItem("currentPlayer");
             if (storedPlayer) {
@@ -213,7 +271,7 @@
             fetchPlayerInfo();
             updateDisplay();
         };
-    </script>
-</body>
 
+    </script>
+  </body>
 </html>
