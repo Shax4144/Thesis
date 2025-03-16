@@ -62,3 +62,22 @@ class Players:
             return jsonify({"message": "Signup successful", "folder_id": folder_id}), 200
         
         return jsonify({"error": "Signup failed"}), 400
+
+    def archive_players():
+        """Archive players and move their folders to the archive folder."""
+        try:
+            players = list(db.players.find({}))  # Fetch all players
+            
+            if not players:
+                return jsonify({"error": "No players to archive"}), 400
+
+            for player in players:
+                folder_id = player.get("folder_id")
+                if folder_id:
+                    move_drive_folder(folder_id, ARCHIVE_FOLDER_ID)  # Move folder to archive
+
+            # Remove players from active database after archiving
+            db.players.delete_many({})  
+            return jsonify({"message": "Players archived successfully!"}), 200
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500

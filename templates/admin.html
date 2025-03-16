@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="script-src 'self' 'unsafe-inline' https://accounts.google.com https://apis.google.com;"
+      content="script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com;"
     />
     <title>PTU</title>
     <link rel="stylesheet" href="../static/assets/css/admin.css" />
@@ -113,8 +113,10 @@
             Print All Registered Players
           </button>
           <button type="button" class="btn-refresh player-btn">Refresh</button>
-          <button type="button" class="archive player-btn">Archive</button>
-          
+          <button type="button" class="archive player-btn" id="archiveButton">
+            Archive
+          </button>
+
           <!-- Refresh Button -->
           <div class="history-box">
             <table id="players-table">
@@ -126,7 +128,7 @@
                   <th>Age</th>
                   <th>Belt</th>
                   <th>Gym</th>
-                  <th>Weight</th>
+                  <th>Weight (kg)</th>
                 </tr>
               </thead>
               <tbody></tbody>
@@ -136,6 +138,7 @@
 
         <div class="record-content" id="record-content">
           <h2>Record Content</h2>
+          <button class="back-button" onclick="goBack()">Back</button>
           <div class="record-box">
             {% for file in files %}
             <div>
@@ -150,7 +153,9 @@
               >
               <div id="folder-{{ file.id }}" class="folder-contents"></div>
               {% else %}
-              <i class="fa-solid fa-file"></i> {{ file.name }} {% endif %}
+              <i class="fa-solid fa-file file"></i>
+              <span class="file">{{ file.name }}</span>
+              {% endif %}
             </div>
             {% endfor %}
           </div>
@@ -160,6 +165,16 @@
             </button>
             <button data-url="{{ url_for('adminSB') }}" class="open-window">
               Admin
+            </button>
+            <button
+              type="button"
+              class="archive record-btn"
+              id="archiveRecordButton"
+            >
+              Archive Record Content
+            </button>
+            <button id="show-archives" class="open-window">
+              Show Archives
             </button>
           </div>
         </div>
@@ -321,6 +336,8 @@
         </div>
       </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 
     <script src="../static/assets/js/admin.js"></script>
   </body>
