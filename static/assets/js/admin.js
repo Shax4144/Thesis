@@ -1,3 +1,17 @@
+const socket = io();
+  
+document.addEventListener("DOMContentLoaded", function () {
+  const socket = io.connect(location.protocol + "//" + document.domain + ":" + location.port);
+
+  // Listen for RFID data
+  socket.on("rfid_data", function (data) {
+      console.log("Received RFID:", data.rfid);
+
+      // Insert RFID into input field
+      document.getElementById("rfid").value = data.rfid;
+  });
+});
+
 //SIDE NAVIGATION BAR
 document.addEventListener("DOMContentLoaded", function () {
   // Sidebar Navigation Elements
@@ -49,11 +63,11 @@ document.addEventListener("DOMContentLoaded", function () {
   const submitButton = form ? form.querySelector(".btn-submit") : null;
 
   if (!form || !submitButton) {
-    console.error("❌ Error: Registration form or submit button not found.");
+    console.error(" Error: Registration form or submit button not found.");
     return;
   }
 
-  // ✅ Remove previous event listener before adding a new one
+  //  Remove previous event listener before adding a new one
   submitButton.removeEventListener("click", handleFormSubmit);
   submitButton.addEventListener("click", handleFormSubmit);
 });
@@ -78,6 +92,7 @@ async function handleFormSubmit(event) {
 
   // Ensure required fields are filled
   const requiredFields = [
+    "rfid",
     "firstname",
     "lastname",
     "category",
@@ -92,7 +107,7 @@ async function handleFormSubmit(event) {
   );
 
   if (missingFields.length > 0) {
-    alert("⚠️ Please fill in all required fields: " + missingFields.join(", "));
+    alert(" Please fill in all required fields: " + missingFields.join(", "));
     submitButton.disabled = false; // Re-enable button
     return;
   }
@@ -109,20 +124,20 @@ async function handleFormSubmit(event) {
     }
 
     const result = await response.json();
-    console.log("✅ Server Response:", result);
+    console.log(" Server Response:", result);
 
     if (result.message) {
       alert("🎉 Player registered successfully!");
       document.querySelector("form[name='signup_form']").reset();
       fetchPlayers(); // Refresh list
     } else {
-      alert("❌ Error: " + (result.error || "Unknown error"));
+      alert(" Error: " + (result.error || "Unknown error"));
     }
   } catch (error) {
-    console.error("❌ Fetch error:", error);
-    alert("⚠️ An error occurred: " + error.message);
+    console.error(" Fetch error:", error);
+    alert(" An error occurred: " + error.message);
   } finally {
-    // ✅ Ensure button is re-enabled after response
+    //  Ensure button is re-enabled after response
     submitButton.disabled = false;
   }
 }
@@ -134,7 +149,7 @@ document.addEventListener("DOMContentLoaded", function () {
   async function fetchPlayers() {
     const tableBody = document.querySelector("#players-table tbody");
     if (!tableBody) {
-      console.error("❌ Error: #players-table tbody not found.");
+      console.error(" Error: #players-table tbody not found.");
       return;
     }
 
@@ -150,6 +165,7 @@ document.addEventListener("DOMContentLoaded", function () {
       players.forEach((player) => {
         const row = document.createElement("tr");
         row.innerHTML = `
+          <td>${player.rfid}</td>
           <td>${player.firstname}</td>
           <td>${player.lastname}</td>
           <td>${player.category}</td>
@@ -161,10 +177,10 @@ document.addEventListener("DOMContentLoaded", function () {
         tableBody.appendChild(row);
       });
 
-      console.log("✅ Players list updated successfully.");
+      console.log(" Players list updated successfully.");
     } catch (error) {
-      console.error("❌ Error fetching players:", error);
-      tableBody.innerHTML = `<tr><td colspan="7">⚠️ Failed to load data</td></tr>`;
+      console.error(" Error fetching players:", error);
+      tableBody.innerHTML = `<tr><td colspan="7"> Failed to load data</td></tr>`;
     }
   }
 
@@ -180,7 +196,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const recordBox = document.querySelector(".record-box");
 
     if (!recordBox) {
-      console.error("❌ Error: .record-box not found.");
+      console.error(" Error: .record-box not found.");
       return;
     }
 
@@ -193,10 +209,10 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       const data = await response.json();
-      console.log("📂 Server Response:", data); // Debugging output
+      console.log(" Server Response:", data); // Debugging output
 
       if (!Array.isArray(data)) {
-        throw new Error("❌ API response is not an array!");
+        throw new Error(" API response is not an array!");
       }
 
       recordBox.innerHTML = ""; // Clear previous records
@@ -223,10 +239,10 @@ document.addEventListener("DOMContentLoaded", function () {
         recordBox.appendChild(div);
       });
 
-      console.log("✅ Record files updated successfully.");
+      console.log(" Record files updated successfully.");
     } catch (error) {
-      console.error("❌ Error fetching files:", error);
-      recordBox.innerHTML = "<p>⚠️ Failed to load files.</p>";
+      console.error(" Error fetching files:", error);
+      recordBox.innerHTML = "<p> Failed to load files.</p>";
     }
   }
 
@@ -249,7 +265,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const playerCount = document.getElementById("number-players");
       if (playerCount) playerCount.textContent = data.players;
     } catch (error) {
-      console.error("❌ Error fetching dashboard data:", error);
+      console.error(" Error fetching dashboard data:", error);
     }
   }
 
@@ -263,9 +279,9 @@ document.addEventListener("DOMContentLoaded", function () {
     button.addEventListener("click", function () {
       const url = this.getAttribute("data-url");
       if (url) {
-        window.open(url, "_blank"); // ✅ Open in a new tab
+        window.open(url, "_blank"); //  Open in a new tab
       } else {
-        console.error("❌ Error: No URL found for this button.");
+        console.error(" Error: No URL found for this button.");
       }
     });
   });
@@ -276,17 +292,17 @@ document.addEventListener("DOMContentLoaded", function () {
   const archiveButton = document.getElementById("archiveRecordButton");
 
   if (!archiveButton) {
-    console.error("❌ Error: Archive button not found.");
+    console.error(" Error: Archive button not found.");
     return;
   }
 
-  // ✅ Remove any previous event listener before adding a new one
+  //  Remove any previous event listener before adding a new one
   archiveButton.removeEventListener("click", handleArchiveRequest);
   archiveButton.addEventListener("click", handleArchiveRequest);
 });
 
 async function handleArchiveRequest() {
-  // ✅ Prevent multiple clicks by disabling the button
+  //  Prevent multiple clicks by disabling the button
   const archiveButton = document.getElementById("archiveRecordButton");
   if (!archiveButton) return;
 
@@ -294,7 +310,7 @@ async function handleArchiveRequest() {
   archiveButton.disabled = true; // Disable button to prevent spam clicking
 
   const confirmArchive = confirm(
-    "⚠️ Are you sure you want to archive the record contents?"
+    " Are you sure you want to archive the record contents?"
   );
   if (!confirmArchive) {
     archiveButton.disabled = false; // Re-enable button if canceled
@@ -311,19 +327,19 @@ async function handleArchiveRequest() {
     }
 
     const result = await response.json();
-    console.log("✅ Archive Response:", result);
+    console.log(" Archive Response:", result);
 
     if (result.message) {
       alert(result.message);
-      fetchFiles(); // ✅ Refresh record box after archiving
+      fetchFiles(); //  Refresh record box after archiving
     } else {
-      alert("❌ Error: " + (result.error || "Unknown error"));
+      alert(" Error: " + (result.error || "Unknown error"));
     }
   } catch (error) {
-    console.error("❌ Failed to archive record content:", error);
-    alert("❌ Failed to connect to archive API.");
+    console.error(" Failed to archive record content:", error);
+    alert(" Failed to connect to archive API.");
   } finally {
-    archiveButton.disabled = false; // ✅ Re-enable button after request completes
+    archiveButton.disabled = false; //  Re-enable button after request completes
   }
 }
 
@@ -332,7 +348,7 @@ async function handleArchiveRequest() {
 document.getElementById("show-archives").addEventListener("click", function () {
   const archiveFolderId = "1GM5-ZA57QPylEhcMexwhhVmdd2g09ZRX"; // Replace with actual archive folder ID
   const archiveURL = `https://drive.google.com/drive/folders/${archiveFolderId}`;
-  window.open(archiveURL, "_blank"); // ✅ Open in a new tab
+  window.open(archiveURL, "_blank"); //  Open in a new tab
 });
 //====================================================================================================
 
@@ -343,7 +359,7 @@ document
     this.disabled = true;
 
     const confirmArchive = confirm(
-      "⚠️ Are you sure you want to archive the record contents?"
+      " Are you sure you want to archive the record contents?"
     );
     if (!confirmArchive) {
       this.disabled = false;
@@ -359,7 +375,7 @@ document
       }
 
       const result = await response.json();
-      console.log("✅ Archive Response:", result);
+      console.log(" Archive Response:", result);
 
       if (result.message) {
         alert(result.message);
@@ -368,11 +384,11 @@ document
           window.open(result.pdf_link, "_blank");
         }
       } else {
-        alert("❌ Error: " + (result.error || "Unknown error"));
+        alert(" Error: " + (result.error || "Unknown error"));
       }
     } catch (error) {
-      console.error("❌ Failed to archive record content:", error);
-      alert("❌ Failed to connect to archive API.");
+      console.error(" Failed to archive record content:", error);
+      alert(" Failed to connect to archive API.");
     } finally {
       this.disabled = false;
     }

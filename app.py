@@ -1,5 +1,8 @@
+import socket
+import threading
 from flask import Flask, request, render_template, session, redirect, jsonify, make_response
 from functools import wraps
+from flask_socketio import SocketIO
 from user.routes import user_bp  
 from database import db
 from googleapiclient.discovery import build
@@ -15,10 +18,14 @@ from datetime import datetime
 app = Flask(__name__)
 app.secret_key = "your-secure-secret-key"
 app.register_blueprint(user_bp, url_prefix='/api')
+socketio = SocketIO(app, cors_allowed_origins="*")
+
+SERVER_IP = "raspberrypi"  # Change this to match your setup
+PORT = 5000
 
 # Google Drive API Setup
 SCOPES = ["https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive.readonly"]
-SERVICE_ACCOUNT_FILE = r"C:\Users\chest\thesis\Thesis\eternal-tempest-451603-c6-dba865b61b34.json"
+SERVICE_ACCOUNT_FILE = r"Thesis\eternal-tempest-451603-c6-a701efdfca67.json"
 ROOT_FOLDER_ID = "1NndBdfWTZl4ZMjGZWWb1UjgeVijl986v"
 ARCHIVE_FOLDER_ID = "1GM5-ZA57QPylEhcMexwhhVmdd2g09ZRX"
 
@@ -26,6 +33,23 @@ creds = service_account.Credentials.from_service_account_file(
     SERVICE_ACCOUNT_FILE, scopes=SCOPES
 )
 service = build("drive", "v3", credentials=creds)
+
+def receive_rfid_data():
+    """Function to receive RFID data from the server and send it to the frontend."""
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client_socket:
+            client_socket.connect((SERVER_IP, PORT))
+            print("[CONNECTED] Receiving RFID data...")
+
+            while True:
+                data = client_socket.recv(1024).decode().strip()
+                if data:
+                    print(f"[RFID] {data}")
+                    # Emit the actual RFID data to update the input box
+                    socketio.emit("rfid_data", {"rfid": data})
+
+    except Exception as e:
+        print(f"[ERROR] Could not connect: {e}")
 
 
 def create_drive_folder(folder_name, parent_folder_id):
@@ -196,9 +220,9 @@ def get_files(folder_id=ROOT_FOLDER_ID):
         files = results.get("files", [])
 
         if not files:
-            print(f"📂 No files found in folder: {folder_id}")  # Debugging
+            print(f" No files found in folder: {folder_id}")  # Debugging
         else:
-            print(f"📂 Found {len(files)} files in folder: {folder_id}")  # Debugging
+            print(f" Found {len(files)} files in folder: {folder_id}")  # Debugging
 
         return files
     except Exception as e:
@@ -282,4 +306,5 @@ def folder_contents(folder_id):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    threading.Thread(target=receive_rfid_data, daemon=True).start()  # Start RFID receiving in a separate thread
+    socketio.run(app, debug=True, allow_unsafe_werkzeug=True)

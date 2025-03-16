@@ -123,6 +123,7 @@
             <table id="players-table">
               <thead>
                 <tr>
+                  <th>RFID</th>
                   <th>First Name</th>
                   <th>Last Name</th>
                   <th>Category</th>
@@ -194,7 +195,7 @@
                         name="rfid"
                         class="field"
                         id="rfid"
-                        disabled
+                        onfocus="blur()"
                         required
                       />
                     </div>
@@ -341,7 +342,7 @@
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
     <script src="../static/assets/js/admin.js"></script>
   </body>
 </html>

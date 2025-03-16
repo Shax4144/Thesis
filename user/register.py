@@ -6,7 +6,7 @@ from google.oauth2 import service_account
 
 # Google Drive API Setup
 SCOPES = ["https://www.googleapis.com/auth/drive"]
-SERVICE_ACCOUNT_FILE = r"C:\Users\chest\thesis\Thesis\eternal-tempest-451603-c6-dba865b61b34.json"
+SERVICE_ACCOUNT_FILE = r"Thesis\eternal-tempest-451603-c6-a701efdfca67.json"
 ROOT_FOLDER_ID = "1NndBdfWTZl4ZMjGZWWb1UjgeVijl986v"
 ARCHIVE_FOLDER_ID = "1GM5-ZA57QPylEhcMexwhhVmdd2g09ZRX"
 creds = service_account.Credentials.from_service_account_file(
@@ -25,7 +25,7 @@ def create_drive_folder(folder_name, parent_folder_id=ROOT_FOLDER_ID):
         folder = service.files().create(body=file_metadata, fields="id").execute()
         return folder.get("id")
     except Exception as e:
-        print(f"❌ Error creating folder: {e}")
+        print(f" Error creating folder: {e}")
         return None
 
 def move_drive_folder(folder_id, new_parent_id):
@@ -37,9 +37,9 @@ def move_drive_folder(folder_id, new_parent_id):
             removeParents=ROOT_FOLDER_ID,
             fields="id, parents"
         ).execute()
-        print(f"✅ Moved folder {folder_id} to Archive")
+        print(f" Moved folder {folder_id} to Archive")
     except Exception as e:
-        print(f"❌ Error moving folder {folder_id}: {e}")
+        print(f" Error moving folder {folder_id}: {e}")
 
 class Players:
     @staticmethod
@@ -48,6 +48,7 @@ class Players:
             # Get form data
             players = {
                 "_id": uuid.uuid4().hex,
+                "rfid": request.json.get("rfid", "").strip(), 
                 "firstname": request.json.get("firstname", "").strip(),
                 "middlename": request.json.get("middlename", "").strip(),
                 "lastname": request.json.get("lastname", "").strip(),
@@ -59,38 +60,38 @@ class Players:
                 "weight_category": request.json.get("weight_category", "").strip(),
             }
 
-            # ✅ Debugging: Print received data
-            print(f"📨 Received Player Data: {players}")
+            #  Debugging: Print received data
+            print(f" Received Player Data: {players}")
 
             # Validate required fields
             missing_fields = [key for key, value in players.items() if not value]
             if missing_fields:
                 return jsonify({"error": f"Missing fields: {', '.join(missing_fields)}"}), 400
 
-            # ✅ Generate full name for folder
+            #  Generate full name for folder
             full_name = f"{players['firstname']} {players['middlename']} {players['lastname']}".strip()
 
-            # ✅ Create Google Drive folder for the player
+            #  Create Google Drive folder for the player
             folder_id = create_drive_folder(full_name)
 
             if not folder_id:
                 return jsonify({"error": "Failed to create player folder in Google Drive"}), 500
 
-            # ✅ Store folder ID in the database
+            #  Store folder ID in the database
             players["folder_id"] = folder_id
 
-            # ✅ Insert into the database
+            #  Insert into the database
             result = db.players.insert_one(players)
 
             if result.acknowledged:
-                print(f"✅ Player {full_name} registered successfully with folder ID {folder_id}")
+                print(f" Player {full_name} registered successfully with folder ID {folder_id}")
                 return jsonify({"message": "Signup successful", "folder_id": folder_id}), 200
             
             return jsonify({"error": "Signup failed"}), 500
 
         except Exception as e:
             import traceback
-            print("❌ ERROR in signup:", traceback.format_exc())  # Print full error
+            print(" ERROR in signup:", traceback.format_exc())  # Print full error
             return jsonify({"error": str(e)}), 500
 
     @staticmethod
@@ -111,5 +112,5 @@ class Players:
             db.players.delete_many({})
             return jsonify({"message": "Players archived successfully!"}), 200
         except Exception as e:
-            print(f"❌ Error archiving players: {e}")
+            print(f" Error archiving players: {e}")
             return jsonify({"error": str(e)}), 500
