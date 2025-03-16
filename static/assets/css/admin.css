@@ -122,10 +122,23 @@ h1 {
   z-index: 1000;
 }
 
+<<<<<<< HEAD
 .icon {
   font-size: 20px;
   color: var(--text-light);
   transition: color 0.3s ease-in-out;
+=======
+.container-navbar h1 {
+    font-size: 24px;
+    color: var(--text-light);
+    margin-right: auto;
+}
+
+.icon{
+    font-size: 20px;
+    color: var(--text-light);
+    transition: color 0.3s ease-in-out;
+>>>>>>> 7ddcbccfed302a19dd912f3712d993a1b56a4c97
 }
 .profile-container {
   display: flex;
@@ -148,6 +161,7 @@ h1 {
   color: var(--text-light);
 }
 
+<<<<<<< HEAD
 .profile-picture {
   width: 40px;
   height: 40px;
@@ -192,6 +206,21 @@ h1 {
   margin-top: 40px;
 }
 /* Active Sidebar Button */
+=======
+.container-mainpage {
+    background-color: var(--primary-color-light);
+    flex-grow: 1;
+    padding: 20px;
+    margin-left: 90px; 
+    margin-top: 50px;
+    
+    }
+.contents-container-mainpage {
+    margin-top: 40px;
+    
+ }
+    /* Active Sidebar Button */
+>>>>>>> 7ddcbccfed302a19dd912f3712d993a1b56a4c97
 .container-nav-circle.active .circle-container {
   background-color: var(--secondary-color-dark); /* Change background */
 }
