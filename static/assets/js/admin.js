@@ -414,29 +414,6 @@ document.querySelectorAll(".open-window").forEach((button) => {
   });
 
 
-  try {
-    const response = await fetch("/api/players/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
-
-    const result = await response.json();
-    console.log("Server Response:", result);
-
-    if (response.ok) {
-      alert(
-        `Player registered successfully! Folder created in Google Drive: ${result.folder_id}`
-      );
-      form.reset();
-    } else {
-      alert("Error: " + (result.error || "Unknown error"));
-    }
-  } catch (error) {
-    console.error("Fetch error:", error);
-    alert("An error occurred: " + error.message);
-  }
-
 });
 
 document.addEventListener("DOMContentLoaded", function () {
