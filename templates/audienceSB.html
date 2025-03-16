@@ -28,6 +28,33 @@
         box-sizing: border-box;
       }
 
+      .content-container {
+        height: 80vh;
+        display: flex;
+      }
+
+      .details-corner {
+        display: flex;
+        flex-direction: column;
+        width: 60%;
+        gap: 5%;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .performing-container {
+        width: 100%;
+      }
+
+      .total-score-corner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+      }
+
       h1 {
         font-size: 5vh;
         color: orange;
@@ -52,10 +79,12 @@
 
       .scoreboard {
         display: flex;
+        flex: 1;
         justify-content: space-between;
         gap: 50px;
         margin-bottom: 10px;
         align-self: center;
+        width: 100%;
       }
 
       .column {
@@ -65,7 +94,7 @@
         color: orange;
         font-weight: bold;
         width: 30vw;
-        height: 20vh;
+        height: auto;
       }
 
       .column p {
@@ -75,7 +104,6 @@
 
       .player-info {
         background: #222;
-        padding: 40px;
         border-radius: 15px;
         text-align: center;
         font-size: 2vh;
@@ -83,8 +111,17 @@
         display: flex;
         flex-direction: column;
         align-self: center;
-        width: 50%;
+        width: 100%;
         color: white;
+      }
+
+      .player-info p {
+        text-align: left;
+      }
+
+      .info-column {
+        flex: 1;
+        padding-left: 5%;
       }
 
       .player-info .info-columns {
@@ -93,9 +130,8 @@
         width: 100%;
       }
 
-      .player-info .info-column {
+      .player-info {
         flex: 1;
-        padding: 10px;
       }
 
       .player-info strong {
@@ -109,9 +145,9 @@
       .total-score-container {
         background-color: orange;
         align-self: center;
-        width: 35%;
-        height: 25vh;
-        color: white;
+        width: 80%;
+        height: 70%;
+        color: black;
         border-radius: 15px;
         text-align: center;
         box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
@@ -123,10 +159,11 @@
       }
 
       .total-score-title {
-        color: aliceblue;
+        color: black;
         font-size: 6vh;
         font-weight: bold;
         margin: 0;
+        padding-top: 10px;
         text-transform: uppercase;
       }
 
@@ -135,6 +172,7 @@
         font-weight: bold;
         display: block;
         margin-top: 10px;
+        padding-top: 10px;
       }
     </style>
   </head>
@@ -143,52 +181,12 @@
     <div class="container">
       <h1>Taekwondo Scoreboard</h1>
 
-      <div class="scoreboard">
-        <div class="column">
-          <h2>Accuracy</h2>
-          <p class="score" id="accuracy-score">6</p>
-        </div>
-        <div class="column">
-          <h2>Presentation</h2>
-          <p class="score" id="presentation-score">10</p>
-        </div>
+      <div class="content-container">
+        <div class="details-corner">
 
-      </div>
-
-      <div class="total-score-container">
-        <h2 class="total-score-title">Total Score</h2>
-        <span class="total-score-value" id="total-score">16</span>
-      </div>
-
-      <div class="player-info">
-        <h2>Player Information</h2>
-        <div class="info-columns">
-          <div class="info-column">
-            <p>
-              <strong>Player:</strong>
-              <span id="player-name"> francis erick datu</span>
-            </p>
-            <p>
-              <strong>Category:</strong>
-              <span id="player-poomsae">legendary heavyweight</span>
-            </p>
-          </div>
-          <div class="info-column">
-            <p>
-              <strong>Belt:</strong>
-              <span id="player-belt">Legendary belt</span>
-            </p>
-            <p>
-              <strong>Gym:</strong>
-              <span id="player-gym"
-                >Samahan ng mga Malakas sumipa ng Bading</span
-              >
-            </p>
-          </div>
-
-        <div class="player-info">
+          <div class="player-info">
             <h2>Player Information</h2>
-            <div class="info-columns">
+              <div class="info-columns">
                 <div class="info-column">
                     <p><strong>Player:</strong> <span id="player-name"></span></p>
                     <p><strong>Category:</strong> <span id="player-poomsae"></span></p>
@@ -198,8 +196,37 @@
                     <p><strong>Gym:</strong> <span id="player-gym"></span></p>
                 </div>
             </div>
+          </div>
+
+          <div class="performing-container">
+            <div class="player-info">
+              <h1>Performing:</h1>
+              <h2>Form 1 <span id="performance"></span></h2>
+            </div>
+          </div>
+  
+          <div class="scoreboard">
+            <div class="column">
+              <h2>Accuracy</h2>
+              <p class="score" id="accuracy-score">6</p>
+            </div>
+            <div class="column">
+              <h2>Presentation</h2>
+              <p class="score" id="presentation-score">10</p>
+            </div>
+          </div>
+  
+        </div>
+  
+  
+        <div class="total-score-corner">
+          <div class="total-score-container">
+            <h2 class="total-score-title">Total Score</h2>
+            <span class="total-score-value" id="total-score">16</span>
+          </div>
         </div>
       </div>
+        
     </div>
 
     <script>
