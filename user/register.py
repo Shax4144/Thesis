@@ -1,22 +1,21 @@
-from googleapiclient.discovery import build
-from google.oauth2 import service_account
 from flask import jsonify, request
 import uuid
 from database import db  
+from googleapiclient.discovery import build
+from google.oauth2 import service_account
 
 # Google Drive API Setup
 SCOPES = ["https://www.googleapis.com/auth/drive"]
 SERVICE_ACCOUNT_FILE = r"C:\Users\chest\thesis\Thesis\eternal-tempest-451603-c6-dba865b61b34.json"
-ROOT_FOLDER_ID = "1NndBdfWTZl4ZMjGZWWb1UjgeVijl986v"  # Your root Google Drive folder
-ARCHIVE_FOLDER_ID = "1GM5-ZA57QPylEhcMexwhhVmdd2g09ZRX"  # Your Google Drive archive folder
-
+ROOT_FOLDER_ID = "1NndBdfWTZl4ZMjGZWWb1UjgeVijl986v"
+ARCHIVE_FOLDER_ID = "1GM5-ZA57QPylEhcMexwhhVmdd2g09ZRX"
 creds = service_account.Credentials.from_service_account_file(
     SERVICE_ACCOUNT_FILE, scopes=SCOPES
 )
 service = build("drive", "v3", credentials=creds)
 
 def create_drive_folder(folder_name, parent_folder_id=ROOT_FOLDER_ID):
-    """Create a new folder in Google Drive."""
+    """Create a new folder in Google Drive and return the folder ID."""
     try:
         file_metadata = {
             "name": folder_name,
@@ -30,7 +29,7 @@ def create_drive_folder(folder_name, parent_folder_id=ROOT_FOLDER_ID):
         return None
 
 def move_drive_folder(folder_id, new_parent_id):
-    """Moves a Google Drive folder to a new parent folder (archive)."""
+    """Move a Google Drive folder to a new parent folder (archive)."""
     try:
         service.files().update(
             fileId=folder_id,
@@ -44,13 +43,12 @@ def move_drive_folder(folder_id, new_parent_id):
 
 class Players:
     @staticmethod
-    @staticmethod
     def signup():
         try:
             # Get form data
             players = {
                 "_id": uuid.uuid4().hex,
-                "firstname": request.json.get("firstname", "").strip(),  
+                "firstname": request.json.get("firstname", "").strip(),
                 "middlename": request.json.get("middlename", "").strip(),
                 "lastname": request.json.get("lastname", "").strip(),
                 "category": request.json.get("category", "").strip(),
@@ -62,17 +60,31 @@ class Players:
             }
 
             # ✅ Debugging: Print received data
-            print(f"Received Player Data: {players}")
+            print(f"📨 Received Player Data: {players}")
 
             # Validate required fields
             missing_fields = [key for key, value in players.items() if not value]
             if missing_fields:
                 return jsonify({"error": f"Missing fields: {', '.join(missing_fields)}"}), 400
 
-            # Insert into the database
+            # ✅ Generate full name for folder
+            full_name = f"{players['firstname']} {players['middlename']} {players['lastname']}".strip()
+
+            # ✅ Create Google Drive folder for the player
+            folder_id = create_drive_folder(full_name)
+
+            if not folder_id:
+                return jsonify({"error": "Failed to create player folder in Google Drive"}), 500
+
+            # ✅ Store folder ID in the database
+            players["folder_id"] = folder_id
+
+            # ✅ Insert into the database
             result = db.players.insert_one(players)
+
             if result.acknowledged:
-                return jsonify({"message": "Signup successful"}), 200
+                print(f"✅ Player {full_name} registered successfully with folder ID {folder_id}")
+                return jsonify({"message": "Signup successful", "folder_id": folder_id}), 200
             
             return jsonify({"error": "Signup failed"}), 500
 

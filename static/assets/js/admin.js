@@ -178,36 +178,37 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener("DOMContentLoaded", function () {
   async function fetchFiles() {
     const recordBox = document.querySelector(".record-box");
+
     if (!recordBox) {
       console.error("❌ Error: .record-box not found.");
       return;
     }
-  
+
     try {
       console.log("📨 Fetching files...");
       const response = await fetch("/folder/1NndBdfWTZl4ZMjGZWWb1UjgeVijl986v");
-  
+
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-  
+
       const data = await response.json();
-      console.log("📂 Server Response:", data); // 🔍 Debug response
-  
+      console.log("📂 Server Response:", data); // Debugging output
+
       if (!Array.isArray(data)) {
         throw new Error("❌ API response is not an array!");
       }
-  
-      recordBox.innerHTML = "";
-  
+
+      recordBox.innerHTML = ""; // Clear previous records
+
       if (data.length === 0) {
         recordBox.innerHTML = "<p>No files found.</p>";
         return;
       }
-  
+
       data.forEach((file) => {
         const div = document.createElement("div");
-  
+
         if (file.mimeType === "application/vnd.google-apps.folder") {
           div.innerHTML = `
             <i class="fa-solid fa-folder folder-icon" onclick="toggleFolder('${file.id}')"></i>
@@ -221,42 +222,18 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         recordBox.appendChild(div);
       });
-  
+
       console.log("✅ Record files updated successfully.");
     } catch (error) {
       console.error("❌ Error fetching files:", error);
-      recordBox.innerHTML = "<p>Failed to load files.</p>";
+      recordBox.innerHTML = "<p>⚠️ Failed to load files.</p>";
     }
   }
-  
-});
 
-//====================================================================================================
-
-//TOGGLE FOLDER
-document.addEventListener("DOMContentLoaded", function () {
-  document
-    .getElementById("archiveButton")
-    .addEventListener("click", async function () {
-      const confirmArchive = confirm(
-        "Are you sure you want to archive the players list?"
-      );
-      if (!confirmArchive) return;
-
-      try {
-        const response = await fetch("/api/Archive", { method: "POST" });
-
-        if (response.ok) {
-          alert("✅ Players archived successfully!");
-          fetchPlayers();
-        } else {
-          alert("❌ Error archiving players.");
-        }
-      } catch (error) {
-        console.error("❌ Error archiving:", error);
-        alert("Failed to connect to archive API.");
-      }
-    });
+  // Automatically fetch records when the page loads
+  document.addEventListener("DOMContentLoaded", function () {
+    fetchFiles();
+  });
 });
 
 //====================================================================================================
@@ -278,3 +255,125 @@ document.addEventListener("DOMContentLoaded", function () {
 
   fetchDashboardData();
 });
+//====================================================================================================
+
+//BUTTON
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll(".open-window").forEach((button) => {
+    button.addEventListener("click", function () {
+      const url = this.getAttribute("data-url");
+      if (url) {
+        window.open(url, "_blank"); // ✅ Open in a new tab
+      } else {
+        console.error("❌ Error: No URL found for this button.");
+      }
+    });
+  });
+});
+//====================================================================================================
+//ARCHIVE RECORDS
+document.addEventListener("DOMContentLoaded", function () {
+  const archiveButton = document.getElementById("archiveRecordButton");
+
+  if (!archiveButton) {
+    console.error("❌ Error: Archive button not found.");
+    return;
+  }
+
+  // ✅ Remove any previous event listener before adding a new one
+  archiveButton.removeEventListener("click", handleArchiveRequest);
+  archiveButton.addEventListener("click", handleArchiveRequest);
+});
+
+async function handleArchiveRequest() {
+  // ✅ Prevent multiple clicks by disabling the button
+  const archiveButton = document.getElementById("archiveRecordButton");
+  if (!archiveButton) return;
+
+  if (archiveButton.disabled) return; // Prevent duplicate requests
+  archiveButton.disabled = true; // Disable button to prevent spam clicking
+
+  const confirmArchive = confirm(
+    "⚠️ Are you sure you want to archive the record contents?"
+  );
+  if (!confirmArchive) {
+    archiveButton.disabled = false; // Re-enable button if canceled
+    return;
+  }
+
+  try {
+    console.log("📨 Sending archive request...");
+
+    const response = await fetch("/api/archiveRecords", { method: "POST" });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    console.log("✅ Archive Response:", result);
+
+    if (result.message) {
+      alert(result.message);
+      fetchFiles(); // ✅ Refresh record box after archiving
+    } else {
+      alert("❌ Error: " + (result.error || "Unknown error"));
+    }
+  } catch (error) {
+    console.error("❌ Failed to archive record content:", error);
+    alert("❌ Failed to connect to archive API.");
+  } finally {
+    archiveButton.disabled = false; // ✅ Re-enable button after request completes
+  }
+}
+
+//====================================================================================================
+//SHOW ARCHIVES
+document.getElementById("show-archives").addEventListener("click", function () {
+  const archiveFolderId = "1GM5-ZA57QPylEhcMexwhhVmdd2g09ZRX"; // Replace with actual archive folder ID
+  const archiveURL = `https://drive.google.com/drive/folders/${archiveFolderId}`;
+  window.open(archiveURL, "_blank"); // ✅ Open in a new tab
+});
+//====================================================================================================
+
+document
+  .getElementById("archiveRecordButton")
+  .addEventListener("click", async function () {
+    if (this.disabled) return;
+    this.disabled = true;
+
+    const confirmArchive = confirm(
+      "⚠️ Are you sure you want to archive the record contents?"
+    );
+    if (!confirmArchive) {
+      this.disabled = false;
+      return;
+    }
+
+    try {
+      console.log("📨 Sending archive request...");
+      const response = await fetch("/api/archiveRecords", { method: "POST" });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log("✅ Archive Response:", result);
+
+      if (result.message) {
+        alert(result.message);
+        fetchFiles();
+        if (result.pdf_link) {
+          window.open(result.pdf_link, "_blank");
+        }
+      } else {
+        alert("❌ Error: " + (result.error || "Unknown error"));
+      }
+    } catch (error) {
+      console.error("❌ Failed to archive record content:", error);
+      alert("❌ Failed to connect to archive API.");
+    } finally {
+      this.disabled = false;
+    }
+  });

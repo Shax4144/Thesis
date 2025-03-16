@@ -1,10 +1,16 @@
-from flask import Flask, request, send_from_directory, render_template, session, redirect, jsonify, make_response
+from flask import Flask, request, render_template, session, redirect, jsonify, make_response
 from functools import wraps
 from user.routes import user_bp  
 from database import db
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
 import os
+from reportlab.lib.pagesizes import letter
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
+import io
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = "your-secure-secret-key"
@@ -31,102 +37,145 @@ def create_drive_folder(folder_name, parent_folder_id):
             "parents": [parent_folder_id]
         }
         folder = service.files().create(body=file_metadata, fields="id").execute()
-        return folder.get("id")  # Returns the new folder's ID
+        return folder.get("id")
     except Exception as e:
         print(f"❌ Error creating folder: {e}")
         return None
 
 
 def move_drive_folder(folder_id, new_parent_id):
-    """Moves a Google Drive folder to a new parent folder (archive)."""
+    """Moves an entire folder (including its contents) to a new parent folder in Google Drive."""
     try:
-        # Get the current parent of the folder
         file_info = service.files().get(fileId=folder_id, fields="parents").execute()
         old_parents = ",".join(file_info.get("parents", []))
 
-        # Move folder by adding a new parent and removing the old one
         service.files().update(
             fileId=folder_id,
             addParents=new_parent_id,
             removeParents=old_parents,
             fields="id, parents"
         ).execute()
-        print(f"✅ Moved folder {folder_id} to Archive")
+
+        print(f"✅ Successfully moved folder {folder_id} to {new_parent_id}")
+
     except Exception as e:
         print(f"❌ Error moving folder {folder_id}: {e}")
 
 
-# Archive Player Records
+def generate_pdf(players):
+    """Generate a well-formatted PDF report of all players with a table."""
+    buffer = io.BytesIO()
+    today_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    # Create PDF Document
+    pdf = SimpleDocTemplate(buffer, pagesize=letter)
+    elements = []
+    
+    # Title Section
+    styles = getSampleStyleSheet()
+    title = Paragraph(f"<b>Player Archive Report</b><br/><br/>Date: {today_date}", styles["Title"])
+    elements.append(title)
+
+    # Table Headers
+    table_data = [["First Name", "Middle Name", "Last Name", "Category", "Age", "Belt", "Gym", "Weight (kg)"]]
+
+    # Add Player Data to the Table
+    for player in players:
+        table_data.append([
+            player["firstname"],
+            player.get("middlename", "-"),
+            player["lastname"],
+            player["category"],
+            player["age"],
+            player["belt"],
+            player["gym"],
+            player["weight"]
+        ])
+
+    # Create Table
+    table = Table(table_data, colWidths=[80, 80, 80, 80, 50, 60, 100, 70])
+
+    # Add Styling to Table
+    table.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), colors.grey),
+        ("TEXTCOLOR", (0, 0), (-1, 0), colors.whitesmoke),
+        ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("BOTTOMPADDING", (0, 0), (-1, 0), 8),
+        ("BACKGROUND", (0, 1), (-1, -1), colors.beige),
+        ("GRID", (0, 0), (-1, -1), 1, colors.black),
+    ]))
+
+    elements.append(table)
+
+    # Build the PDF
+    pdf.build(elements)
+    buffer.seek(0)
+    return buffer
+
+def upload_to_drive(file_stream, filename, parent_folder_id):
+    """Upload the PDF file to Google Drive."""
+    from googleapiclient.http import MediaIoBaseUpload
+
+    file_metadata = {
+        "name": filename,
+        "parents": [parent_folder_id]
+    }
+    media = MediaIoBaseUpload(file_stream, mimetype="application/pdf")
+
+    uploaded_file = service.files().create(
+        body=file_metadata,
+        media_body=media,
+        fields="id, webViewLink"
+    ).execute()
+
+    return uploaded_file.get("id"), uploaded_file.get("webViewLink")
+
+
 @app.route("/api/archiveRecords", methods=["POST"])
 def archive_records():
-    """Move all record content folders to an archive subfolder named Records_YYYY-MM-DD."""
+    """Archive player records, generate a PDF, and move data to Google Drive."""
     from datetime import datetime
-    today_date = datetime.now().strftime("%Y-%m-%d")
+    today_date = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     records_folder_name = f"Records_{today_date}"
 
     try:
-        # Step 1: Create a new folder inside Archive named "Records_YYYY-MM-DD"
+        # Step 1: Create archive folder in Google Drive
         records_archive_folder_id = create_drive_folder(records_folder_name, ARCHIVE_FOLDER_ID)
-        if not records_archive_folder_id:
-            return jsonify({"error": "Failed to create archive folder"}), 500
 
-        # Step 2: Fetch all record content folders
+        # Step 2: Fetch all player records from the database
+        players = list(db.players.find({}, {'_id': 0}))
+        if not players:
+            return jsonify({"message": "No player records found to archive."}), 400
+
+        # Step 3: Generate PDF from player data
+        pdf_buffer = generate_pdf(players)
+
+        # Step 4: Upload PDF to the archive folder
+        pdf_filename = f"Players_Archive_{today_date}.pdf"
+        pdf_id, pdf_link = upload_to_drive(pdf_buffer, pdf_filename, records_archive_folder_id)
+
+        # Step 5: Move all player folders inside the new archive folder
         query = f"'{ROOT_FOLDER_ID}' in parents and mimeType='application/vnd.google-apps.folder' and trashed=false"
         results = service.files().list(q=query, fields="files(id, name)").execute()
         folders = results.get("files", [])
 
-        if not folders:
-            return jsonify({"message": "No record folders found to archive."})
-
-        # Step 3: Move each folder to the newly created "Records_YYYY-MM-DD" archive folder
         for folder in folders:
             folder_id = folder["id"]
             move_drive_folder(folder_id, records_archive_folder_id)
 
-        return jsonify({"message": f"All record content moved to {records_folder_name}!"})
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-
-# File Archive Setup
-@app.route("/api/Archive", methods=["POST"])
-def archive_file():
-    from googleapiclient.http import MediaIoBaseUpload
-    import io
-
-    if "file" not in request.files:
-        return jsonify({"error": "No file uploaded"}), 400
-
-    file = request.files["file"]
-    parent_folder_id = ARCHIVE_FOLDER_ID  # Google Drive archive folder ID
-
-    from datetime import datetime
-    today_date = datetime.now().strftime("%Y-%m-%d")
-    file_name = f"Players_{today_date}.pdf"
-
-    try:
-        # Convert file to byte stream
-        file_stream = io.BytesIO(file.read())
-
-        # Upload to Google Drive
-        file_metadata = {"name": file_name, "parents": [parent_folder_id]}
-        media = MediaIoBaseUpload(file_stream, mimetype="application/pdf")
-
-        uploaded_file = service.files().create(
-            body=file_metadata,
-            media_body=media,
-            fields="id, webViewLink"
-        ).execute()
+        # Step 6: Clear player records from the database
+        db.players.delete_many({})
 
         return jsonify({
-            "message": "File archived successfully",
-            "file_id": uploaded_file.get("id"),
-            "file_link": uploaded_file.get("webViewLink")
+            "message": f"All player records moved to {records_folder_name}!",
+            "pdf_link": pdf_link
         })
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
 
 
 @app.route("/api/players/clear", methods=["DELETE"])
