@@ -1,4 +1,4 @@
-const socket = io();
+
   
 document.addEventListener("DOMContentLoaded", function () {
   const socket = io.connect(location.protocol + "//" + document.domain + ":" + location.port);
@@ -118,28 +118,31 @@ async function handleFormSubmit(event) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
+  
     const result = await response.json();
-    console.log(" Server Response:", result);
-
+    console.log("🔍 Full Server Response:", result); // Debugging
+  
+    if (response.status === 400) {
+      console.warn("⚠️ Bad Request Error:", result.error);
+      alert("❌ Error: " + result.error);
+      submitButton.disabled = false;
+      return;
+    }
+  
     if (result.message) {
       alert("🎉 Player registered successfully!");
       document.querySelector("form[name='signup_form']").reset();
       fetchPlayers(); // Refresh list
     } else {
-      alert(" Error: " + (result.error || "Unknown error"));
+      alert("❌ Error: " + (result.error || "Unknown error"));
     }
   } catch (error) {
-    console.error(" Fetch error:", error);
-    alert(" An error occurred: " + error.message);
+    console.error("🚨 Fetch error:", error);
+    alert("❌ An error occurred: " + error.message);
   } finally {
-    //  Ensure button is re-enabled after response
     submitButton.disabled = false;
   }
+  
 }
 
 //====================================================================================================

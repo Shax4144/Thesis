@@ -166,7 +166,7 @@
             width: 100%;
         }
 
-        .info-column p{
+        .info-column p {
             text-align: left;
         }
 
@@ -188,259 +188,484 @@
     <div class="container">
         <h1>Admin Panel</h1>
 
-       <div class="players-container">
+        <div class="players-container">
             <div class="player1">
                 <div class="player-info">
                     <h2>Player 1 Information</h2>
                     <div class="info-columns">
                         <div class="info-column">
-                            <p><strong>Player:</strong> <span id="player-name">francis erick datu</span></p>
-                            <p><strong>Category:</strong> <span id="player-poomsae">legendary heavyweight</span></p>
+                            <p><strong>Player:</strong> <span id="player1-name"></span></p>
+                            <p><strong>Category:</strong> <span id="player1-category"></span></p>
                         </div>
                         <div class="info-column">
-                            <p><strong>Belt:</strong> <span id="player-belt">Legendary belt</span></p>
-                            <p><strong>Gym:</strong> <span id="player-gym">Samahan ng mga Malakas sumipa ng Bading</span></p>
+                            <p><strong>Belt:</strong> <span id="player1-belt"></span></p>
+                            <p><strong>Gym:</strong> <span id="player1-gym"></span></p>
                         </div>
                     </div>
                 </div>
 
                 <div class="scoring-container">
                     <div class="top-row">
-                        <h2 class="highlight">Total Score: <span id="total-score">16</span></h2>
+                        <h2 class="highlight">Total Score: <span id="player1-total-score">10</span></h2>
+                    </div>
+                </div>
+                <div class="scoring-container">
+                    <div class="top-row">
+                        <h2 class="highlight">Performing: <span id="player1-performing"></span></h2>
                     </div>
                 </div>
 
                 <div class="scoreboard">
                     <div class="column">
                         <h2>Accuracy</h2>
-                        <p class="score" id="accuracy-score">10</p>
-                        <input type="number" id="accuracy-deduction" class="deduction-input" step="0.1" min="0"
+                        <p class="score" id="player1-accuracy-score">4</p>
+                        <input type="number" id="player1-accuracy-deduction" class="deduction-input" step="0.1" min="0"
                             placeholder="Enter Deduction">
                     </div>
 
                     <div class="column">
                         <h2>Presentation</h2>
-                        <p class="score" id="presentation-score">6</p>
-                        <input type="number" id="presentation-deduction" class="deduction-input" step="0.1" min="0"
-                            placeholder="Enter Deduction">
+                        <p class="score" id="player1-presentation-score">6</p>
+                        <input type="number" id="player1-presentation-deduction" class="deduction-input" step="0.1"
+                            min="0" placeholder="Enter Deduction">
                     </div>
 
                 </div>
-                <button class="btn" onclick="">Register Player 1</button> 
-                <button class="btn" onclick="applyDeductions()">Submit Scores</button>
-                <button class="btn" onclick="undo()">Undo</button>
-                <button class="btn" onclick="redo()">Redo</button>  
+                <h2 class="player1-detected" id="player1-detected">Not Register</h2>
+                <button class="btn player1-register" onclick="">Register Player 1</button>
+                <button class="btn player1-start">Start</button>
+                <button class="btn player1-submit" id="player1-submit">Submit Scores</button>
+                <button class="btn player1-undo" onclick="">Undo</button>
+                <button class="btn player1-redo" onclick="">Redo</button>
             </div>
-        
+
             <div class="player2">
                 <div class="player-info">
                     <h2>Player 2 Information</h2>
                     <div class="info-columns">
                         <div class="info-column">
-                            <p><strong>Player:</strong> <span id="player-name">francis erick datu</span></p>
-                            <p><strong>Category:</strong> <span id="player-poomsae">legendary heavyweight</span></p>
+                            <p><strong>Player:</strong> <span id="player2-name"></span></p>
+                            <p><strong>Category:</strong> <span id="player2-category"></span></p>
                         </div>
                         <div class="info-column">
-                            <p><strong>Belt:</strong> <span id="player-belt">Legendary belt</span></p>
-                            <p><strong>Gym:</strong> <span id="player-gym">Samahan ng mga Malakas sumipa ng Bading</span></p>
+                            <p><strong>Belt:</strong> <span id="player2-belt"></span></p>
+                            <p><strong>Gym:</strong> <span id="player2-gym"></span></p>
                         </div>
                     </div>
                 </div>
 
                 <div class="scoring-container">
                     <div class="top-row">
-                        <h2 class="highlight">Total Score: <span id="total-score">16</span></h2>
+                        <h2 class="highlight">Total Score: <span id="player2-total-score">10</span></h2>
+                    </div>
+                </div>
+                <div class="scoring-container">
+                    <div class="top-row">
+                        <h2 class="highlight">Performing: <span id="player2-performing"></span></h2>
                     </div>
                 </div>
 
                 <div class="scoreboard">
                     <div class="column">
                         <h2>Accuracy</h2>
-                        <p class="score" id="accuracy-score">10</p>
-                        <input type="number" id="accuracy-deduction" class="deduction-input" step="0.1" min="0"
+                        <p class="score" id="player2-accuracy-score">4</p>
+                        <input type="number" id="player2-accuracy-deduction" class="deduction-input" step="0.1" min="0"
                             placeholder="Enter Deduction">
                     </div>
 
                     <div class="column">
                         <h2>Presentation</h2>
-                        <p class="score" id="presentation-score">6</p>
-                        <input type="number" id="presentation-deduction" class="deduction-input" step="0.1" min="0"
-                            placeholder="Enter Deduction">
+                        <p class="score" id="player2-presentation-score">6</p>
+                        <input type="number" id="player2-presentation-deduction" class="deduction-input" step="0.1"
+                            min="0" placeholder="Enter Deduction">
                     </div>
+
                 </div>
-                <button class="btn" onclick="">Register Player 2</button> 
-                <button class="btn" onclick="applyDeductions()">Submit Scores</button>
-                <button class="btn" onclick="undo()">Undo</button>
-                <button class="btn" onclick="redo()">Redo</button>  
+                <h2 class="player2-detected" id="player2-detected">Not Register</h2>
+                <button class="btn player2-register">Register Player 2</button>
+                <button class="btn player2-start">Start</button>
+                <button class="btn player2-submit" id="player2-submit">Submit Scores</button>
+                <button class="btn player2-undo">Undo</button>
+                <button class="btn player2-redo" onclick="">Redo</button>
             </div>
         </div>
-        <button class="displayBtn" onclick="">Display the winner</button> 
+        <button class="displayBtn">Display the Winner</button>
+
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
     <script>
-        let historyStack = [];
-        let redoStack = [];
-        let currentPlayerIndex = 0;
-        let players = [];
+        document.addEventListener("DOMContentLoaded", function () {
+            const socket = io("http://localhost:5000");
+            let currentPerforming = "";
+            let waitingForRFID = null;
+            let isScoringActive = false;
+            let playerStarted = { 1: false, 2: false };
+            let playerSubmitted = { 1: false, 2: false };
+            const registeredRFIDs = {};
+            let gameNumber = 1; // Global game counter
 
-        async function saveToHistory(accuracy, presentation) {
-            historyStack.push({ accuracy, presentation });
-            redoStack = [];
-        }
+            socket.on("rfid_data", function (data) {
+                if (isScoringActive || !waitingForRFID) return;
 
-        async function applyDeductions() {
-            let accuracy = parseFloat(document.getElementById("accuracy-score").textContent);
-            let presentation = parseFloat(document.getElementById("presentation-score").textContent);
+                const rfid = data.rfid;
+                console.log("RFID Scanned:", rfid);
 
-            if (isNaN(accuracy) || isNaN(presentation)) {
-                alert("Scores must be fetched from the database before applying deductions.");
-                return;
-            }
+                fetch(`/get_player/${rfid}`)
+                    .then(response => response.json())
+                    .then(player => {
+                        if (!player) {
+                            updatePlayerStatus(waitingForRFID, "Not Registered");
+                            resetRegisterButton(waitingForRFID);
+                            return;
+                        }
 
-            let accuracyDeduction = parseFloat(document.getElementById("accuracy-deduction").value) || 0;
-            let presentationDeduction = parseFloat(document.getElementById("presentation-deduction").value) || 0;
+                        for (const key in registeredRFIDs) {
+                            if (registeredRFIDs[key] === rfid) {
+                                alert(`This RFID is already registered to Player ${key}!`);
+                                resetRegisterButton(waitingForRFID);
+                                return;
+                            }
+                        }
 
-            if (accuracyDeduction > accuracy) {
-                alert("Accuracy deduction cannot exceed available points!");
-                document.getElementById("accuracy-deduction").value = accuracy.toFixed(1);
-                accuracyDeduction = accuracy;
-            }
+                        if (registeredRFIDs[waitingForRFID]) {
+                            unregisterPlayer(waitingForRFID);
+                        }
 
-            if (presentationDeduction > presentation) {
-                alert("Presentation deduction cannot exceed available points!");
-                document.getElementById("presentation-deduction").value = presentation.toFixed(1);
-                presentationDeduction = presentation;
-            }
-
-            await saveToHistory(accuracy, presentation);
-
-            accuracy = Math.max(0, accuracy - accuracyDeduction);
-            presentation = Math.max(0, presentation - presentationDeduction);
-            let totalScore = accuracy + presentation;
-
-            if (totalScore < 0.05) {
-                totalScore = 0.0;
-                accuracy = 0.0;
-                presentation = 0.0;
-            }
-
-            const scores = { accuracy, presentation };
-            await fetch('/api/scores', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(scores)
+                        assignPlayer(waitingForRFID, rfid, player);
+                        resetRegisterButton(waitingForRFID);
+                    })
+                    .catch(error => console.error("Error fetching player:", error));
             });
 
-            updateDisplay();
-            document.getElementById("accuracy-deduction").value = "";
-            document.getElementById("presentation-deduction").value = "";
-        }
-
-        async function undo() {
-            if (historyStack.length > 0) {
-                let lastState = historyStack.pop();
-                redoStack.push({
-                    accuracy: parseFloat(document.getElementById("accuracy-score").textContent),
-                    presentation: parseFloat(document.getElementById("presentation-score").textContent)
-                });
-
-                const scores = { accuracy: lastState.accuracy, presentation: lastState.presentation };
-                await fetch('/api/scores', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(scores)
-                });
-
-                updateDisplay();
-            } else {
-                alert("No more undos available!");
+            function assignPlayer(playerNumber, rfid, player) {
+                updatePlayerInfo(playerNumber, player);
+                registeredRFIDs[playerNumber] = rfid;
+                waitingForRFID = null;
             }
-        }
 
-        async function redo() {
-            if (redoStack.length > 0) {
-                let redoState = redoStack.pop();
-                historyStack.push({
-                    accuracy: parseFloat(document.getElementById("accuracy-score").textContent),
-                    presentation: parseFloat(document.getElementById("presentation-score").textContent)
-                });
+            function unregisterPlayer(playerNumber) {
+                delete registeredRFIDs[playerNumber];
 
-                const scores = { accuracy: redoState.accuracy, presentation: redoState.presentation };
-                await fetch('/api/scores', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(scores)
-                });
-
-                updateDisplay();
-            } else {
-                alert("No more redos available!");
+                document.getElementById(`player${playerNumber}-name`).innerText = "Not Registered";
+                document.getElementById(`player${playerNumber}-category`).innerText = "";
+                document.getElementById(`player${playerNumber}-belt`).innerText = "";
+                document.getElementById(`player${playerNumber}-gym`).innerText = "";
+                document.querySelector(`.player${playerNumber}-detected`).innerText = "Waiting for registration...";
             }
-        }
-        
 
-        async function fetchPlayers() {
-            const response = await fetch('/api/players');
-            players = await response.json();
-            updatePlayerInfo();
-        }
+            function updatePlayerInfo(playerNumber, player) {
+                const fullName = `${player.firstname || ""} ${player.middlename || ""} ${player.lastname || ""}`.trim();
 
-        function updatePlayerInfo() {
-            if (players.length > 0) {
-                const player = players[currentPlayerIndex];
-                document.getElementById('player-name').textContent = player.firstname + ' ' + player.lastname;
-                document.getElementById('player-poomsae').textContent = player.category;
-                document.getElementById('player-belt').textContent = player.belt;
-                document.getElementById('player-gym').textContent = player.gym;
-
-                localStorage.setItem("currentPlayer", JSON.stringify(player));
+                document.getElementById(`player${playerNumber}-name`).innerText = fullName || "Unknown";
+                document.getElementById(`player${playerNumber}-category`).innerText = player.category || "Unknown";
+                document.getElementById(`player${playerNumber}-belt`).innerText = player.belt || "Unknown";
+                document.getElementById(`player${playerNumber}-gym`).innerText = player.gym || "Unknown";
+                document.querySelector(`.player${playerNumber}-detected`).innerText = "Registered";
             }
-        }
 
-        function nextPlayer() {
-                if (players.length > 0) {
-                    currentPlayerIndex = (currentPlayerIndex + 1) % players.length;  // Circulate through players
-                    updatePlayerInfo();
+            function updatePlayerStatus(playerNumber, status) {
+                document.querySelector(`.player${playerNumber}-detected`).innerText = status;
+            }
+
+            function resetRegisterButton(playerNumber) {
+                const registerButton = document.querySelector(`.player${playerNumber}-register`);
+                if (registerButton) registerButton.innerText = `Register Player ${playerNumber}`;
+            }
+
+            document.querySelector(".player1-register").addEventListener("click", function () {
+                if (isScoringActive || waitingForRFID) return;
+                document.querySelector(`.player1-detected`).innerText = "Detecting...";
+                waitingForRFID = 1;
+            });
+
+            document.querySelector(".player2-register").addEventListener("click", function () {
+                if (isScoringActive || waitingForRFID) return;
+                document.querySelector(`.player2-detected`).innerText = "Detecting...";
+                waitingForRFID = 2;
+            });
+
+            function generateRandomScores(playerNumber) {
+                if (!registeredRFIDs[1] || !registeredRFIDs[2]) {
+                    alert("Both players must be registered before starting!");
+                    return;
                 }
+
+                if (playerStarted[playerNumber]) return;
+
+                playerStarted[playerNumber] = true;
+                isScoringActive = true;
+
+                const accuracyScore = (Math.random() * 4).toFixed(1);
+                const presentationScore = (Math.random() * 6).toFixed(1);
+
+                document.getElementById(`player${playerNumber}-accuracy-score`).innerText = accuracyScore;
+                document.getElementById(`player${playerNumber}-presentation-score`).innerText = presentationScore;
+
+                const totalScore = parseFloat(accuracyScore) + parseFloat(presentationScore);
+                document.getElementById(`player${playerNumber}-total-score`).innerText = totalScore.toFixed(1);
+
+                // If currentPerforming is not set, generate it (based on both players’ belt)
+                if (!currentPerforming) {
+                    // Get belt values (assumed to be already set by registration)
+                    const belt1 = document.getElementById("player1-belt").innerText.toLowerCase();
+                    const belt2 = document.getElementById("player2-belt").innerText.toLowerCase();
+
+                    let performingOptions = [];
+                    // If both players have black belt, use black performing options; otherwise, use Taeguk options.
+                    if (belt1 === "black" && belt2 === "black") {
+                        performingOptions = ["Black Poomsae 1", "Black Poomsae 2", "Black Poomsae 3"];
+                    } else {
+                        performingOptions = ["Taeguk 1", "Taeguk 2", "Taeguk 3", "Taeguk 4", "Taeguk 5", "Taeguk 6", "Taeguk 7", "Taeguk 8"];
+                    }
+                    const randomIndex = Math.floor(Math.random() * performingOptions.length);
+                    currentPerforming = performingOptions[randomIndex];
+                }
+
+                // Assign the same performing value to both players
+                document.getElementById("player1-performing").innerText = currentPerforming;
+                document.getElementById("player2-performing").innerText = currentPerforming;
             }
 
-            // Fetch players on load and refresh every second
-        window.onload = () => {
-            fetchPlayers();
-            setInterval(fetchPlayers, 1000);
-        };
 
+            function displayWinner() {
+                // Get necessary DOM elements for totals and submission status
+                const player1TotalEl = document.getElementById("player1-total-score");
+                const player2TotalEl = document.getElementById("player2-total-score");
+                const player1SubmitEl = document.getElementById("player1-submit");
+                const player2SubmitEl = document.getElementById("player2-submit");
 
+                // Check if elements exist
+                if (!player1TotalEl || !player2TotalEl || !player1SubmitEl || !player2SubmitEl) {
+                    console.error("Error: One or more elements are missing!");
+                    alert("Error: Required elements are missing in the DOM.");
+                    return;
+                }
 
+                // Parse totals
+                const player1Total = parseFloat(player1TotalEl.innerText) || 0;
+                const player2Total = parseFloat(player2TotalEl.innerText) || 0;
 
+                // Check submission status
+                const player1Submitted = player1SubmitEl.value === "true";
+                const player2Submitted = player2SubmitEl.value === "true";
 
+                if (!player1Submitted || !player2Submitted) {
+                    alert("Error: Both players must submit their scores first!");
+                    return;
+                }
 
-        async function updateDisplay() {
-            const response = await fetch('/api/scores');
-            const scores = await response.json();
-            const accuracy = scores.accuracy;
-            const presentation = scores.presentation;
+                // Determine winner
+                let winnerText = "";
+                let winnerNumber = null;
+                if (player1Total > player2Total) {
+                    winnerText = "🏆 Player 1 Wins!";
+                    winnerNumber = 1;
+                } else if (player2Total > player1Total) {
+                    winnerText = "🏆 Player 2 Wins!";
+                    winnerNumber = 2;
+                } else {
+                    winnerText = "🤝 It's a Tie!";
+                }
 
-            if (accuracy !== undefined && presentation !== undefined) {
-                document.getElementById("accuracy-score").textContent = accuracy.toFixed(1);
-                document.getElementById("presentation-score").textContent = presentation.toFixed(1);
-                document.getElementById("total-score").textContent = (accuracy + presentation).toFixed(1);
-            } else {
-                alert("Failed to fetch scores from the database.");
+                // Gather player details
+                const player1Info = {
+                    name: document.getElementById("player1-name").innerText,
+                    belt: document.getElementById("player1-belt").innerText,
+                    gym: document.getElementById("player1-gym").innerText,
+                    category: document.getElementById("player1-category").innerText,
+                    accuracy: document.getElementById("player1-accuracy-score").innerText,
+                    presentation: document.getElementById("player1-presentation-score").innerText,
+                    totalScore: document.getElementById("player1-total-score").innerText,
+                    performing: document.getElementById("player1-performing").innerText,
+                    status: "", // to be assigned below
+                    game: gameNumber
+                };
+
+                const player2Info = {
+                    name: document.getElementById("player2-name").innerText,
+                    belt: document.getElementById("player2-belt").innerText,
+                    gym: document.getElementById("player2-gym").innerText,
+                    category: document.getElementById("player2-category").innerText,
+                    accuracy: document.getElementById("player2-accuracy-score").innerText,
+                    presentation: document.getElementById("player2-presentation-score").innerText,
+                    totalScore: document.getElementById("player2-total-score").innerText,
+                    performing: document.getElementById("player2-performing").innerText,
+                    status: "",
+                    game: gameNumber
+                };
+
+                // Set status based on the winner
+                if (winnerText === "🤝 It's a Tie!") {
+                    player1Info.status = "Tie";
+                    player2Info.status = "Tie";
+                } else {
+                    player1Info.status = (winnerNumber === 1) ? "Winner" : "Loser";
+                    player2Info.status = (winnerNumber === 2) ? "Winner" : "Loser";
+                }
+
+                // Post the game info to the server
+                const gameData = {
+                    game: gameNumber,
+                    players: [player1Info, player2Info]
+                };
+
+                fetch('/post_game', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(gameData)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("Game data posted successfully:", data);
+                    })
+                    .catch(error => {
+                        console.error("Error posting game data:", error);
+                    });
+
+                // Alert the winner
+                alert(winnerText);
+
+                // Increment game number for the next match
+                gameNumber++;
+
+                // Reset the game
+                resetGame();
             }
-        }
 
-        window.onload = () => {
-            fetchPlayers();
-            updateDisplay();
-        };
+
+
+            // Reset function to clear data
+            function resetGame() {
+                console.log("Resetting game...");
+
+                // Reset global variables
+                waitingForRFID = null;
+                isScoringActive = false;
+                playerStarted = { 1: false, 2: false };
+                playerSubmitted = { 1: false, 2: false };
+                // Clear registeredRFIDs keys
+                for (let key in registeredRFIDs) {
+                    delete registeredRFIDs[key];
+                }
+                currentPerforming = ""; // Reset performing value
+                // Reset scores to initial values
+                document.getElementById("player1-total-score").innerText = "10";
+                document.getElementById("player2-total-score").innerText = "10";
+                document.getElementById("player1-accuracy-score").innerText = "4";
+                document.getElementById("player1-presentation-score").innerText = "6";
+                document.getElementById("player2-accuracy-score").innerText = "4";
+                document.getElementById("player2-presentation-score").innerText = "6";
+
+                // Clear deductions
+                document.getElementById("player1-accuracy-deduction").value = "";
+                document.getElementById("player1-presentation-deduction").value = "";
+                document.getElementById("player1-performing").innerText = "";
+                document.getElementById("player2-performing").innerText = "";
+                document.getElementById("player2-accuracy-deduction").value = "";
+                document.getElementById("player2-presentation-deduction").value = "";
+
+                // Reset player details for Player 1
+                document.getElementById("player1-name").innerText = "";
+                document.getElementById("player1-category").innerText = "";
+                document.getElementById("player1-belt").innerText = "";
+                document.getElementById("player1-gym").innerText = "";
+                document.querySelector(".player1-detected").innerText = "Not Register";
+
+                // Reset player details for Player 2
+                document.getElementById("player2-name").innerText = "";
+                document.getElementById("player2-category").innerText = "";
+                document.getElementById("player2-belt").innerText = "";
+                document.getElementById("player2-gym").innerText = "";
+                document.querySelector(".player2-detected").innerText = "Not Register";
+
+                // Reset submission status (if using hidden inputs)
+                if (document.getElementById("player1-submit")) {
+                    document.getElementById("player1-submit").value = "false";
+                }
+                if (document.getElementById("player2-submit")) {
+                    document.getElementById("player2-submit").value = "false";
+                }
+
+                console.log("Game reset. Ready for a new match.");
+            }
+
+            function submitScores(playerNumber) {
+                // Check if both players are registered before submitting scores
+                const player1Registered = document.getElementById("player1-detected").innerText !== "Not Register";
+                const player2Registered = document.getElementById("player2-detected").innerText !== "Not Register";
+                if (!player1Registered || !player2Registered) {
+                    alert("Error: Both players must be registered before submitting scores!");
+                    return;
+                }
+                // Check if the player has started their round
+                if (!playerStarted[playerNumber]) {
+                    alert("Error: Player " + playerNumber + " has not started yet!");
+                    return;
+                }
+                const accuracyScoreElement = document.getElementById(`player${playerNumber}-accuracy-score`);
+                const presentationScoreElement = document.getElementById(`player${playerNumber}-presentation-score`);
+                const totalScoreElement = document.getElementById(`player${playerNumber}-total-score`);
+
+                const accuracyDeduction = parseFloat(document.getElementById(`player${playerNumber}-accuracy-deduction`).value) || 0;
+                const presentationDeduction = parseFloat(document.getElementById(`player${playerNumber}-presentation-deduction`).value) || 0;
+
+                let newAccuracyScore = parseFloat(accuracyScoreElement.innerText) - accuracyDeduction;
+                let newPresentationScore = parseFloat(presentationScoreElement.innerText) - presentationDeduction;
+
+                newAccuracyScore = Math.max(newAccuracyScore, 0);
+                newPresentationScore = Math.max(newPresentationScore, 0);
+
+                accuracyScoreElement.innerText = newAccuracyScore.toFixed(1);
+                presentationScoreElement.innerText = newPresentationScore.toFixed(1);
+
+                const newTotalScore = newAccuracyScore + newPresentationScore;
+                totalScoreElement.innerText = newTotalScore.toFixed(1);
+
+                // Mark the player as having submitted their score
+                const submittedElement = document.getElementById(`player${playerNumber}-submit`);
+                if (submittedElement) {
+                    submittedElement.value = "true";
+                } else {
+                    console.log(`Error: Submission element for Player ${playerNumber} not found.`);
+                }
+                console.log(`Player ${playerNumber} submitted their score.`);
+            }
+
+
+            // Event Listeners for Submit Buttons
+            document.querySelector(".player1-submit").addEventListener("click", function () {
+                submitScores(1);
+            });
+
+            document.querySelector(".player2-submit").addEventListener("click", function () {
+                submitScores(2);
+            });
+
+
+            // Event listener for the Display button
+            document.querySelector(".displayBtn").addEventListener("click", function () {
+                console.log("Display button clicked.");
+                displayWinner();
+            });
+
+
+            document.querySelector(".player1-start").addEventListener("click", function () {
+                generateRandomScores(1);
+            });
+
+            document.querySelector(".player2-start").addEventListener("click", function () {
+                generateRandomScores(2);
+            });
+
+
+
+
+        });
+
+
     </script>
+
 </body>
 
 </html>

@@ -23,9 +23,10 @@ socketio = SocketIO(app, cors_allowed_origins="*")
 SERVER_IP = "raspberrypi"  # Change this to match your setup
 PORT = 5000
 
+
 # Google Drive API Setup
 SCOPES = ["https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive.readonly"]
-SERVICE_ACCOUNT_FILE = r"Thesis\eternal-tempest-451603-c6-a701efdfca67.json"
+SERVICE_ACCOUNT_FILE = r"Thesis\eternal-tempest-451603-c6-d5bbb3c231f7.json"
 ROOT_FOLDER_ID = "1NndBdfWTZl4ZMjGZWWb1UjgeVijl986v"
 ARCHIVE_FOLDER_ID = "1GM5-ZA57QPylEhcMexwhhVmdd2g09ZRX"
 
@@ -40,6 +41,8 @@ def receive_rfid_data():
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client_socket:
             client_socket.connect((SERVER_IP, PORT))
             print("[CONNECTED] Receiving RFID data...")
+
+
 
             while True:
                 data = client_socket.recv(1024).decode().strip()
@@ -200,7 +203,13 @@ def archive_records():
         return jsonify({"error": str(e)}), 500
 
 
-
+@app.route("/get_player/<rfid>", methods=["GET"])
+def get_player(rfid):
+    player = db.players.find_one({"rfid": rfid}, {"_id": 0})  # Exclude MongoDB's `_id`
+    
+    if player:
+        return jsonify(player)
+    return jsonify(None)
 
 @app.route("/api/players/clear", methods=["DELETE"])
 def clear_players():
@@ -263,6 +272,7 @@ def admin():
     return response
 
 
+
 @app.route('/api/dashboard_data')
 def dashboard_data():
     """Returns player count for the dashboard."""
@@ -290,6 +300,8 @@ def get_players():
         return jsonify(players)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
 
 
 @app.route("/folder/<folder_id>")
