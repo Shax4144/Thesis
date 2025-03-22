@@ -23,16 +23,3 @@ def player_signup():
     return Players.signup()  
 # Call static method
 
-@user_bp.route('/get_allowed_emails', methods=['GET'])
-def get_allowed_emails():
-    return Email.get_allowed_emails()
-
-# Add a new email
-@user_bp.route('/add/email', methods=['POST'])
-def add_allowed_email():
-    return Email.add_email()
-
-# Delete an email
-@user_bp.route('/delete_allowed_email', methods=['POST'])
-def delete_allowed_email():
-    return Email.get_allowed_emails()
