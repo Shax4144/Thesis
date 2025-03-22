@@ -6,7 +6,7 @@ from google.oauth2 import service_account
 
 # Google Drive API Setup
 SCOPES = ["https://www.googleapis.com/auth/drive"]
-SERVICE_ACCOUNT_FILE = r"Thesis\eternal-tempest-451603-c6-a701efdfca67.json"
+SERVICE_ACCOUNT_FILE = r"Thesis\eternal-tempest-451603-c6-d5bbb3c231f7.json"
 ROOT_FOLDER_ID = "1NndBdfWTZl4ZMjGZWWb1UjgeVijl986v"
 ARCHIVE_FOLDER_ID = "1GM5-ZA57QPylEhcMexwhhVmdd2g09ZRX"
 creds = service_account.Credentials.from_service_account_file(
@@ -48,6 +48,7 @@ class Players:
             # Get form data
             players = {
                 "_id": uuid.uuid4().hex,
+                
                 "rfid": request.json.get("rfid", "").strip(), 
                 "firstname": request.json.get("firstname", "").strip(),
                 "middlename": request.json.get("middlename", "").strip(),
@@ -60,7 +61,7 @@ class Players:
                 "weight_category": request.json.get("weight_category", "").strip(),
             }
 
-            #  Debugging: Print received data
+            # Debugging: Print received data
             print(f" Received Player Data: {players}")
 
             # Validate required fields
@@ -68,25 +69,31 @@ class Players:
             if missing_fields:
                 return jsonify({"error": f"Missing fields: {', '.join(missing_fields)}"}), 400
 
-            #  Generate full name for folder
+            if db.players.find_one({"rfid": players["rfid"]}):
+                print("❌ Duplicate RFID detected")  # Debugging
+                return jsonify({"error": "RFID already exists"}), 400
+
+
+            # Generate full name for folder
             full_name = f"{players['firstname']} {players['middlename']} {players['lastname']}".strip()
 
-            #  Create Google Drive folder for the player
+            # Create Google Drive folder for the player
             folder_id = create_drive_folder(full_name)
 
             if not folder_id:
                 return jsonify({"error": "Failed to create player folder in Google Drive"}), 500
 
-            #  Store folder ID in the database
+            # Store folder ID in the database
             players["folder_id"] = folder_id
 
-            #  Insert into the database
+            # Insert into the database
             result = db.players.insert_one(players)
 
             if result.acknowledged:
                 print(f" Player {full_name} registered successfully with folder ID {folder_id}")
                 return jsonify({"message": "Signup successful", "folder_id": folder_id}), 200
             
+             
             return jsonify({"error": "Signup failed"}), 500
 
         except Exception as e:
