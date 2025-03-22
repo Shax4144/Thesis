@@ -183,11 +183,14 @@ a:hover{
     border-radius: 30px;
     cursor: pointer;
     transition: 0.3s;
+    margin-top: 20px;
 }
 .btn:hover{
     background: var(--text-color);
     box-shadow: 0 0 3px var(--text-color);
 }
+
+
 .input-submit:hover{
     background: var(--secondary-color);
 }

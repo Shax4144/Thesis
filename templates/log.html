@@ -37,6 +37,13 @@
 
                 <div class="inputBox">
                     <input type="submit" value="Login" class="btn">
+                    <form>
+                        <button class="btn" onclick="event.preventDefault(); window.location.href='{{ url_for('googleLogin') }}'">
+                            <i class="fa-brands fa-google"></i> Login With Google
+                          </button>
+                        <button class="btn" onclick="event.preventDefault(); window.location.href='{{ url_for('googleDev') }}'">
+                            <i class="fa-brands fa-google"></i> Add Authorized Emails (Dev)
+                    </form>
                 </div>    
             </form>
         </div>

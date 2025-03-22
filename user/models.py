@@ -9,6 +9,7 @@ class User:
     def start_session(user):
         session['logged_in'] = True
         session['user'] = user
+        session.permanent = False  # Ensure session is non-permanent
         return jsonify(user), 200
     
     @staticmethod

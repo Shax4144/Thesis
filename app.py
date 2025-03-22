@@ -1,6 +1,6 @@
 import socket
 import threading
-from flask import Flask, request, render_template, session, redirect, jsonify, make_response
+from flask import Flask, request, render_template, session, redirect, jsonify, make_response, url_for
 from functools import wraps
 from flask_socketio import SocketIO
 from user.routes import user_bp  
@@ -12,16 +12,39 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
+from authlib.integrations.flask_client import OAuth
 import io
+import json
 from datetime import datetime
 
 app = Flask(__name__)
-app.secret_key = "your-secure-secret-key"
+app.secret_key = "7a396704-83f5-4598-8a7c-32e4bd58c676"
+app.config['SESSION_PERMANENT'] = False  # Ensure session expires on browser close
 app.register_blueprint(user_bp, url_prefix='/api')
 socketio = SocketIO(app, cors_allowed_origins="*")
 
 SERVER_IP = "raspberrypi"  # Change this to match your setup
 PORT = 5000
+appConf = {
+    "OAUTH2_CLIENT_ID": "460933508714-j510gtuclfdfe9p5epfscc27aedn5jhh.apps.googleusercontent.com",
+    "OAUTH2_CLIENT_SECRET": "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",
+    "OAUTH2_META_URL": "https://accounts.google.com/.well-known/openid-configuration",
+    "FLASK_SECRET": "99c1e4b0-3c0c-42bd-9e00-3420826a80c3",
+    "FLASK_PORT": 5000
+}
+
+oauth = OAuth(app)
+# list of google scopes - https://developers.google.com/identity/protocols/oauth2/scopes
+google = oauth.register(
+    "google",
+    client_id=appConf.get("OAUTH2_CLIENT_ID"),
+    client_secret=appConf.get("OAUTH2_CLIENT_SECRET"),
+    client_kwargs={
+        "scope": "openid profile email"
+    },
+    server_metadata_url=f'{appConf.get("OAUTH2_META_URL")}',
+)
+
 
 # Google Drive API Setup
 SCOPES = ["https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive.readonly"]
@@ -234,6 +257,7 @@ def get_files(folder_id=ROOT_FOLDER_ID):
 def login_required(f):
     @wraps(f)
     def wrap(*args, **kwargs):
+        session.permanent = False  # Ensure session is non-permanent per request
         if 'logged_in' in session:
             return f(*args, **kwargs)
         else:
@@ -244,11 +268,16 @@ def login_required(f):
 # Routes
 @app.route('/')
 def home():
+    if session.get('logged_in'):
+        return redirect('/api/admin')  # Redirect to admin if logged in
     return render_template('home.html')
 
 @app.route('/login')
 def log():
+    if session.get('logged_in'):
+        return redirect('/api/admin')  # Redirect if logged in
     return render_template('log.html')
+
 
 @app.route('/registration')
 def reg():
@@ -303,6 +332,87 @@ def folder_contents(folder_id):
     except Exception as e:
         print(f"❌ Error fetching files: {e}")  # Debugging output
         return jsonify({"error": str(e)}), 500
+
+#google login
+
+@app.route("/login/google")
+def googleLogin():
+    try:
+        redirect_uri = url_for('authorize_google', _external=True)
+        return google.authorize_redirect(redirect_uri)
+    except Exception as e:
+        app.logger.error(f"Error During Login: {str(e)}")
+        return "Error occurred during login", 500
+
+
+ALLOWED_EMAILS = {'candovince94@gmail.com', 'example2@gmail.com'}
+
+@app.route("/authorize/google")
+def authorize_google():
+    try:
+        token = google.authorize_access_token()
+        userinfo_endpoint = google.server_metadata['userinfo_endpoint']
+        resp = google.get(userinfo_endpoint)
+        user_info = resp.json()
+        username = user_info['email']
+
+        if not db.authorized.find_one({'email': username}):
+            return "Access Denied. Your email is not authorized.", 403
+
+        session['username'] = username
+        session['oauth_token'] = token
+        session['logged_in'] = True
+        return redirect(url_for('admin'))
+    except Exception as e:
+        app.logger.error(f"Error in Authorization: {str(e)}")
+        return "Authorization failed.", 500
+
+
+@app.route('/add/registration')
+def registration():
+    return render_template('practice.html')
+
+@app.route('/add/email', methods=['POST'])
+def add_email():
+    email = request.form['email']
+    if db.authorized.find_one({'email': email}):
+        return "Email already exists. Please use another."
+    db.authorized.insert_one({'email': email})
+    return "Email submitted successfully!"
+
+
+@app.route("/login/dev")
+def googleDev():
+    try:
+        redirect_uri = url_for('authorize_dev', _external=True)
+        return google.authorize_redirect(redirect_uri)
+    except Exception as e:
+        app.logger.error(f"Error During Dev Login: {str(e)}")
+        return "Error occurred during login", 500
+
+
+# Separate allowed emails for dev
+ALLOWED_DEV_EMAILS = {'candovince0908@gmail.com', 'example2@gmail.com'}
+
+@app.route("/authorize/dev")
+def authorize_dev():
+    try:
+        token = google.authorize_access_token()
+        userinfo_endpoint = google.server_metadata['userinfo_endpoint']
+        resp = google.get(userinfo_endpoint)
+        user_info = resp.json()
+        username = user_info['email']
+
+        if not db.emails.find_one({'email': username}):
+            return "Access Denied. Your email is not authorized.", 403
+
+        session['username'] = username
+        session['oauth_token'] = token
+        return redirect(url_for('registration'))
+    except Exception as e:
+        app.logger.error(f"Error in Dev Authorization: {str(e)}")
+        return "Authorization failed.", 500
+
 
 
 if __name__ == '__main__':

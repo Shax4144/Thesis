@@ -34,10 +34,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Logout Functionality
-    document.getElementById("logout").addEventListener("click", function () {
-        window.location.href = "login.html"; // Redirects to login page
-    });
 
     // Load Student Data (For Display)
     document.getElementById("studentName").textContent = "Cyrus Clifford Aguas"; 
