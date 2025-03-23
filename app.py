@@ -49,7 +49,7 @@ google = oauth.register(
 
 # Google Drive API Setup
 SCOPES = ["https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive.readonly"]
-SERVICE_ACCOUNT_FILE = r"Thesis\eternal-tempest-451603-c6-a701efdfca67.json"
+SERVICE_ACCOUNT_FILE = r""
 ROOT_FOLDER_ID = "1NndBdfWTZl4ZMjGZWWb1UjgeVijl986v"
 ARCHIVE_FOLDER_ID = "1GM5-ZA57QPylEhcMexwhhVmdd2g09ZRX"
 

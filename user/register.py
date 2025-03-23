@@ -6,7 +6,7 @@ from google.oauth2 import service_account
 
 # Google Drive API Setup
 SCOPES = ["https://www.googleapis.com/auth/drive"]
-SERVICE_ACCOUNT_FILE = r"Thesis\eternal-tempest-451603-c6-a701efdfca67.json"
+SERVICE_ACCOUNT_FILE = r""
 ROOT_FOLDER_ID = "1NndBdfWTZl4ZMjGZWWb1UjgeVijl986v"
 ARCHIVE_FOLDER_ID = "1GM5-ZA57QPylEhcMexwhhVmdd2g09ZRX"
 creds = service_account.Credentials.from_service_account_file(
