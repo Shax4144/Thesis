@@ -259,7 +259,7 @@ def rfid_and_winner_handler():
 
         except (socket.error, ConnectionRefusedError):
             print("[ERROR] Connection lost. Retrying in 5 seconds...")
-            time.sleep(5)
+            
 
 
 ### --- 🔥 RECEIVE RFID DATA FROM THE SAME CONNECTION --- ###
