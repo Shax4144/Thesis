@@ -13,6 +13,9 @@ from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
 from authlib.integrations.flask_client import OAuth
+from google_auth_oauthlib.flow import Flow
+from google.oauth2.credentials import Credentials
+from google.auth.transport.requests import Request
 import io
 import json
 from datetime import datetime
@@ -49,15 +52,58 @@ google = oauth.register(
 
 # Google Drive API Setup
 SCOPES = ["https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive.readonly"]
-SERVICE_ACCOUNT_FILE = r"Thesis\eternal-tempest-451603-c6-a701efdfca67.json"
+CLIENT_SECRETS_FILE = 'client_secret.json'
 ROOT_FOLDER_ID = "1NndBdfWTZl4ZMjGZWWb1UjgeVijl986v"
 ARCHIVE_FOLDER_ID = "1GM5-ZA57QPylEhcMexwhhVmdd2g09ZRX"
 
-creds = service_account.Credentials.from_service_account_file(
-    SERVICE_ACCOUNT_FILE, scopes=SCOPES
-)
-service = build("drive", "v3", credentials=creds)
 
+flow = Flow.from_client_secrets_file(
+    CLIENT_SECRETS_FILE,
+    scopes=SCOPES,
+    redirect_uri='http://localhost:5000/callback'
+)
+
+def get_drive_service():
+    """Authenticate using OAuth 2.0 and return the Google Drive service."""
+    creds = None
+    
+    # Check if token.json exists
+    if os.path.exists('token.json'):
+        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
+
+    # If no valid credentials, start OAuth flow
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            print("🔄 Refreshing expired credentials.")
+            creds.refresh(Request())
+        else:
+            print("🌐 Starting OAuth flow for new authentication.")
+            flow = Flow.from_client_secrets_file(
+                CLIENT_SECRETS_FILE,
+                scopes=SCOPES,
+                redirect_uri='http://localhost:5000/callback'
+            )
+            auth_url, _ = flow.authorization_url(prompt='consent')
+            print(f"🔎 Go to this URL and authorize access: {auth_url}")
+
+            code = input("Enter the authorization code: ").strip()
+            flow.fetch_token(code=code)
+            creds = flow.credentials
+
+            # Save credentials for future use
+            with open('token.json', 'w') as token_file:
+                token_file.write(creds.to_json())
+            print("✅ Credentials saved to token.json")
+
+    try:
+        from googleapiclient.discovery import build
+        service = build('drive', 'v3', credentials=creds)
+        print("✅ Google Drive service initialized successfully.")
+        return service
+    except Exception as e:
+        print(f"❌ Error initializing Google Drive service: {e}")
+        return None
+    
 def receive_rfid_data():
     """Function to receive RFID data from the server and send it to the frontend."""
     try:
@@ -81,6 +127,7 @@ def receive_rfid_data():
 def create_drive_folder(folder_name, parent_folder_id):
     """Creates a new folder in Google Drive inside the specified parent folder."""
     try:
+        service = get_drive_service()
         file_metadata = {
             "name": folder_name,
             "mimeType": "application/vnd.google-apps.folder",
@@ -96,6 +143,7 @@ def create_drive_folder(folder_name, parent_folder_id):
 def move_drive_folder(folder_id, new_parent_id):
     """Moves an entire folder (including its contents) to a new parent folder in Google Drive."""
     try:
+        service = get_drive_service()
         file_info = service.files().get(fileId=folder_id, fields="parents").execute()
         old_parents = ",".join(file_info.get("parents", []))
 
@@ -164,6 +212,7 @@ def generate_pdf(players):
     return buffer
 
 def upload_to_drive(file_stream, filename, parent_folder_id):
+    service = get_drive_service()
     """Upload the PDF file to Google Drive."""
     from googleapiclient.http import MediaIoBaseUpload
 
@@ -190,6 +239,7 @@ def archive_records():
     records_folder_name = f"Records_{today_date}"
 
     try:
+        service = get_drive_service()
         # Step 1: Create archive folder in Google Drive
         records_archive_folder_id = create_drive_folder(records_folder_name, ARCHIVE_FOLDER_ID)
 
@@ -246,7 +296,9 @@ def clear_players():
 
 def get_files(folder_id=ROOT_FOLDER_ID):
     """Fetch files from Google Drive folder."""
+    
     try:
+        service = get_drive_service()
         query = f"'{folder_id}' in parents and trashed = false"
         results = service.files().list(q=query, fields="files(id, name, mimeType, webViewLink)").execute()
         files = results.get("files", [])
@@ -425,7 +477,27 @@ def authorize_dev():
         app.logger.error(f"Error in Dev Authorization: {str(e)}")
         return "Authorization failed.", 500
 
+@app.route('/callback')
+def callback():
+    try:
+        flow.fetch_token(authorization_response=request.url)
+        credentials = flow.credentials
+        session['credentials'] = credentials_to_dict(credentials)
 
+        return redirect(url_for('index'))  # or wherever you want to redirect
+    except Exception as e:
+        print(f"❌ Error during callback: {e}")
+        return "Authorization failed.", 500
+
+def credentials_to_dict(credentials):
+    return {
+        'token': credentials.token,
+        'refresh_token': credentials.refresh_token,
+        'token_uri': credentials.token_uri,
+        'client_id': credentials.client_id,
+        'client_secret': credentials.client_secret,
+        'scopes': credentials.scopes
+    }
 
 if __name__ == '__main__':
     threading.Thread(target=receive_rfid_data, daemon=True).start()  # Start RFID receiving in a separate thread

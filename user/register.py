@@ -1,21 +1,61 @@
 from flask import jsonify, request
 import uuid
 from database import db  
+from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
+from google_auth_oauthlib.flow import Flow
+from google.oauth2.credentials import Credentials
+import os
 
 # Google Drive API Setup
-SCOPES = ["https://www.googleapis.com/auth/drive"]
-SERVICE_ACCOUNT_FILE = r""
+SCOPES = ["https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive.readonly"]
+CLIENT_SECRETS_FILE = 'client_secret.json'
 ROOT_FOLDER_ID = "1NndBdfWTZl4ZMjGZWWb1UjgeVijl986v"
 ARCHIVE_FOLDER_ID = "1GM5-ZA57QPylEhcMexwhhVmdd2g09ZRX"
-creds = service_account.Credentials.from_service_account_file(
-    SERVICE_ACCOUNT_FILE, scopes=SCOPES
+
+
+flow = Flow.from_client_secrets_file(
+    CLIENT_SECRETS_FILE,
+    scopes=SCOPES,
+    redirect_uri='http://localhost:5000/callback'
 )
-service = build("drive", "v3", credentials=creds)
+
+def get_drive_service():
+    """Authenticate using OAuth 2.0 and return the Google Drive service."""
+    creds = None
+    
+    # Check if token exists
+    if os.path.exists('token.json'):
+        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
+
+    # If no valid credentials, perform authentication
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            flow = Flow.from_client_secrets_file(
+                CLIENT_SECRETS_FILE,
+                scopes=SCOPES,
+                redirect_uri='http://localhost:5000/callback'
+            )
+            auth_url, _ = flow.authorization_url(prompt='consent')
+            print(f"Please go to this URL and authorize access: {auth_url}")
+
+            # Capture authorization code
+            code = input('Enter the authorization code: ')
+            flow.fetch_token(code=code)
+            creds = flow.credentials
+            
+            # Save credentials for future use
+            with open('token.json', 'w') as token_file:
+                token_file.write(creds.to_json())
+
+    return build('drive', 'v3', credentials=creds)
 
 def create_drive_folder(folder_name, parent_folder_id=ROOT_FOLDER_ID):
     """Create a new folder in Google Drive and return the folder ID."""
+    service = get_drive_service()
     try:
         file_metadata = {
             "name": folder_name,
@@ -23,13 +63,16 @@ def create_drive_folder(folder_name, parent_folder_id=ROOT_FOLDER_ID):
             "parents": [parent_folder_id]
         }
         folder = service.files().create(body=file_metadata, fields="id").execute()
+        print(f"✅ Folder created with ID: {folder.get('id')}")
         return folder.get("id")
     except Exception as e:
-        print(f" Error creating folder: {e}")
+        print(f"❌ Error creating folder: {e}")
         return None
+
 
 def move_drive_folder(folder_id, new_parent_id):
     """Move a Google Drive folder to a new parent folder (archive)."""
+    service = get_drive_service()
     try:
         service.files().update(
             fileId=folder_id,
@@ -37,9 +80,9 @@ def move_drive_folder(folder_id, new_parent_id):
             removeParents=ROOT_FOLDER_ID,
             fields="id, parents"
         ).execute()
-        print(f" Moved folder {folder_id} to Archive")
+        print(f"✅ Moved folder {folder_id} to Archive")
     except Exception as e:
-        print(f" Error moving folder {folder_id}: {e}")
+        print(f"❌ Error moving folder {folder_id}: {e}")
 
 class Players:
     @staticmethod

@@ -147,7 +147,7 @@ async function handleFormSubmit(event) {
 
 //====================================================================================================
 
-//FETHC PLAYERS
+//FETCH PLAYERS
 document.addEventListener("DOMContentLoaded", function () {
   async function fetchPlayers() {
     const tableBody = document.querySelector("#players-table tbody");
