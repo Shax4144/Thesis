@@ -19,7 +19,9 @@ from google.auth.transport.requests import Request
 import io
 import json
 from datetime import datetime
-
+from flask_socketio import SocketIO, emit
+import queue
+import json
 app = Flask(__name__)
 app.secret_key = "7a396704-83f5-4598-8a7c-32e4bd58c676"
 app.config['SESSION_PERMANENT'] = False  # Ensure session expires on browser close
@@ -49,6 +51,7 @@ google = oauth.register(
 )
 
 
+winner_queue = queue.Queue()
 
 # Google Drive API Setup
 SCOPES = ["https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive.readonly"]
@@ -230,6 +233,21 @@ def upload_to_drive(file_stream, filename, parent_folder_id):
 
     return uploaded_file.get("id"), uploaded_file.get("webViewLink")
 
+@app.route("/api/winners/save", methods=["POST"])
+def save_game():
+    try:
+        data = request.json
+        game_number = data.get("game")
+        players = data.get("players", [])
+
+        # Save both players to the database
+        for player in players:
+            player["timestamp"] = datetime.now()
+            db.status.insert_one(player)
+
+        return jsonify({"message": "Game results saved successfully!"}), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route("/api/archiveRecords", methods=["POST"])
 def archive_records():
@@ -284,6 +302,138 @@ def get_player(rfid):
         return jsonify(player)
     return jsonify(None)
 
+@socketio.on("game_state")
+def update_game_state(data):
+    print("Game state updated:", data)  # ✅ Debugging print
+    emit("game_state", data, broadcast=True)  # ✅ Broadcast to all clients
+
+@socketio.on("start_game")
+def handle_start_game(data):
+    print("Broadcasting start_game event:", data)  # Debugging
+    emit("start_game", data, broadcast=True)
+    
+@socketio.on("update_score")
+def handle_update_score(data):
+    print("Received updated score:", data)  # Debugging
+    emit("update_score", data, broadcast=True)
+
+
+
+
+### --- 🔥 SINGLE CONNECTION HANDLER --- ###
+def rfid_and_winner_handler():
+    """Single connection for RFID receiving & winner data sending."""
+    while True:
+        try:
+            with socket.create_connection((SERVER_IP, PORT)) as client_socket:
+                print(f"[CONNECTED] Unified Connection to {SERVER_IP}:{PORT}")
+
+                # Start RFID listener in a separate thread using the same socket
+                rfid_thread = threading.Thread(target=receive_rfid_data, args=(client_socket,), daemon=True)
+                rfid_thread.start()
+
+                while True:
+                    # Check for new winner data
+                    if not winner_queue.empty():
+                        data = winner_queue.get()
+                        if data is None:
+                            break  # Stop if needed
+
+                        json_data = json.dumps(data)
+                        print(f"[DEBUG] Sending Winner Data: {json_data}")
+                        client_socket.sendall(json_data.encode("utf-8"))
+
+                        # Wait for optional response
+                        response = client_socket.recv(1024).decode("utf-8").strip()
+                        print(f"[SERVER RESPONSE] {response}")
+
+                        winner_queue.task_done()
+
+        except (socket.error, ConnectionRefusedError):
+            print("[ERROR] Connection lost. Retrying in 5 seconds...")
+            
+
+
+### --- 🔥 RECEIVE RFID DATA FROM THE SAME CONNECTION --- ###
+def receive_rfid_data(client_socket):
+    """Read RFID data from the server using the same connection."""
+    try:
+        while True:
+            data = client_socket.recv(1024).decode().strip()
+            if not data:
+                break  # Assume server disconnected
+
+            print(f"[RFID] {data}")
+            socketio.emit("rfid_data", {"rfid": data})
+
+    except (socket.error, ConnectionResetError):
+        print("[ERROR] RFID receiving stopped.")
+
+
+
+### --- 🔥 SOCKET EVENT HANDLING --- ###
+@socketio.on("winner_displayed", namespace="/")
+def handle_winner_display(data):
+    print(f"[SOCKET EVENT] Winner announced: {data}")
+
+    # Broadcast to all connected clients
+    emit("winner_displayed", data, broadcast=True)
+
+    # Queue the winner data to be sent
+    winner = data.get("winner")
+    winner_data = data.get("winnerData", {})
+    send_winner_data(winner, winner_data)
+
+
+def send_winner_data(winner, winner_data=None):
+    """Queue winner data for background processing."""
+    data = {"winner": winner}
+    if winner_data:
+        data["winnerData"] = winner_data
+
+    print(f"[DEBUG] Queuing Winner Data: {data}")
+    winner_queue.put(data)  # Add data to the queue
+
+### --- 🔥 SOCKET EVENT HANDLING --- ###
+@socketio.on("winner_displayed", namespace="/")
+def handle_winner_display(data):
+    print(f"[SOCKET EVENT] Winner announced: {data}")
+
+    # Broadcast to all connected clients
+    emit("winner_displayed", data, broadcast=True)
+
+    # Queue the winner data to be sent
+    winner = data.get("winner")
+    winner_data = data.get("winnerData", {})
+    send_winner_data(winner, winner_data)
+
+
+def send_winner_data(winner, winner_data=None):
+    """Queue winner data for background processing."""
+    data = {"winner": winner}
+    if winner_data:
+        data["winnerData"] = winner_data
+
+    print(f"[DEBUG] Queuing winner data: {data}")
+    winner_queue.put(data)  # Add data to the queue
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @app.route("/api/players/clear", methods=["DELETE"])
 def clear_players():
     """Remove all players after archiving."""
@@ -292,6 +442,9 @@ def clear_players():
         return jsonify({"message": "All players have been removed after archiving."})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+
 
 
 def get_files(folder_id=ROOT_FOLDER_ID):
@@ -499,6 +652,11 @@ def credentials_to_dict(credentials):
         'scopes': credentials.scopes
     }
 
+
+
 if __name__ == '__main__':
-    threading.Thread(target=receive_rfid_data, daemon=True).start()  # Start RFID receiving in a separate thread
+     # Prevent double execution caused by Flask's debug mode reloader
+    if os.environ.get("WERKZEUG_RUN_MAIN") == "true":
+        connection_thread = threading.Thread(target=rfid_and_winner_handler, name="UnifiedHandler", daemon=True)
+        connection_thread.start()
     socketio.run(app, debug=True, allow_unsafe_werkzeug=True)
