@@ -1,3 +1,5 @@
+from gevent import monkey
+monkey.patch_all()  # ← MUST BE VERY TOP
 import socket
 import threading
 from threading import Thread
