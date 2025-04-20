@@ -1,5 +1,6 @@
 import socket
 import threading
+from threading import Thread
 from flask import Flask, request, render_template, session, redirect, jsonify, make_response, url_for
 from functools import wraps
 from flask_socketio import SocketIO
@@ -29,7 +30,9 @@ app = Flask(__name__)
 app.secret_key = "7a396704-83f5-4598-8a7c-32e4bd58c676"
 app.config['SESSION_PERMANENT'] = False  # Ensure session expires on browser close
 app.register_blueprint(user_bp, url_prefix='/api')
-socketio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode="gevent")
+
+
 
 SERVER_IP = "raspberrypi"  # Change this to match your setup
 PORT = 6000
@@ -40,6 +43,7 @@ appConf = {
     "FLASK_SECRET": os.environ.get("FLASK_SECRET"),
     "FLASK_PORT": 6000
 }
+
 
 oauth = OAuth(app)
 # list of google scopes - https://developers.google.com/identity/protocols/oauth2/scopes
@@ -58,10 +62,10 @@ winner_queue = queue.Queue()
 
 # Google Drive API Setup
 SCOPES = ["https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive.readonly"]
-CLIENT_SECRETS_FILE = "client_secret.json"
+CLIENT_SECRETS_FILE = "/etc/secrets/client_secret.json"
 ROOT_FOLDER_ID = "1NndBdfWTZl4ZMjGZWWb1UjgeVijl986v"
 ARCHIVE_FOLDER_ID = "1GM5-ZA57QPylEhcMexwhhVmdd2g09ZRX"
-TOKEN_JSON_PATH = "token.json"
+TOKEN_JSON_PATH = "/etc/secrets/token.json"
 
 REDIRECT_URI = os.environ.get("GOOGLE_REDIRECT_URI", "http://localhost:6000/callback")
 
@@ -727,9 +731,8 @@ def credentials_to_dict(credentials):
 
 
 
-if __name__ == '__main__':
-     # Prevent double execution caused by Flask's debug mode reloader
-    if os.environ.get("WERKZEUG_RUN_MAIN") == "true":
-        connection_thread = threading.Thread(target=rfid_and_winner_handler, name="UnifiedHandler", daemon=True)
-        connection_thread.start()
-    socketio.run(app)
+if __name__ == "__main__":
+    # Start RFID + winner connection in background
+    connection_thread = Thread(target=rfid_and_winner_handler, daemon=True)
+    connection_thread.start()
+    socketio.run(app, host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
