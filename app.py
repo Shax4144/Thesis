@@ -1,5 +1,3 @@
-from gevent import monkey
-monkey.patch_all()  # ← MUST BE VERY TOP
 import socket
 import threading
 from threading import Thread
@@ -39,13 +37,12 @@ socketio = SocketIO(app, cors_allowed_origins="*", async_mode="gevent")
 SERVER_IP = "raspberrypi"  # Change this to match your setup
 PORT = 6000
 appConf = {
-    "OAUTH2_CLIENT_ID": os.environ.get("OAUTH2_CLIENT_ID"),
-    "OAUTH2_CLIENT_SECRET": os.environ.get("OAUTH2_CLIENT_SECRET"),
+    "OAUTH2_CLIENT_ID": "460933508714-j510gtuclfdfe9p5epfscc27aedn5jhh.apps.googleusercontent.com",
+    "OAUTH2_CLIENT_SECRET": "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",
     "OAUTH2_META_URL": "https://accounts.google.com/.well-known/openid-configuration",
-    "FLASK_SECRET": os.environ.get("FLASK_SECRET"),
+    "FLASK_SECRET": "99c1e4b0-3c0c-42bd-9e00-3420826a80c3",
     "FLASK_PORT": 6000
 }
-
 
 oauth = OAuth(app)
 # list of google scopes - https://developers.google.com/identity/protocols/oauth2/scopes
@@ -64,26 +61,24 @@ winner_queue = queue.Queue()
 
 # Google Drive API Setup
 SCOPES = ["https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive.readonly"]
-CLIENT_SECRETS_FILE = "/etc/secrets/client_secret.json"
+CLIENT_SECRETS_FILE = 'client_secret.json'
 ROOT_FOLDER_ID = "1NndBdfWTZl4ZMjGZWWb1UjgeVijl986v"
 ARCHIVE_FOLDER_ID = "1GM5-ZA57QPylEhcMexwhhVmdd2g09ZRX"
-TOKEN_JSON_PATH = "/etc/secrets/token.json"
 
-REDIRECT_URI = os.environ.get("GOOGLE_REDIRECT_URI", "http://localhost:6000/callback")
 
 flow = Flow.from_client_secrets_file(
     CLIENT_SECRETS_FILE,
     scopes=SCOPES,
-    redirect_uri=REDIRECT_URI
+    redirect_uri='http://localhost:6000/callback'
 )
 
 def get_drive_service():
     """Authenticate using OAuth 2.0 and return the Google Drive service."""
     creds = None
-
-    # Load credentials from token.json
-    if os.path.exists(TOKEN_JSON_PATH):
-        creds = Credentials.from_authorized_user_file(TOKEN_JSON_PATH, SCOPES)
+    
+    # Check if token.json exists
+    if os.path.exists('token.json'):
+        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
 
     # If no valid credentials, start OAuth flow
     if not creds or not creds.valid:
@@ -95,7 +90,7 @@ def get_drive_service():
             flow = Flow.from_client_secrets_file(
                 CLIENT_SECRETS_FILE,
                 scopes=SCOPES,
-                redirect_uri='http://localhost:6000/callback'  # adjust if needed for deployment
+                redirect_uri='http://localhost:6000/callback'
             )
             auth_url, _ = flow.authorization_url(prompt='consent')
             print(f"🔎 Go to this URL and authorize access: {auth_url}")
@@ -105,7 +100,7 @@ def get_drive_service():
             creds = flow.credentials
 
             # Save credentials for future use
-            with open(TOKEN_JSON_PATH, 'w') as token_file:
+            with open('token.json', 'w') as token_file:
                 token_file.write(creds.to_json())
             print("✅ Credentials saved to token.json")
 

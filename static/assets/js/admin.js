@@ -3,12 +3,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const socket = io.connect(
     location.protocol + "//" + document.domain + ":" + location.port
   );
-
-  // Listen for successful connection
-  socket.on("connect", function () {
-    console.log("Socket connected:", socket.connected); // Should log `true` when connected
-  });
-
   // Listen for RFID data
   socket.on("rfid_data", function (data) {
     console.log("Received RFID:", data.rfid);
