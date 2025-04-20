@@ -30,17 +30,17 @@ app = Flask(__name__)
 app.secret_key = "7a396704-83f5-4598-8a7c-32e4bd58c676"
 app.config['SESSION_PERMANENT'] = False  # Ensure session expires on browser close
 app.register_blueprint(user_bp, url_prefix='/api')
-socketio = SocketIO(app, cors_allowed_origins="*", async_mode="eventlet")
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode="gevent")
 
 
 
 SERVER_IP = "raspberrypi"  # Change this to match your setup
 PORT = 6000
 appConf = {
-    "OAUTH2_CLIENT_ID": "460933508714-j510gtuclfdfe9p5epfscc27aedn5jhh.apps.googleusercontent.com",
-    "OAUTH2_CLIENT_SECRET": "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",
+    "OAUTH2_CLIENT_ID": os.environ.get("OAUTH2_CLIENT_ID"),
+    "OAUTH2_CLIENT_SECRET": os.environ.get("OAUTH2_CLIENT_SECRET"),
     "OAUTH2_META_URL": "https://accounts.google.com/.well-known/openid-configuration",
-    "FLASK_SECRET": "99c1e4b0-3c0c-42bd-9e00-3420826a80c3",
+    "FLASK_SECRET": os.environ.get("FLASK_SECRET"),
     "FLASK_PORT": 6000
 }
 
@@ -61,24 +61,26 @@ winner_queue = queue.Queue()
 
 # Google Drive API Setup
 SCOPES = ["https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive.readonly"]
-CLIENT_SECRETS_FILE = 'client_secret.json'
+CLIENT_SECRETS_FILE = "/etc/secrets/client_secret.json"
 ROOT_FOLDER_ID = "1NndBdfWTZl4ZMjGZWWb1UjgeVijl986v"
 ARCHIVE_FOLDER_ID = "1GM5-ZA57QPylEhcMexwhhVmdd2g09ZRX"
+TOKEN_JSON_PATH = "/etc/secrets/token.json"
 
+REDIRECT_URI = os.environ.get("GOOGLE_REDIRECT_URI", "http://localhost:6000/callback")
 
 flow = Flow.from_client_secrets_file(
     CLIENT_SECRETS_FILE,
     scopes=SCOPES,
-    redirect_uri='http://localhost:6000/callback'
+    redirect_uri=REDIRECT_URI
 )
 
 def get_drive_service():
     """Authenticate using OAuth 2.0 and return the Google Drive service."""
     creds = None
-    
-    # Check if token.json exists
-    if os.path.exists('token.json'):
-        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
+
+    # Load credentials from token.json
+    if os.path.exists(TOKEN_JSON_PATH):
+        creds = Credentials.from_authorized_user_file(TOKEN_JSON_PATH, SCOPES)
 
     # If no valid credentials, start OAuth flow
     if not creds or not creds.valid:
@@ -90,7 +92,7 @@ def get_drive_service():
             flow = Flow.from_client_secrets_file(
                 CLIENT_SECRETS_FILE,
                 scopes=SCOPES,
-                redirect_uri='http://localhost:6000/callback'
+                redirect_uri='http://localhost:6000/callback'  # adjust if needed for deployment
             )
             auth_url, _ = flow.authorization_url(prompt='consent')
             print(f"🔎 Go to this URL and authorize access: {auth_url}")
@@ -100,7 +102,7 @@ def get_drive_service():
             creds = flow.credentials
 
             # Save credentials for future use
-            with open('token.json', 'w') as token_file:
+            with open(TOKEN_JSON_PATH, 'w') as token_file:
                 token_file.write(creds.to_json())
             print("✅ Credentials saved to token.json")
 
@@ -132,6 +134,53 @@ def receive_rfid_data():
     except Exception as e:
         print(f"[ERROR] Could not connect: {e}")
 
+def rfid_and_winner_handler():
+    """Single connection for RFID receiving & winner data sending."""
+    while True:
+        try:
+            with socket.create_connection((SERVER_IP, PORT)) as client_socket:
+                print(f"[CONNECTED] Unified Connection to {SERVER_IP}:{PORT}")
+
+                # Start RFID listener in a separate thread using the same socket
+                rfid_thread = threading.Thread(target=receive_rfid_data, args=(client_socket,), daemon=True)
+                rfid_thread.start()
+
+                while True:
+                    # Check for new winner data
+                    if not winner_queue.empty():
+                        data = winner_queue.get()
+                        if data is None:
+                            break  # Stop if needed
+
+                        json_data = json.dumps(data)
+                        print(f"[DEBUG] Sending Winner Data: {json_data}")
+                        client_socket.sendall(json_data.encode("utf-8"))
+
+                        # Wait for optional response
+                        response = client_socket.recv(1024).decode("utf-8").strip()
+                        print(f"[SERVER RESPONSE] {response}")
+
+                        winner_queue.task_done()
+
+        except (socket.error, ConnectionRefusedError):
+            print("[ERROR] Connection lost. Retrying in 5 seconds...")
+            
+
+
+### --- 🔥 RECEIVE RFID DATA FROM THE SAME CONNECTION --- ###
+def receive_rfid_data(client_socket):
+    """Read RFID data from the server using the same connection."""
+    try:
+        while True:
+            data = client_socket.recv(1024).decode().strip()
+            if not data:
+                break  # Assume server disconnected
+
+            print(f"[RFID] {data}")
+            socketio.emit("rfid_data", {"rfid": data})
+
+    except (socket.error, ConnectionResetError):
+        print("[ERROR] RFID receiving stopped.")
 
 def create_drive_folder(folder_name, parent_folder_id):
     """Creates a new folder in Google Drive inside the specified parent folder."""
@@ -350,53 +399,7 @@ def handle_update_score(data):
 
 
 ### --- 🔥 SINGLE CONNECTION HANDLER --- ###
-def rfid_and_winner_handler():
-    """Single connection for RFID receiving & winner data sending."""
-    while True:
-        try:
-            with socket.create_connection((SERVER_IP, PORT)) as client_socket:
-                print(f"[CONNECTED] Unified Connection to {SERVER_IP}:{PORT}")
 
-                # Start RFID listener in a separate thread using the same socket
-                rfid_thread = threading.Thread(target=receive_rfid_data, args=(client_socket,), daemon=True)
-                rfid_thread.start()
-
-                while True:
-                    # Check for new winner data
-                    if not winner_queue.empty():
-                        data = winner_queue.get()
-                        if data is None:
-                            break  # Stop if needed
-
-                        json_data = json.dumps(data)
-                        print(f"[DEBUG] Sending Winner Data: {json_data}")
-                        client_socket.sendall(json_data.encode("utf-8"))
-
-                        # Wait for optional response
-                        response = client_socket.recv(1024).decode("utf-8").strip()
-                        print(f"[SERVER RESPONSE] {response}")
-
-                        winner_queue.task_done()
-
-        except (socket.error, ConnectionRefusedError):
-            print("[ERROR] Connection lost. Retrying in 5 seconds...")
-            
-
-
-### --- 🔥 RECEIVE RFID DATA FROM THE SAME CONNECTION --- ###
-def receive_rfid_data(client_socket):
-    """Read RFID data from the server using the same connection."""
-    try:
-        while True:
-            data = client_socket.recv(1024).decode().strip()
-            if not data:
-                break  # Assume server disconnected
-
-            print(f"[RFID] {data}")
-            socketio.emit("rfid_data", {"rfid": data})
-
-    except (socket.error, ConnectionResetError):
-        print("[ERROR] RFID receiving stopped.")
 
 
 
@@ -732,4 +735,4 @@ if __name__ == "__main__":
     # Start RFID + winner connection in background
     connection_thread = Thread(target=rfid_and_winner_handler, daemon=True)
     connection_thread.start()
-    socketio.run(app, debug=True)
+    socketio.run(app, host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
