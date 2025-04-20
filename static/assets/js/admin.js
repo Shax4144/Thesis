@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   // Initialize the socket connection
-  const socket = io(); // Automatically connects to the host that served the page
+  const socket = io("https://ptu-08k7.onrender.com"); // Automatically connects to the host that served the page
 
   // Listen for RFID data
   socket.on("rfid_data", function (data) {
