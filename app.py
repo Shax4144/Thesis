@@ -136,6 +136,10 @@ def receive_rfid_data():
     except Exception as e:
         print(f"[ERROR] Could not connect: {e}")
 
+@socketio.on('rfid_data')
+def handle_rfid_data(data):
+    print(f"[DEBUG] RFID data received: {data}")
+
 def rfid_and_winner_handler():
     """Single connection for RFID receiving & winner data sending."""
     while True:

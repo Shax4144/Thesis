@@ -1,8 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
   // Initialize the socket connection
-  const socket = io.connect(
-    location.protocol + "//" + document.domain + ":" + location.port
-  );
+  const socket = io(); // Automatically connects to the host that served the page
+
   // Listen for RFID data
   socket.on("rfid_data", function (data) {
     console.log("Received RFID:", data.rfid);
@@ -10,6 +9,19 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
+const socket = io.connect("https://ptu-08k7.onrender.comm");
+
+socket.on("connect", function () {
+  console.log("WebSocket connected!");
+});
+
+socket.on("disconnect", function () {
+  console.log("WebSocket disconnected!");
+});
+
+socket.on("rfid_data", function (data) {
+  console.log("Received RFID data:", data);
+});
 //SIDE NAVIGATION BAR
 document.addEventListener("DOMContentLoaded", function () {
   // Sidebar Navigation Elements
