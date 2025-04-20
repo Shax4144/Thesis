@@ -340,6 +340,43 @@ h1 {
   background-color: var(--secondary-color);
 }
 
+.overview-box {
+  margin-bottom: 20px;
+}
+
+.overview-box span {
+  display: block;
+  height: 50px; /* Placeholder size */
+  width: 100%;
+  background-color: var(--primary-color-extra-light);
+  border-radius: 5px;
+  min-width: 600px;
+}
+
+.overview-box table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+}
+
+.overview-box th,
+.overview-box td {
+  border: 1.5px solid var(--primary-color-light);
+  padding: 8px;
+  text-align: left;
+}
+
+.overview-box th {
+  background-color: var(--primary-color-extra-light);
+  font-weight: bold;
+  color: var(--text-light);
+}
+
+.overview-box td {
+  background-color: var(--primary-color-extra-light);
+  color: var(--text-light);
+}
+
 .history-content {
   padding: 20px;
   background-color: var(--primary-color);

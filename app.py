@@ -1,5 +1,6 @@
 import socket
 import threading
+from threading import Thread
 from flask import Flask, request, render_template, session, redirect, jsonify, make_response, url_for
 from functools import wraps
 from flask_socketio import SocketIO
@@ -22,20 +23,25 @@ from datetime import datetime
 from flask_socketio import SocketIO, emit
 import queue
 import json
+import requests
+
+
 app = Flask(__name__)
 app.secret_key = "7a396704-83f5-4598-8a7c-32e4bd58c676"
 app.config['SESSION_PERMANENT'] = False  # Ensure session expires on browser close
 app.register_blueprint(user_bp, url_prefix='/api')
-socketio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode="gevent")
+
+
 
 SERVER_IP = "raspberrypi"  # Change this to match your setup
-PORT = 5000
+PORT = 6000
 appConf = {
     "OAUTH2_CLIENT_ID": "460933508714-j510gtuclfdfe9p5epfscc27aedn5jhh.apps.googleusercontent.com",
     "OAUTH2_CLIENT_SECRET": "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",
     "OAUTH2_META_URL": "https://accounts.google.com/.well-known/openid-configuration",
     "FLASK_SECRET": "99c1e4b0-3c0c-42bd-9e00-3420826a80c3",
-    "FLASK_PORT": 5000
+    "FLASK_PORT": 6000
 }
 
 oauth = OAuth(app)
@@ -63,7 +69,7 @@ ARCHIVE_FOLDER_ID = "1GM5-ZA57QPylEhcMexwhhVmdd2g09ZRX"
 flow = Flow.from_client_secrets_file(
     CLIENT_SECRETS_FILE,
     scopes=SCOPES,
-    redirect_uri='http://localhost:5000/callback'
+    redirect_uri='http://localhost:6000/callback'
 )
 
 def get_drive_service():
@@ -84,7 +90,7 @@ def get_drive_service():
             flow = Flow.from_client_secrets_file(
                 CLIENT_SECRETS_FILE,
                 scopes=SCOPES,
-                redirect_uri='http://localhost:5000/callback'
+                redirect_uri='http://localhost:6000/callback'
             )
             auth_url, _ = flow.authorization_url(prompt='consent')
             print(f"🔎 Go to this URL and authorize access: {auth_url}")
@@ -163,26 +169,25 @@ def move_drive_folder(folder_id, new_parent_id):
         print(f"❌ Error moving folder {folder_id}: {e}")
 
 
-def generate_pdf(players):
-    """Generate a well-formatted PDF report of all players with a table."""
+def generate_pdf(players, status_data):
+    """Generate a well-formatted PDF report of all players and their status with tables."""
     buffer = io.BytesIO()
     today_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     # Create PDF Document
     pdf = SimpleDocTemplate(buffer, pagesize=letter)
     elements = []
-    
-    # Title Section
+
     styles = getSampleStyleSheet()
     title = Paragraph(f"<b>Player Archive Report</b><br/><br/>Date: {today_date}", styles["Title"])
     elements.append(title)
 
-    # Table Headers
-    table_data = [["First Name", "Middle Name", "Last Name", "Category", "Age", "Belt", "Gym", "Weight (kg)"]]
+    # --- Player Table ---
+    elements.append(Paragraph("<b>Player Information</b><br/><br/>", styles["Heading2"]))
 
-    # Add Player Data to the Table
+    player_table_data = [["First Name", "Middle Name", "Last Name", "Category", "Age", "Belt", "Gym", "Weight (kg)"]]
     for player in players:
-        table_data.append([
+        player_table_data.append([
             player["firstname"],
             player.get("middlename", "-"),
             player["lastname"],
@@ -193,11 +198,8 @@ def generate_pdf(players):
             player["weight"]
         ])
 
-    # Create Table
-    table = Table(table_data, colWidths=[80, 80, 80, 80, 50, 60, 100, 70])
-
-    # Add Styling to Table
-    table.setStyle(TableStyle([
+    player_table = Table(player_table_data, colWidths=[80, 80, 80, 80, 50, 60, 100, 70])
+    player_table.setStyle(TableStyle([
         ("BACKGROUND", (0, 0), (-1, 0), colors.grey),
         ("TEXTCOLOR", (0, 0), (-1, 0), colors.whitesmoke),
         ("ALIGN", (0, 0), (-1, -1), "CENTER"),
@@ -206,13 +208,38 @@ def generate_pdf(players):
         ("BACKGROUND", (0, 1), (-1, -1), colors.beige),
         ("GRID", (0, 0), (-1, -1), 1, colors.black),
     ]))
+    elements.append(player_table)
+    elements.append(Paragraph("<br/><br/>", styles["Normal"]))
 
-    elements.append(table)
+    # --- Status Table ---
+    elements.append(Paragraph("<b>Player Status Records</b><br/><br/>", styles["Heading2"]))
+
+    status_table_data = [["Name", "Total Score", "Status", "Timestamp"]]
+    for s in status_data:
+        status_table_data.append([
+            s.get("name", "-"),
+            s.get("totalScore", "-"),
+            s.get("status", "-"),
+            s.get("timestamp", "-")
+        ])
+
+    status_table = Table(status_table_data, colWidths=[150, 100, 100, 150])
+    status_table.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), colors.darkblue),
+        ("TEXTCOLOR", (0, 0), (-1, 0), colors.whitesmoke),
+        ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("BOTTOMPADDING", (0, 0), (-1, 0), 8),
+        ("BACKGROUND", (0, 1), (-1, -1), colors.lightgrey),
+        ("GRID", (0, 0), (-1, -1), 1, colors.black),
+    ]))
+    elements.append(status_table)
 
     # Build the PDF
     pdf.build(elements)
     buffer.seek(0)
     return buffer
+
 
 def upload_to_drive(file_stream, filename, parent_folder_id):
     service = get_drive_service()
@@ -263,11 +290,12 @@ def archive_records():
 
         # Step 2: Fetch all player records from the database
         players = list(db.players.find({}, {'_id': 0}))
+        status_data = list(db.status.find({}, {'_id': 0}))
         if not players:
             return jsonify({"message": "No player records found to archive."}), 400
 
         # Step 3: Generate PDF from player data
-        pdf_buffer = generate_pdf(players)
+        pdf_buffer = generate_pdf(players, status_data)
 
         # Step 4: Upload PDF to the archive folder
         pdf_filename = f"Players_Archive_{today_date}.pdf"
@@ -284,6 +312,7 @@ def archive_records():
 
         # Step 6: Clear player records from the database
         db.players.delete_many({})
+        db.status.delete_many({})
 
         return jsonify({
             "message": f"All player records moved to {records_folder_name}!",
@@ -417,21 +446,69 @@ def send_winner_data(winner, winner_data=None):
     print(f"[DEBUG] Queuing winner data: {data}")
     winner_queue.put(data)  # Add data to the queue
 
+@app.route('/start_recording', methods=['POST'])
+def start_recording():
+    try:
+        # Receive data from client
+        data = request.get_json()
+        player1 = data.get('player1')
+        player2 = data.get('player2')
+
+        if not player1 or not player2:
+            return jsonify({'message': 'Player RFID data is missing', 'status': 'error'}), 400
+
+        # Forwarding the data to Raspberry Pi
+        raspberry_pi_ip = 'http://192.168.100.54:5000/receive'
+        response = requests.post(raspberry_pi_ip, json={'player1': player1, 'player2': player2})
+
+        # Returning the response from Raspberry Pi
+        return jsonify({'message': 'Recording started', 'status': 'success', 'response': response.json()})
+
+    except Exception as e:
+        return jsonify({'message': 'Internal server error', 'status': 'error', 'error': str(e)}), 500
+    
+@app.route('/start_recording2', methods=['POST'])
+def start_recording2():
+    try:
+        # Receive data from client
+        data = request.get_json()
+        player1 = data.get('player1')
+        player2 = data.get('player2')
+
+        if not player1 or not player2:
+            return jsonify({'message': 'Player RFID data is missing', 'status': 'error'}), 400
+
+        # Forwarding the data to Raspberry Pi
+        raspberry_pi_ip = 'http://192.168.100.54:5000/receive2'
+        response = requests.post(raspberry_pi_ip, json={'player1': player1, 'player2': player2})
+
+        # Returning the response from Raspberry Pi
+        return jsonify({'message': 'Recording started', 'status': 'success', 'response': response.json()})
+
+    except Exception as e:
+        return jsonify({'message': 'Internal server error', 'status': 'error', 'error': str(e)}), 500
 
 
+# GET all status entries
+@app.route('/api/overview')
+def get_status():
+    """Fetch all status data (overview)."""
+    try:
+        status_data = list(db.status.find({}, {'_id': 0}))
+        return jsonify(status_data)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
-
-
-
-
-
-
-
-
-
-
-
+# DELETE all status entries
+@app.route("/api/overview/clear", methods=["DELETE"])
+def clear_status():
+    """Remove all status entries (after archiving or resetting)."""
+    try:
+        db.status.delete_many({})
+        return jsonify({"message": "All status entries have been removed."})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 @app.route("/api/players/clear", methods=["DELETE"])
@@ -442,9 +519,6 @@ def clear_players():
         return jsonify({"message": "All players have been removed after archiving."})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
-
-
 
 
 def get_files(folder_id=ROOT_FOLDER_ID):
@@ -654,9 +728,8 @@ def credentials_to_dict(credentials):
 
 
 
-if __name__ == '__main__':
-     # Prevent double execution caused by Flask's debug mode reloader
-    if os.environ.get("WERKZEUG_RUN_MAIN") == "true":
-        connection_thread = threading.Thread(target=rfid_and_winner_handler, name="UnifiedHandler", daemon=True)
-        connection_thread.start()
-    socketio.run(app, debug=True, allow_unsafe_werkzeug=True)
+if __name__ == "__main__":
+    # Start RFID + winner connection in background
+    connection_thread = Thread(target=rfid_and_winner_handler, daemon=True)
+    connection_thread.start()
+    socketio.run(app, host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))

@@ -1,14 +1,18 @@
-
-  
 document.addEventListener("DOMContentLoaded", function () {
-  const socket = io.connect(location.protocol + "//" + document.domain + ":" + location.port);
+  // Initialize the socket connection
+  const socket = io.connect(
+    location.protocol + "//" + document.domain + ":" + location.port
+  );
+
+  // Listen for successful connection
+  socket.on("connect", function () {
+    console.log("Socket connected:", socket.connected); // Should log `true` when connected
+  });
 
   // Listen for RFID data
   socket.on("rfid_data", function (data) {
-      console.log("Received RFID:", data.rfid);
-
-      // Insert RFID into input field
-      document.getElementById("rfid").value = data.rfid;
+    console.log("Received RFID:", data.rfid);
+    document.getElementById("rfid").value = data.rfid;
   });
 });
 
@@ -118,17 +122,17 @@ async function handleFormSubmit(event) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
-  
+
     const result = await response.json();
     console.log("🔍 Full Server Response:", result); // Debugging
-  
+
     if (response.status === 400) {
       console.warn("⚠️ Bad Request Error:", result.error);
       alert("❌ Error: " + result.error);
       submitButton.disabled = false;
       return;
     }
-  
+
     if (result.message) {
       alert("🎉 Player registered successfully!");
       document.querySelector("form[name='signup_form']").reset();
@@ -142,7 +146,6 @@ async function handleFormSubmit(event) {
   } finally {
     submitButton.disabled = false;
   }
-  
 }
 
 //====================================================================================================
@@ -152,7 +155,7 @@ document.addEventListener("DOMContentLoaded", function () {
   async function fetchPlayers() {
     const tableBody = document.querySelector("#players-table tbody");
     if (!tableBody) {
-      console.error(" Error: #players-table tbody not found.");
+      console.error("Error: #players-table tbody not found.");
       return;
     }
 
@@ -180,16 +183,55 @@ document.addEventListener("DOMContentLoaded", function () {
         tableBody.appendChild(row);
       });
 
-      console.log(" Players list updated successfully.");
+      console.log("Players list updated successfully.");
     } catch (error) {
-      console.error(" Error fetching players:", error);
-      tableBody.innerHTML = `<tr><td colspan="7"> Failed to load data</td></tr>`;
+      console.error("Error fetching players:", error);
+      tableBody.innerHTML = `<tr><td colspan="8">Failed to load data</td></tr>`;
+    }
+  }
+
+  async function fetchOverview() {
+    const overviewTableBody = document.querySelector("#overview-table tbody");
+    if (!overviewTableBody) {
+      console.error("Error: #overview-table tbody not found.");
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/overview");
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const overviewData = await response.json();
+
+      overviewTableBody.innerHTML = ""; // Clear old rows
+
+      overviewData.forEach((item) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${item.name}</td>
+          <td>${item.gym}</td>
+          <td>${item.totalScore}</td>
+          <td>${item.performing}</td>
+          <td>${item.category}</td>
+          <td>${item.status}</td>
+          <td>${item.timestamp}</td>
+        `;
+        overviewTableBody.appendChild(row);
+      });
+
+      console.log("Overview data loaded successfully.");
+    } catch (error) {
+      console.error("Error fetching overview data:", error);
     }
   }
 
   window.fetchPlayers = fetchPlayers;
   fetchPlayers();
+  fetchOverview();
 });
+
 //====================================================================================================
 
 //FETCH FILES

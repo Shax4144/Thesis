@@ -102,8 +102,21 @@
         <div class="history-content" id="history-content">
           <h2>Player History</h2>
           <h3>Overview</h3>
-          <div class="win-box">
-            <span></span>
+          <div class="overview-box">
+            <table id="overview-table">
+              <thead>
+                <tr>
+                  <th>First Name</th>
+                  <th>Last Name</th>
+                  <th>Score</th>
+                  <th>Perfomed</th>
+                  <th>Category</th>
+                  <th>Status</th> 
+                  <th>Time</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
           </div>
           <div class="tournament-played-box">
             <span></span>
@@ -118,7 +131,7 @@
             Archive
           </button>
 
-          <!-- Refresh Button -->
+          
           <div class="history-box">
             <table id="players-table">
               <thead>
@@ -191,12 +204,12 @@
                     <div class="details">
                       <label for="rfid">RFID</label>
                       <input
-                        type="text"
-                        name="rfid"
-                        class="field"
-                        id="rfid"
-                        onfocus="blur()"
-                        required
+                      type="text"
+                      name="rfid"
+                      class="field"
+                      id="rfid"
+                      onfocus="blur()"
+                      required
                       />
                     </div>
                   </div>

@@ -18,7 +18,7 @@ ARCHIVE_FOLDER_ID = "1GM5-ZA57QPylEhcMexwhhVmdd2g09ZRX"
 flow = Flow.from_client_secrets_file(
     CLIENT_SECRETS_FILE,
     scopes=SCOPES,
-    redirect_uri='http://localhost:5000/callback'
+    redirect_uri='http://localhost:6000/callback'
 )
 
 def get_drive_service():
@@ -37,7 +37,7 @@ def get_drive_service():
             flow = Flow.from_client_secrets_file(
                 CLIENT_SECRETS_FILE,
                 scopes=SCOPES,
-                redirect_uri='http://localhost:5000/callback'
+                redirect_uri='http://localhost:6000/callback'
             )
             auth_url, _ = flow.authorization_url(prompt='consent')
             print(f"Please go to this URL and authorize access: {auth_url}")
