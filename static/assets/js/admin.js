@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-const socket = io.connect("https://ptu-08k7.onrender.comm");
+const socket = io.connect("https://ptu-08k7.onrender.com");
 
 socket.on("connect", function () {
   console.log("WebSocket connected!");
