@@ -10,6 +10,7 @@ class User:
         session['logged_in'] = True
         session['user'] = user
         session.permanent = False  # Ensure session is non-permanent
+        user['_id'] = str(user['_id'])
         return jsonify(user), 200
     
     @staticmethod
