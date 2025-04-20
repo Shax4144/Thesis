@@ -1,3 +1,5 @@
+from gevent import monkey
+monkey.patch_all()
 import socket
 import threading
 from threading import Thread
@@ -61,10 +63,10 @@ winner_queue = queue.Queue()
 
 # Google Drive API Setup
 SCOPES = ["https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive.readonly"]
-CLIENT_SECRETS_FILE = "/etc/secrets/client_secret.json"
+CLIENT_SECRETS_FILE = "client_secret.json"
 ROOT_FOLDER_ID = "1NndBdfWTZl4ZMjGZWWb1UjgeVijl986v"
 ARCHIVE_FOLDER_ID = "1GM5-ZA57QPylEhcMexwhhVmdd2g09ZRX"
-TOKEN_JSON_PATH = "/etc/secrets/token.json"
+TOKEN_JSON_PATH = "token.json"
 
 REDIRECT_URI = os.environ.get("GOOGLE_REDIRECT_URI", "http://localhost:6000/callback")
 
