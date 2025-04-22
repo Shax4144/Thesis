@@ -78,13 +78,6 @@ flow = Flow.from_client_secrets_file(
     redirect_uri=REDIRECT_URI
 )
 
-def start_background_thread():
-    print("[INIT] Starting unified RFID and winner handler thread")
-    connection_thread = Thread(target=rfid_and_winner_handler, daemon=True)
-    connection_thread.start()
-
-start_background_thread()
-
 def get_drive_service():
     """Authenticate using OAuth 2.0 and return the Google Drive service."""
     creds = None
@@ -742,7 +735,12 @@ def credentials_to_dict(credentials):
         'scopes': credentials.scopes
     }
 
+def start_background_thread():
+    print("[INIT] Starting unified RFID and winner handler thread")
+    connection_thread = Thread(target=rfid_and_winner_handler, daemon=True)
+    connection_thread.start()
 
+start_background_thread()
 
 if __name__ == "__main__":
     # Start RFID + winner connection in background
