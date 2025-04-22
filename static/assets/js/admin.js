@@ -4,6 +4,14 @@ document.addEventListener("DOMContentLoaded", function () {
     transports: ["websocket", "polling"] 
   }); // Automatically connects to the host that served the page
 
+  socket.on("connect", function () {
+    console.log("WebSocket connected!");
+  });
+  
+  socket.on("disconnect", function () {
+    console.log("WebSocket disconnected!");
+  });
+  
   // Listen for RFID data
   socket.on("rfid_data", function (data) {
     console.log("Received RFID:", data.rfid);
@@ -11,17 +19,6 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-socket.on("connect", function () {
-  console.log("WebSocket connected!");
-});
-
-socket.on("disconnect", function () {
-  console.log("WebSocket disconnected!");
-});
-
-socket.on("rfid_data", function (data) {
-  console.log("Received RFID data:", data);
-});
 //SIDE NAVIGATION BAR
 document.addEventListener("DOMContentLoaded", function () {
   // Sidebar Navigation Elements
