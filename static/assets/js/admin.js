@@ -1,6 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
   // Initialize the socket connection
-  const socket = io("https://ptu-08k7.onrender.com"); // Automatically connects to the host that served the page
+  const socket = io("https://ptu-08k7.onrender.com",{
+    transports: ["websocket", "polling"] 
+  }); // Automatically connects to the host that served the page
 
   // Listen for RFID data
   socket.on("rfid_data", function (data) {
@@ -8,8 +10,6 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("rfid").value = data.rfid;
   });
 });
-
-const socket = io.connect("https://ptu-08k7.onrender.com");
 
 socket.on("connect", function () {
   console.log("WebSocket connected!");
