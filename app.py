@@ -26,15 +26,13 @@ from flask_socketio import SocketIO, emit
 import queue
 import json
 import requests
-from flask_cors import CORS
 
 
 app = Flask(__name__)
 app.secret_key = "7a396704-83f5-4598-8a7c-32e4bd58c676"
 app.config['SESSION_PERMANENT'] = False  # Ensure session expires on browser close
 app.register_blueprint(user_bp, url_prefix='/api')
-CORS(app, origins=["https://web-production-f6258.up.railway.app"])  # Adjust the origin as needed
-socketio = SocketIO(app, cors_allowed_origins="https://web-production-f6258.up.railway.app", async_mode="gevent")
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode="gevent")
 
 
 
