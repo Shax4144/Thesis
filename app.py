@@ -168,7 +168,8 @@ def rfid_and_winner_handler():
 
         except (socket.error, ConnectionRefusedError):
             print("[ERROR] Connection lost. Retrying in 5 seconds...")
-            socketio.emit("console_log", {"message": "[ERROR] Connection lost. Retrying in 5 seconds..."})
+            with app.app_context():
+                socketio.emit("console_log", {"message": "[ERROR] Connection lost. Retrying in 5 seconds..."})
             
 
 

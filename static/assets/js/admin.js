@@ -1,21 +1,25 @@
 document.addEventListener("DOMContentLoaded", function () {
   // Initialize the socket connection
-  const socket = io("https://ptu-08k7.onrender.com",{
-    transports: ["websocket", "polling"] 
+  const socket = io("https://ptu-08k7.onrender.com", {
+    transports: ["websocket", "polling"],
   }); // Automatically connects to the host that served the page
 
   socket.on("connect", function () {
     console.log("WebSocket connected!");
   });
-  
+
   socket.on("disconnect", function () {
     console.log("WebSocket disconnected!");
   });
-  
+
   // Listen for RFID data
   socket.on("rfid_data", function (data) {
     console.log("Received RFID:", data.rfid);
     document.getElementById("rfid").value = data.rfid;
+  });
+
+  socket.on("console_log", function (data) {
+    console.log("[SERVER LOG]:", data.message);
   });
 });
 
